@@ -91,16 +91,20 @@ public:
      Solve problems.
      Solve based on algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
      @param times Number of attempts to build a record for each problem.
-     @param probability Probability for solving knapsack problem.
+     @param probabilityKP Probability for solving knapsack problem.
+     @param probabilitySN Probability for creating subset of neighbours.
      @param tabuListSize Length of tabu list.
      @param changingInterval Number of steps of algorithm before changing neighbourhood.
+     @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
      @return Map of problems and found records.
      */
     shared_ptr<map<Problem *, shared_ptr<Schedule>>>
     solveWithScheduleKochetovStolyar2003(int times,
-                                         float probability,
+                                         float probabilityKP,
+                                         float probabilitySN,
                                          int tabuListSize,
-                                         int changingInterval);
+                                         int changingInterval,
+                                         int maxIterationNumber);
 };
 
 

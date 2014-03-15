@@ -190,17 +190,21 @@ solveWithSchedulePingPong(int times, float probability)
 
 shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver ::
 solveWithScheduleKochetovStolyar2003(int times,
-                                     float probability,
+                                     float probabilityKP,
+                                     float probabilitySN,
                                      int tabuListSize,
-                                     int changingInterval)
+                                     int changingInterval,
+                                     int maxIterationNumber)
 {
     shared_ptr<map<Problem *, shared_ptr<Schedule>>>
     solve(new map<Problem *, shared_ptr<Schedule>>);
     for (auto &problem : _problems) {
 #warning (+) using `times` parameter
-        (*solve)[problem] = problem->scheduleKochetovStolyar2003(probability,
+        (*solve)[problem] = problem->scheduleKochetovStolyar2003(probabilityKP,
+                                                                 probabilitySN,
                                                                  tabuListSize,
-                                                                 changingInterval);
+                                                                 changingInterval,
+                                                                 maxIterationNumber);
     }
     return solve;
 }

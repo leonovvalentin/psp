@@ -24,9 +24,9 @@ int main(int argc, const char * argv[])
 {
     cout << "Start" << endl;
     
-    string path = "/Users/valentinleonov/Documents/xCode/psp2/psp2/Data";
+    string path = "/Users/valentinleonov/Documents/xCode/psp/psp/Data";
     Solver *solver = new Solver(&path);
-    auto solve = solver->solveWithScheduleKochetovStolyar2003(1, 0.5f, 4, 5);
+    auto solve = solver->solveWithScheduleKochetovStolyar2003(1, 0.5f, 0.0f, 4, 2, 10);
     for (auto &pProblemSchedule : *solve) {
         cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()
         << " " << *pProblemSchedule.second->validationDescription() << endl;

@@ -209,30 +209,31 @@ shared_ptr<Schedule> Problem :: schedulePingPong(int times, float probability) c
     return record;
 }
 
-shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probability,
+shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
+                                                            float probabilitySN,
                                                             int tabuListSize,
-                                                            int changingInterval) const
+                                                            int changingInterval,
+                                                            int maxIterationNumber) const
 {
     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
-        return selectJobsViaKP(jobs, schedule, time, timeForStart, probability);
+    [probabilityKP](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+        return selectJobsViaKP(jobs, schedule, time, timeForStart, probabilityKP);
     };
     
     TabuList tabuList(tabuListSize);
     
-    bool stop = false; // Stop indicator
     int stepsNoChange = 0; // Number of steps without changing neighbourhood
     NeighbourhoodType currentNeighbourhoodType = NeighbourhoodTypeEarly;
     
-    // Initial schedule
-    
-    shared_ptr<Schedule> schedule = schedulePingPong(1, probability);
+    shared_ptr<Schedule> schedule = schedulePingPong(1, probabilityKP); // Initial schedule
     shared_ptr<Schedule> record = schedule;
     tabuList.add(schedule->sumOfStarts());
     
-    while (!stop) {
+    for (int iteration = 0; iteration < maxIterationNumber; iteration++) {
         
-        if (stepsNoChange > changingInterval) {
+        // currentNeighbourhoodType
+        
+        if (stepsNoChange >= changingInterval) {
             switch (currentNeighbourhoodType) {
                 case NeighbourhoodTypeEarly: {
                     currentNeighbourhoodType = NeighbourhoodTypeLate;
@@ -243,13 +244,75 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probability,
                     break;
                 }
             }
+            stepsNoChange = 0;
         }
         
-        shared_ptr<vector<shared_ptr<Schedule>>> neighbours =
+        // allNeighbours
+        
+        shared_ptr<vector<shared_ptr<Schedule>>> allNeighbours =
         schedule->neighboringSchedules(currentNeighbourhoodType, functionForSelecting);
         
-#warning Set right stop criteria
-        stop = true;
+        // neighboursWithoutTabu
+        
+        auto neighboursWithoutTabu =
+        shared_ptr<vector<shared_ptr<Schedule>>>(new vector<shared_ptr<Schedule>>(0));
+        neighboursWithoutTabu->reserve(allNeighbours->size());
+        
+        while (neighboursWithoutTabu->size() == 0 && tabuList.size() != 0) {
+            for (auto &neighbour : *allNeighbours) {
+                if (!tabuList.containTabu(neighbour->sumOfStarts())) {
+                    neighboursWithoutTabu->push_back(neighbour);
+                }
+            }
+            if (neighboursWithoutTabu->size() == 0) {
+#warning Set number of tabu for removing as parameter of function?
+                tabuList.removeOlderTabu(1);
+            }
+        }
+        
+        if (neighboursWithoutTabu->size() == 0) {
+#warning TBD
+            cout << "neighboursWithoutTabu.size = 0" << endl;
+            abort();
+        }
+        
+        // neighbours
+        
+        auto neighbours =
+        shared_ptr<vector<shared_ptr<Schedule>>>(new vector<shared_ptr<Schedule>>(0));
+        neighbours->reserve(neighboursWithoutTabu->size());
+        
+        for (auto &neighbour : *neighboursWithoutTabu) {
+            if (Random :: randomFloatFrom0To1() < probabilitySN) neighbours->push_back(neighbour);
+        }
+        
+        if (neighbours->size() == 0) {
+            long randIndex = Random :: randomLong(0, neighboursWithoutTabu->size() - 1);
+            neighbours->push_back((*neighboursWithoutTabu)[randIndex]);
+        }
+        
+        // minNeighbour
+        
+        shared_ptr<Schedule> minNeighbour = nullptr;
+        int minNeighbourDuration = INT_MAX;
+        
+        for (auto &neighbour : *neighbours) {
+            int neighbourDuration = neighbour->duration();
+            if (neighbourDuration < minNeighbourDuration) {
+                minNeighbour = neighbour;
+                minNeighbourDuration = neighbourDuration;
+            }
+        }
+        
+        // Update record, schedule, tabuList
+        
+        if (minNeighbourDuration < record->duration()) record = minNeighbour;
+        schedule = minNeighbour;
+        tabuList.add(minNeighbour->sumOfStarts());
+        
+        // Update stepsNoChange
+        
+        stepsNoChange++;
     }
     
     return record;
