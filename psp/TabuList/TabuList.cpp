@@ -24,7 +24,15 @@ TabuList :: TabuList(int size)
 
 ostream & operator<<(ostream &os, const TabuList &tabuList)
 {
-    os << "TabuList:"; for (auto &tabu : tabuList._list) os << " " << tabu;
+    os << "TabuList: ";
+    
+    bool first = true;
+    for (auto &tabu : tabuList._list) {
+        if (first) first = false;
+        else os << ", ";
+        os << tabu;
+    }
+    
     os << " maxSize: " << tabuList._maxSize
     << " currentSize: " << tabuList._list.size();
     
@@ -47,6 +55,8 @@ int TabuList :: maxSize() const
 
 void TabuList :: add(int tabu)
 {
+    if (containTabu(tabu)) return;
+    
     if (_list.size() >= _maxSize) _list.erase(_list.begin());
     _list.push_back(tabu);
 }
