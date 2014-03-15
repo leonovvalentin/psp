@@ -111,7 +111,6 @@ shared_ptr<Schedule> Schedule :: schedulePartialyLateParallel
     }
     schedule->shift(-start);
     
-    cout << schedule->stringMATLAB() << endl;
     return schedule;
 }
 
@@ -447,6 +446,10 @@ shared_ptr<Schedule> Schedule :: neighbourForLateSchedule
     for (Job *j : *net) {
         auto iterator = find(_activeList.jobList()->begin(), _activeList.jobList()->end(), j);
         if (iterator < minIterator) minIterator = iterator;
+    }
+    
+    if (maxIterator + 1 == _activeList.jobList()->end()) {
+        maxIterator--;
     }
     
     return Schedule :: schedulePartialyLateParallel(&_activeList,

@@ -96,13 +96,14 @@ private:
      @param activeList ActiveList by which shedule will be created.
      @param resources Available resources.
      @param minIterator Begin-iterator of `activeList.jobList` middle part.
-     @param maxIterator End-iterator of `activeList.jobList` middle part.
+     @param maxIterator End-iterator of `activeList.jobList` middle part. It should be such that after middle part remains at least one job.
      @param starts Starts of jobs which positions in activeList more then maxIterator.
      @param functionForSelecting Function for selecting jobs which will be next scheduled (for \
      jobs from meddle part).
      @return Schedule created by partialy late parallel decoder.
      */
 #warning refactor to scheduleCompositeLateParallel
+#warning May be needs to add right handling of case when maxIterator contain end job(When section3 is empty)?
     static shared_ptr<Schedule> schedulePartialyLateParallel
     (ActiveList *activeList,
      const vector<Resource *> *resources,
