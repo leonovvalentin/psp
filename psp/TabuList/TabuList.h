@@ -23,10 +23,9 @@ using namespace std;
 class TabuList
 {
 private:
-    int _size;
-    int _currentIndx;
+    int _maxSize;
     vector<int> _list;
-
+    
 public:
     
 #pragma mark - init
@@ -37,13 +36,17 @@ public:
      */
     TabuList(int size);
     
+#pragma mark - out
+    friend ostream & operator<<(ostream &os, const TabuList &tabuList);
+    
 #pragma mark - getters
-    int size() const;
-    int currentIndx() const;
-    const vector<int> * list() const;
+    unsigned long size() const;
+    int maxSize() const;
     
 #pragma mark - functionality
     void add(int tabu);
+    void removeOlderTabu(unsigned long numberOfTabuForRemoving);
+    bool containTabu(int tabu);
 };
 
 

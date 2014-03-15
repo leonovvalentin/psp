@@ -16,35 +16,48 @@
 
 TabuList :: TabuList(int size)
 {
-    _size = size;
-    _currentIndx = 0;
-    _list = vector<int>(size, 0);
+    _maxSize = size;
+    _list = vector<int>(0); _list.reserve(size);
+}
+
+#pragma mark - out
+
+ostream & operator<<(ostream &os, const TabuList &tabuList)
+{
+    os << "TabuList:"; for (auto &tabu : tabuList._list) os << " " << tabu;
+    os << " maxSize: " << tabuList._maxSize
+    << " currentSize: " << tabuList._list.size();
+    
+    return os;
 }
 
 #pragma mark - getters
 
-int TabuList :: size() const
+unsigned long TabuList :: size() const
 {
-    return _size;
+    return _list.size();
 }
 
-int TabuList :: currentIndx() const
+int TabuList :: maxSize() const
 {
-    return _currentIndx;
-}
-
-const vector<int> * TabuList :: list() const
-{
-    return &_list;
+    return _maxSize;
 }
 
 #pragma mark - functionality
 
 void TabuList :: add(int tabu)
 {
-    _list[_currentIndx] = tabu;
-    
-    int nextIndx = _currentIndx + 1;
-    if (nextIndx >= _size) _currentIndx = 0;
-    else _currentIndx = nextIndx;
+    if (_list.size() >= _maxSize) _list.erase(_list.begin());
+    _list.push_back(tabu);
+}
+
+void TabuList :: removeOlderTabu(unsigned long numberOfTabuForRemoving)
+{
+    if (numberOfTabuForRemoving > _list.size()) numberOfTabuForRemoving = _list.size();
+    _list.erase(_list.begin(), _list.begin() + numberOfTabuForRemoving);
+}
+
+bool TabuList :: containTabu(int tabu)
+{
+    return find(begin(_list), end(_list), tabu) != end(_list);
 }
