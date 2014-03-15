@@ -154,6 +154,25 @@ string stringFromIntVector(const vector<int> *ints)
     return ss.str();
 }
 
+string stringOfDurationsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules)
+{
+    stringstream ss;
+    
+    if (!schedules->size()) {
+        ss << "Vector is empty";
+        return ss.str();
+    }
+    
+    bool first = true;
+    for (auto &item : *schedules) {
+        if (first) first = false;
+        else ss << ", ";
+        ss << item->duration();
+    }
+    
+    return ss.str();
+}
+
 bool sameJobsInVector(const vector<Job *> *jobs)
 {
     for (int i=0; i<jobs->size(); i++) {
