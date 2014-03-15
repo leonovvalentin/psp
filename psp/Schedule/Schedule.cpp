@@ -448,6 +448,7 @@ shared_ptr<Schedule> Schedule :: neighbourForLateSchedule
         if (iterator < minIterator) minIterator = iterator;
     }
     
+#warning Is it right interpretation of article?
     if (maxIterator + 1 == _activeList.jobList()->end()) {
         maxIterator--;
     }
