@@ -347,12 +347,12 @@ shared_ptr<vector<shared_ptr<Schedule>>> Schedule :: neighboringSchedules
     shared_ptr<Schedule> schedule = nullptr;
     switch (neighbourhoodType) {
         case NeighbourhoodTypeEarly: {
-            if (_type == ScheduleTypeEarly) schedule = shared_ptr<Schedule>(this);
+            if (_type == ScheduleTypeEarly) schedule = shared_from_this();
             else schedule = earlySchedule();
             break;
         }
         case NeighbourhoodTypeLate: {
-            if (_type == ScheduleTypeLate) schedule = shared_ptr<Schedule>(this);
+            if (_type == ScheduleTypeLate) schedule = shared_from_this();
             else schedule = lateSchedule();
             break;
         }

@@ -49,7 +49,7 @@ typedef enum ScheduleValids {
 
 
 
-class Schedule
+class Schedule : public enable_shared_from_this<Schedule>
 {
 private:
     ScheduleType _type;
