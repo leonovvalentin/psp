@@ -50,6 +50,7 @@ string stringMATLARRectangle(int x, int y, int width, int height,
 string stringFromJobsVector(const vector<Job *> *jobs);
 string stringFromIntVector(const vector<int> *ints);
 string stringOfDurationsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules);
+string stringOfSumOfStartsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules);
 bool sameJobsInVector(const vector<Job *> *jobs);
 
 
