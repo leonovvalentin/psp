@@ -270,10 +270,10 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
             }
         }
         
-        if (neighboursWithoutTabu->size() == 0) {
-#warning TBD
-            cout << "neighboursWithoutTabu.size = 0" << endl;
-            abort();
+        if (neighboursWithoutTabu->size() == 0 && tabuList.size() == 0) {
+            neighboursWithoutTabu->insert(neighboursWithoutTabu->begin(),
+                                          allNeighbours->begin(),
+                                          allNeighbours->end());
         }
         
         // neighbours
