@@ -33,16 +33,24 @@ int main(int argc, const char * argv[])
     Solver *solver = new Solver(&path);
     
     // Kochetov, Stolyar, 2003
-    /* probabilityKP = ?
-     * probabilitySN = 0.2
-     * tabuListSize = 5
-     * changingInterval = 5..10
-     * maxIterationNumber = 1000..5000
+    /**
+     probabilityKP = ?
+     probabilitySN = 0.2
+     tabuListSize = 5
+     changingInterval = 5..10
+     maxIterationNumber = 1000..5000
      */
 //    auto solve = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 1000);
     
     // My genetic algorithm
-    auto solve = solver->solveWithMyGA(40, 100, 0.5f);
+    /**
+     populationSize = 40
+     parentsSize = 20
+     timesPingPongInitialPopulation = 100
+     probabilityKP = ?
+     probabilityParentSelection = 0.8
+     */
+    auto solve = solver->solveWithMyGA(10, 5, 2, 0.5f, 0.1f);
     
     for (auto &pProblemSchedule : *solve) {
         cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()

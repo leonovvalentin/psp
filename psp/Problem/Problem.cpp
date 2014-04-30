@@ -319,10 +319,12 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
 }
 
 shared_ptr<Schedule> Problem :: scheduleMyGA(int populationSize,
+                                             int parentsSize,
                                              int timesPingPongInitialPopulation,
-                                             float probabilityKP) const
+                                             float probabilityKP,
+                                             float probabilityParentSelection) const
 {
-    shared_ptr<Schedule> record = schedulePingPong(1, probabilityKP);
+    shared_ptr<Schedule> record = nullptr;
     
     // initial population
     
@@ -331,7 +333,27 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int populationSize,
         shared_ptr<Schedule> schedule = schedulePingPong(timesPingPongInitialPopulation,
                                                          probabilityKP);
         population.push_back(schedule);
-        if (schedule->duration() < record->duration()) record = schedule;
+        if (!record || (schedule->duration() < record->duration())) record = schedule;
+    }
+    
+    // select parents
+    
+    sort(population.begin(), population.end(), [](shared_ptr<Schedule> a, shared_ptr<Schedule> b) {
+        return a->duration() < b->duration();
+    });
+    
+    vector<shared_ptr<Schedule>> parents(0); parents.reserve(parentsSize);
+    for (int i=0; i<population.size() && parents.size() < parentsSize; i++) {
+        if (Random :: randomFloatFrom0To1() < probabilityParentSelection) {
+            parents.push_back(population[i]);
+        }
+    }
+    
+    for (int i=0; parents.size() < parentsSize; i++) {
+        auto schedule = population[i];
+        if (find(begin(parents), end(parents), schedule) == end(parents)) {
+            parents.push_back(schedule);
+        }
     }
     
     return record;

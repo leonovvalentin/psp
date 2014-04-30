@@ -108,13 +108,17 @@ public:
      Solve problem.
      Solve based on my genetic algorithm.
      @param populationSize Size of population.
+     @param parentsSize Number of parents in each iteration.
      @param timesPingPongInitialPopulation Number of attempts to build a record in Ping-pong algorithm when we construct schedules for initial population.
      @param probabilityKP Probability for solving knapsack problem.
+     @param probabilityParentSelection Probability for selectiong schedule from population to parents.
      @return Found record.
      */
     shared_ptr<Schedule> scheduleMyGA(int populationSize,
+                                      int parentsSize,
                                       int timesPingPongInitialPopulation,
-                                      float probabilityKP) const;
+                                      float probabilityKP,
+                                      float probabilityParentSelection) const;
 };
 
 
