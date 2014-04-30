@@ -11,28 +11,42 @@
 #include "Solver.h"
 
 #include <iostream>
+#include <ctime>
+
+
+
 using namespace std;
 
 
 
-#warning Refactor in all project: eighbour -> eighbor
-#warning Refactor in all project: neghb -> neighb
+#warning Refactor in all project: eighbour -> eighbor, neghb -> neighb
 
 
 
 int main(int argc, const char * argv[])
 {
     cout << "Start" << endl;
+    time_t t;
+    time(&t);
     
     string path = "/Users/valentinleonov/Documents/xCode/psp/psp/Data";
     Solver *solver = new Solver(&path);
-    auto solve = solver->solveWithScheduleKochetovStolyar2003(1, 0.5f, 0.0f, 4, 2, 10);
+    
+    // Kochetov, Stolyar, 2003
+    /* probabilityKP = ?
+     * probabilitySN = 0.2
+     * tabuListSize = 5
+     * changingInterval = 5..10
+     * maxIterationNumber = 1000..5000
+     */
+    auto solve = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 1000);
+    
     for (auto &pProblemSchedule : *solve) {
         cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()
-        << " " << *pProblemSchedule.second->validationDescription() << endl;
+        /*<< " " << *pProblemSchedule.second->validationDescription()*/ << endl;
     }
     delete solver;
     
-    cout << "Finish" << endl;
+    cout << "Finish. Duration =  " << time(NULL) - t << endl;
     return 0;
 }
