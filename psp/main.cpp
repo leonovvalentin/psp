@@ -42,7 +42,7 @@ int main(int argc, const char * argv[])
 //    auto solve = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 1000);
     
     // My genetic algorithm
-    auto solve = solver->solveWithMyGA();
+    auto solve = solver->solveWithMyGA(40, 100, 0.5f);
     
     for (auto &pProblemSchedule : *solve) {
         cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()

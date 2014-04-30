@@ -318,8 +318,21 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
     return record;
 }
 
-shared_ptr<Schedule> Problem :: scheduleMyGA() const
+shared_ptr<Schedule> Problem :: scheduleMyGA(int populationSize,
+                                             int timesPingPongInitialPopulation,
+                                             float probabilityKP) const
 {
-    shared_ptr<Schedule> record;
+    shared_ptr<Schedule> record = schedulePingPong(1, probabilityKP);
+    
+    // initial population
+    
+    vector<shared_ptr<Schedule>> population(0); population.reserve(populationSize);
+    for (int i=0; i<populationSize; i++) {
+        shared_ptr<Schedule> schedule = schedulePingPong(timesPingPongInitialPopulation,
+                                                         probabilityKP);
+        population.push_back(schedule);
+        if (schedule->duration() < record->duration()) record = schedule;
+    }
+    
     return record;
 }
