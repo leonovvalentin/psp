@@ -35,7 +35,8 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
     map<Resource *, shared_ptr<vector<int>>> rests;
     for (auto &pResourceAmount : *schedule->resourceRemains()) {
         rests[pResourceAmount.first] =
-        shared_ptr<vector<int>>(new vector<int>(*pResourceAmount.second));
+        shared_ptr<vector<int>>(new vector<int>(pResourceAmount.second->begin(),
+                                                pResourceAmount.second->end()));
     }
     
     shared_ptr<vector<Job *>> selectedJobs(new vector<Job *>(0));
