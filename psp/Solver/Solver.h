@@ -103,6 +103,13 @@ public:
                                          int tabuListSize,
                                          int changingInterval,
                                          int maxIterationNumber);
+    
+    /**
+     Solve problems.
+     Solve based on my genetic algorithm.
+     @return Map of problems and found records.
+     */
+    shared_ptr<map<Problem *, shared_ptr<Schedule>>> solveWithMyGA();
 };
 
 

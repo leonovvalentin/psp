@@ -104,6 +104,12 @@ public:
                                                      int tabuListSize,
                                                      int changingInterval,
                                                      int maxIterationNumber) const;
+    /**
+     Solve problem.
+     Solve based on my genetic algorithm.
+     @return Found record.
+     */
+    shared_ptr<Schedule> scheduleMyGA() const;
 };
 
 

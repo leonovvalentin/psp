@@ -317,3 +317,9 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
     
     return record;
 }
+
+shared_ptr<Schedule> Problem :: scheduleMyGA() const
+{
+    shared_ptr<Schedule> record;
+    return record;
+}

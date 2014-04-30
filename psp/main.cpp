@@ -39,7 +39,10 @@ int main(int argc, const char * argv[])
      * changingInterval = 5..10
      * maxIterationNumber = 1000..5000
      */
-    auto solve = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 1000);
+//    auto solve = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 1000);
+    
+    // My genetic algorithm
+    auto solve = solver->solveWithMyGA();
     
     for (auto &pProblemSchedule : *solve) {
         cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()

@@ -196,12 +196,21 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
     shared_ptr<map<Problem *, shared_ptr<Schedule>>>
     solve(new map<Problem *, shared_ptr<Schedule>>);
     for (auto &problem : _problems) {
-#warning (+) using `times` parameter
         (*solve)[problem] = problem->scheduleKochetovStolyar2003(probabilityKP,
                                                                  probabilitySN,
                                                                  tabuListSize,
                                                                  changingInterval,
                                                                  maxIterationNumber);
+    }
+    return solve;
+}
+
+shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver :: solveWithMyGA()
+{
+    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
+    solve(new map<Problem *, shared_ptr<Schedule>>);
+    for (auto &problem : _problems) {
+        (*solve)[problem] = problem->scheduleMyGA();
     }
     return solve;
 }
