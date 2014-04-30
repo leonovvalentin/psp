@@ -44,13 +44,15 @@ int main(int argc, const char * argv[])
     
     // My genetic algorithm
     /**
+     maxGeneratedSchedules = 5000
      populationSize = 40
-     parentsSize = 20
+     maxParents = 20
+     maxChildren = 40
      timesPingPongInitialPopulation = 100
-     probabilityKP = ?
+     probabilityKP -
      probabilityParentSelection = 0.8
      */
-    auto solve = solver->solveWithMyGA(10, 5, 2, 0.5f, 0.1f);
+    auto solve = solver->solveWithMyGA(10, 7, 4, 6, 1, 0.5f, 0.8f);
     
     for (auto &pProblemSchedule : *solve) {
         cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()

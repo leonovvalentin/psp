@@ -206,8 +206,10 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
 }
 
 shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver ::
-solveWithMyGA(int populationSize,
-              int parentsSize,
+solveWithMyGA(int maxGeneratedSchedules,
+              int populationSize,
+              int maxParents,
+              int maxChildren,
               int timesPingPongInitialPopulation,
               float probabilityKP,
               float probabilityParentSelection)
@@ -215,8 +217,10 @@ solveWithMyGA(int populationSize,
     shared_ptr<map<Problem *, shared_ptr<Schedule>>>
     solve(new map<Problem *, shared_ptr<Schedule>>);
     for (auto &problem : _problems) {
-        (*solve)[problem] = problem->scheduleMyGA(populationSize,
-                                                  parentsSize,
+        (*solve)[problem] = problem->scheduleMyGA(maxGeneratedSchedules,
+                                                  populationSize,
+                                                  maxParents,
+                                                  maxChildren,
                                                   timesPingPongInitialPopulation,
                                                   probabilityKP,
                                                   probabilityParentSelection);

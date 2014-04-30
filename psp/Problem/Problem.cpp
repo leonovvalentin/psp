@@ -318,8 +318,10 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
     return record;
 }
 
-shared_ptr<Schedule> Problem :: scheduleMyGA(int populationSize,
-                                             int parentsSize,
+shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
+                                             int populationSize,
+                                             int maxParents,
+                                             int maxChildren,
                                              int timesPingPongInitialPopulation,
                                              float probabilityKP,
                                              float probabilityParentSelection) const
@@ -327,7 +329,6 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int populationSize,
     shared_ptr<Schedule> record = nullptr;
     
     // initial population
-    
     vector<shared_ptr<Schedule>> population(0); population.reserve(populationSize);
     for (int i=0; i<populationSize; i++) {
         shared_ptr<Schedule> schedule = schedulePingPong(timesPingPongInitialPopulation,
@@ -336,23 +337,36 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int populationSize,
         if (!record || (schedule->duration() < record->duration())) record = schedule;
     }
     
-    // select parents
-    
-    sort(population.begin(), population.end(), [](shared_ptr<Schedule> a, shared_ptr<Schedule> b) {
-        return a->duration() < b->duration();
-    });
-    
-    vector<shared_ptr<Schedule>> parents(0); parents.reserve(parentsSize);
-    for (int i=0; i<population.size() && parents.size() < parentsSize; i++) {
-        if (Random :: randomFloatFrom0To1() < probabilityParentSelection) {
-            parents.push_back(population[i]);
+    int numberOfGeneratedSchedules = 0;
+    while (numberOfGeneratedSchedules < maxGeneratedSchedules) {
+        
+        // select parents as subset of population
+        sort(population.begin(), population.end(), [](shared_ptr<Schedule> a, shared_ptr<Schedule> b) {
+            return a->duration() < b->duration();
+        });
+        vector<shared_ptr<Schedule>> parents(0); parents.reserve(maxParents);
+        for (int i=0; i<population.size() && parents.size() < maxParents; i++) {
+            if (Random :: randomFloatFrom0To1() < probabilityParentSelection) {
+                parents.push_back(population[i]);
+            }
         }
-    }
-    
-    for (int i=0; parents.size() < parentsSize; i++) {
-        auto schedule = population[i];
-        if (find(begin(parents), end(parents), schedule) == end(parents)) {
-            parents.push_back(schedule);
+        for (int i=0; parents.size() < maxParents; i++) {
+            auto schedule = population[i];
+            if (find(begin(parents), end(parents), schedule) == end(parents)) {
+                parents.push_back(schedule);
+            }
+        }
+        
+        int numberOfChildren = 0;
+        while (numberOfChildren < maxChildren) {
+            
+            // random select 2 different parents
+            auto parent1 = parents[Random :: randomLong(0, parents.size())];
+            auto parent2 = parents[Random :: randomLong(0, parents.size())];
+            while (parent2 == parent1) {
+                parent2 = parents[Random :: randomLong(0, parents.size())];
+            }
+            
         }
     }
     
