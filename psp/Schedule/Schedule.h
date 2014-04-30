@@ -282,7 +282,7 @@ private:
                                                          int time,
                                                          bool timeForStart);
     /**
-     Shift all job starts and resource rests on `time`.
+     Shift all job starts and resource remains on `time`.
      @param time Step for shifting.
      */
     void shift(int time);

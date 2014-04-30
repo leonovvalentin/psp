@@ -32,9 +32,9 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
 {
     vector<Job *> pretenders(*jobs);
     
-    map<Resource *, shared_ptr<vector<int>>> rests;
+    map<Resource *, shared_ptr<vector<int>>> remains;
     for (auto &pResourceAmount : *schedule->resourceRemains()) {
-        rests[pResourceAmount.first] =
+        remains[pResourceAmount.first] =
         shared_ptr<vector<int>>(new vector<int>(pResourceAmount.second->begin(),
                                                 pResourceAmount.second->end()));
     }
@@ -69,7 +69,7 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
             if (pResourceAmount.second == 0) continue;
             int timeStart = timeForStart ? time : time - maxJob->duration();
             for (int t = timeStart; t < timeStart + maxJob->duration(); t++) {
-                (*rests[pResourceAmount.first])[t] -= pResourceAmount.second;
+                (*remains[pResourceAmount.first])[t] -= pResourceAmount.second;
             }
         }
         pretenders.erase(find(pretenders.begin(), pretenders.end(), maxJob));
@@ -79,7 +79,7 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
             for (auto &pResourceAmount : *job->resourceAmounts()) {
                 int timeStart = timeForStart ? time : time - job->duration();
                 for (int t = timeStart; t < timeStart + job->duration(); t++) {
-                    if (pResourceAmount.second > (*rests[pResourceAmount.first])[t]) {
+                    if (pResourceAmount.second > (*remains[pResourceAmount.first])[t]) {
                         pretenders.erase(pretenders.begin() + i);
                         i--;
                         validByResources = false;
