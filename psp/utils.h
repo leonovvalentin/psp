@@ -43,6 +43,7 @@ typedef shared_ptr<vector<Job *>> JOBS_VECTOR_PTR;
 JOBS_VECTOR_PTR selectJobFirstInActiveList(PARAMETERS_OF_SELECTING_FUNCTION);
 JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probability);
 
+void removeJobFromList(const Job *job, vector<Job *> *list);
 bool jobInList(const Job *job, const vector<Job *> *list);
 string stringMATLARRectangle(int x, int y, int width, int height,
                              float redColor, float greenColor, float blueColor,
@@ -51,6 +52,9 @@ string stringFromJobsVector(const vector<Job *> *jobs);
 string stringFromIntVector(const vector<int> *ints);
 string stringOfDurationsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules);
 string stringOfSumOfStartsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules);
+string stringFromBlocksVector
+(const shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>> blocks);
+string stringFromBlock(const shared_ptr<pair<shared_ptr<vector<Job *>>, float>> block);
 bool sameJobsInVector(const vector<Job *> *jobs);
 
 

@@ -205,7 +205,7 @@ public:
 #pragma mark - helper methods
 private:
     /**
-     Find block of jobs which are performed simultaneously give small remaining unused resource.
+     Find blocks of jobs which are performed simultaneously give small remaining unused resource.
      @param permissibleResourceRemains Returned jobs are performed simultaneously will be give relative resource remains less or equal then this parameter (resource remains <= permissible resource remains).
      @return List of pairs (key = jobs list, value = relative resources remaining) sorted by increasing of time in schedule.
      */

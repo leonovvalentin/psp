@@ -94,6 +94,14 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
     return selectedJobs;
 };
 
+void removeJobFromList(const Job *job, vector<Job *> *list)
+{
+    auto jobIt = find(begin(*list), end(*list), job);
+    if (jobIt != end(*list)) {
+        list->erase(jobIt);
+    }
+}
+
 bool jobInList(const Job *job, const vector<Job *> *list)
 {
     return find(begin(*list), end(*list), job) != end(*list);
@@ -190,6 +198,31 @@ string stringOfSumOfStartsFromSchdulesVector(const vector<shared_ptr<Schedule>> 
         ss << item->sumOfStarts();
     }
     
+    return ss.str();
+}
+
+string stringFromBlocksVector
+(const shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>> blocks)
+{
+    stringstream ss;
+    
+    if (!blocks->size()) {
+        ss << "Vector is empty";
+        return ss.str();
+    }
+    
+    for (int i=0; i<blocks->size(); i++) {
+        ss << stringFromBlock((*blocks)[i]);
+        if (i < blocks->size() - 1) ss << endl;
+    }
+    
+    return ss.str();
+}
+
+string stringFromBlock(const shared_ptr<pair<shared_ptr<vector<Job *>>, float>> block)
+{
+    stringstream ss;
+    ss << stringFromJobsVector(block->first.get()) << " : " << block->second;
     return ss.str();
 }
 

@@ -325,9 +325,94 @@ shared_ptr<Schedule> Schedule :: cross(shared_ptr<Schedule> schedule,
                                        float permissibleResourceRemains)
 {
     auto denseJobsBlocks = this->denseJobsBlocks(permissibleResourceRemains);
-    auto denseJobsBlocksOfSchedule = schedule->denseJobsBlocks(permissibleResourceRemains);
+    auto denseJobsBlocks2 = schedule->denseJobsBlocks(permissibleResourceRemains);
     
-    return nullptr;
+    auto jobsList = *_activeList.jobList();
+    auto jobsList2 = *schedule->activeList()->jobList();
+    vector<Job *> childJobsList(0);
+    
+    while (denseJobsBlocks->size() != 0 || denseJobsBlocks2->size() != 0) {
+        
+        shared_ptr<pair<shared_ptr<vector<Job *>>, float>> bestBlock = nullptr;
+        vector<Job *> *bestJobsList = NULL;
+        
+        shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>>
+        bestDenseJobsBlocks = nullptr, otherDenseJobsBlocks = nullptr;
+        
+        if (denseJobsBlocks->size() != 0 && denseJobsBlocks2->size() == 0) {
+            bestBlock = (*denseJobsBlocks)[0];
+            bestJobsList = &jobsList;
+            bestDenseJobsBlocks = denseJobsBlocks;
+            otherDenseJobsBlocks = denseJobsBlocks2;
+        }
+        else if (denseJobsBlocks->size() == 0 && denseJobsBlocks2->size() != 0) {
+            bestBlock = (*denseJobsBlocks2)[0];
+            bestJobsList = &jobsList2;
+            bestDenseJobsBlocks = denseJobsBlocks2;
+            otherDenseJobsBlocks = denseJobsBlocks;
+        }
+        else {
+            auto block = (*denseJobsBlocks)[0], block2 = (*denseJobsBlocks2)[0];
+            if (block->second < block2->second) {
+                bestBlock = block;
+                bestJobsList = &jobsList;
+                bestDenseJobsBlocks = denseJobsBlocks;
+                otherDenseJobsBlocks = denseJobsBlocks2;
+            }
+            else {
+                bestBlock = block2;
+                bestJobsList = &jobsList2;
+                bestDenseJobsBlocks = denseJobsBlocks2;
+                otherDenseJobsBlocks = denseJobsBlocks;
+            }
+        }
+        
+        while (bestJobsList->size()) {
+            
+            Job *job = (*bestJobsList)[0];
+            
+            childJobsList.push_back(job);
+            
+            removeJobFromList(job, &jobsList);
+            removeJobFromList(job, &jobsList2);
+            
+            removeJobFromList(job, bestBlock->first.get());
+            
+            // remove blocks with current job
+            for (int j=0; j<bestDenseJobsBlocks->size();) {
+                auto b = (*bestDenseJobsBlocks)[j];
+                if (b != bestBlock && jobInList(job, b->first.get())) {
+                    bestDenseJobsBlocks->erase(bestDenseJobsBlocks->begin() + j);
+                }
+                else {
+                    j++;
+                }
+            }
+            for (int j=0; j<otherDenseJobsBlocks->size();) {
+                if (jobInList(job, (*otherDenseJobsBlocks)[j]->first.get())) {
+                    otherDenseJobsBlocks->erase(otherDenseJobsBlocks->begin() + j);
+                }
+                else {
+                    j++;
+                }
+            }
+            
+            if (!bestBlock->first->size()) {
+                bestDenseJobsBlocks->erase(bestDenseJobsBlocks->begin());
+                break;
+            }
+        }
+    }
+    
+    if (childJobsList.size() != _activeList.jobList()->size()) {
+        vector<Job *> *bestJobsList = NULL;
+        if (duration() < schedule->duration()) bestJobsList = &jobsList;
+        else bestJobsList = &jobsList2;
+        childJobsList.insert(childJobsList.end(), bestJobsList->begin(), bestJobsList->end());
+    }
+    
+    ActiveList childActiveList(&childJobsList);
+    return Schedule :: scheduleEarly(&childActiveList, _resources);
 }
 
 shared_ptr<Schedule> Schedule :: earlySchedule()

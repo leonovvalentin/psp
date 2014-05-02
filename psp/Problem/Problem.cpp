@@ -361,10 +361,10 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
         int numberOfChildren = 0;
         while (numberOfChildren < maxChildren) {
             
-            auto parent1 = parents[Random :: randomLong(0, parents.size())];
-            auto parent2 = parents[Random :: randomLong(0, parents.size())];
+            auto parent1 = parents[Random :: randomLong(0, parents.size() - 1)];
+            auto parent2 = parents[Random :: randomLong(0, parents.size() - 1)];
             while (parent2 == parent1) {
-                parent2 = parents[Random :: randomLong(0, parents.size())];
+                parent2 = parents[Random :: randomLong(0, parents.size() - 1)];
             }
             
             auto child = parent1->cross(parent2, permissibleResourceRemains);
