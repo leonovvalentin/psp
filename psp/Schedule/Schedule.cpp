@@ -383,8 +383,7 @@ shared_ptr<vector<shared_ptr<Schedule>>> Schedule :: neighboringSchedules
             }
             default: {
                 
-                cout << "Error. Incorrect schedule type. See \
-                neighboringSchedules(neighbourhoodType, &functionForSelecting) function of Schedule"
+                cout << "Error. Incorrect schedule type. See neighboringSchedules(neighbourhoodType, &functionForSelecting) function of Schedule"
                 << endl;
                 
                 cout << "neighbourhoodType = " << neighbourhoodType << endl;

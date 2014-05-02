@@ -69,16 +69,13 @@ private:
      */
     Schedule(ActiveList *activeList, const vector<Resource *> *resources);
     /**
-     Early partial parallel schedule. First part of activeList will be started with time moments \
-     from `starts`, second part of activeList will be schedule via parallel decoder, third part of \
-     activeList will be scheduled via early decoder.
+     Early partial parallel schedule. First part of activeList will be started with time moments from `starts`, second part of activeList will be schedule via parallel decoder, third part of activeList will be scheduled via early decoder.
      @param activeList ActiveList by which shedule will be created.
      @param resources Available resources.
      @param minIterator Begin-iterator of `activeList.jobList` middle part.
      @param maxIterator End-iterator of `activeList.jobList` middle part.
      @param starts Starts of jobs which positions in activeList less then minIterator.
-     @param functionForSelecting Function for selecting jobs which will be next scheduled (for \
-     jobs from meddle part).
+     @param functionForSelecting Function for selecting jobs which will be next scheduled (for jobs from meddle part).
      @return Schedule created by partialy early parallel decoder.
      */
 #warning refactor to scheduleCompositeEarlyParallel
@@ -90,16 +87,13 @@ private:
      const map<Job *, int> *starts,
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
-     Late partial parallel schedule. Last part of activeList will be started with time moments \
-     from `starts`, middle part of activeList will be schedule via parallel decoder, first part of \
-     activeList will be scheduled via late decoder.
+     Late partial parallel schedule. Last part of activeList will be started with time moments from `starts`, middle part of activeList will be schedule via parallel decoder, first part of activeList will be scheduled via late decoder.
      @param activeList ActiveList by which shedule will be created.
      @param resources Available resources.
      @param minIterator Begin-iterator of `activeList.jobList` middle part.
      @param maxIterator End-iterator of `activeList.jobList` middle part. It should be such that after middle part remains at least one job.
      @param starts Starts of jobs which positions in activeList more then maxIterator.
-     @param functionForSelecting Function for selecting jobs which will be next scheduled (for \
-     jobs from meddle part).
+     @param functionForSelecting Function for selecting jobs which will be next scheduled (for jobs from meddle part).
      @return Schedule created by partialy late parallel decoder.
      */
 #warning refactor to scheduleCompositeLateParallel
@@ -252,17 +246,14 @@ private:
      Calculate completed and active (which is in process or is started at this `time`) jobs.
      @param time Time for which jobs will be calculated.
      @param completed Vector in which calculated completed jobs will be stored.
-     @param active Vector in which calculated active jobs will be stored (which is in process or \
-     is started at this `time`).
+     @param active Vector in which calculated active jobs will be stored (which is in process or is started at this `time`).
      */
     void calcCompletedAndActiveJobs(int time, vector<Job *> *completed, vector<Job *> *active);
     /**
-     Calculate jobs which started after or at this `time` and active jobs (jobs which is in \
-     process or is ended at this `time`).
+     Calculate jobs which started after or at this `time` and active jobs (jobs which is in process or is ended at this `time`).
      @param time Time for which jobs will be calculated.
      @param started Vector in which calculated started jobs will be stored.
-     @param active Vector in which calculated active jobs (jobs which is in process or is ended at \
-     this `time`).
+     @param active Vector in which calculated active jobs (jobs which is in process or is ended at this `time`).
      */
     void calcStartedAndActiveJobs(int time, vector<Job *> *completed, vector<Job *> *active);
     /**
@@ -292,8 +283,7 @@ private:
     void reduceResourceRemain(Job *job);
     /**
      @param jobs List of jobs from which will be selected resulting list.
-     @param time Expected time of jobs beginning (if `timeForStart` is true) or ended (if \
-     `timeForStart` is false).
+     @param time Expected time of jobs beginning (if `timeForStart` is true) or ended (if `timeForStart` is false).
      @param timeForStart If true, then `time` is time of jobs beginning, else of jobs finishing.
      @return Jobs which can be started at time `time` given the resource constraints.
      */
