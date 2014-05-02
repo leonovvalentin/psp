@@ -12,13 +12,14 @@
 
 
 
-shared_ptr<map<shared_ptr<vector<Job *>>, float>> Schedule ::
+shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>> Schedule ::
 denseJobsBlocks(float permissibleResourceRemains)
 {
-    shared_ptr<map<shared_ptr<vector<Job *>>, float>>
-    blocks(new map<shared_ptr<vector<Job *>>, float>);
+    shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>>
+    blocks(new vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>);
+    blocks->reserve(duration());
     
-    pair<shared_ptr<vector<Job *>>, float> prevBlock;
+    shared_ptr<pair<shared_ptr<vector<Job *>>, float>> prevBlock = nullptr;
     for (int t=0; t<duration(); t++) {
         
         float resourceRemains = relativeResourceRemains(t);
@@ -26,27 +27,39 @@ denseJobsBlocks(float permissibleResourceRemains)
             
             auto activeJobs = this->calcActiveJobs(t);
             
-            if (!prevBlock.first) {
-                (*blocks)[activeJobs] = resourceRemains;
-                prevBlock.first = activeJobs; prevBlock.second = resourceRemains;
+            if (!prevBlock) {
+                
+                shared_ptr<pair<shared_ptr<vector<Job *>>, float>>
+                block(new pair<shared_ptr<vector<Job *>>, float>(activeJobs, resourceRemains));
+                
+                blocks->push_back(block);
+                prevBlock= block;
                 continue;
             }
             
             bool isIntersecting = false;
             for (auto &job : *activeJobs) {
-                if (jobInList(job, prevBlock.first.get())) {
+                if (jobInList(job, prevBlock->first.get())) {
                     isIntersecting = true;
-                    if (resourceRemains < prevBlock.second) {
-                        blocks->erase(prevBlock.first);
-                        (*blocks)[activeJobs] = resourceRemains;
-                        prevBlock.first = activeJobs; prevBlock.second = resourceRemains;
+                    if (resourceRemains < prevBlock->second) {
+                        
+                        shared_ptr<pair<shared_ptr<vector<Job *>>, float>>
+                        block(new pair<shared_ptr<vector<Job *>>, float>(activeJobs,
+                                                                         resourceRemains));
+                        
+                        (*blocks)[blocks->size() - 1] = block;
+                        prevBlock = block;
                     }
                     break;
                 }
             }
             if (!isIntersecting) {
-                (*blocks)[activeJobs] = resourceRemains;
-                prevBlock.first = activeJobs; prevBlock.second = resourceRemains;
+                
+                shared_ptr<pair<shared_ptr<vector<Job *>>, float>>
+                block(new pair<shared_ptr<vector<Job *>>, float>(activeJobs, resourceRemains));
+                
+                blocks->push_back(block);
+                prevBlock = block;
             }
         }
     }

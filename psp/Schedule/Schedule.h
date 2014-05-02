@@ -207,8 +207,9 @@ private:
     /**
      Find block of jobs which are performed simultaneously give small remaining unused resource.
      @param permissibleResourceRemains Returned jobs are performed simultaneously will be give relative resource remains less or equal then this parameter (resource remains <= permissible resource remains).
+     @return List of pairs (key = jobs list, value = relative resources remaining) sorted by increasing of time in schedule.
      */
-    shared_ptr<map<shared_ptr<vector<Job *>>, float>> denseJobsBlocks
+    shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>> denseJobsBlocks
     (float permissibleResourceRemains);
     /**
      Add jobs on schedule via early decoder.
