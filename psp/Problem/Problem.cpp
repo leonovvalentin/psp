@@ -324,7 +324,8 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
                                              int maxChildren,
                                              int timesPingPongInitialPopulation,
                                              float probabilityKP,
-                                             float probabilityParentSelection) const
+                                             float probabilityParentSelection,
+                                             float permissibleResourceRemains) const
 {
     shared_ptr<Schedule> record = nullptr;
     
@@ -360,13 +361,13 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
         int numberOfChildren = 0;
         while (numberOfChildren < maxChildren) {
             
-            // random select 2 different parents
             auto parent1 = parents[Random :: randomLong(0, parents.size())];
             auto parent2 = parents[Random :: randomLong(0, parents.size())];
             while (parent2 == parent1) {
                 parent2 = parents[Random :: randomLong(0, parents.size())];
             }
             
+            auto child = parent1->cross(parent2, permissibleResourceRemains);
         }
     }
     

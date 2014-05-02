@@ -212,7 +212,8 @@ solveWithMyGA(int maxGeneratedSchedules,
               int maxChildren,
               int timesPingPongInitialPopulation,
               float probabilityKP,
-              float probabilityParentSelection)
+              float probabilityParentSelection,
+              float permissibleResourceRemains)
 {
     shared_ptr<map<Problem *, shared_ptr<Schedule>>>
     solve(new map<Problem *, shared_ptr<Schedule>>);
@@ -223,7 +224,8 @@ solveWithMyGA(int maxGeneratedSchedules,
                                                   maxChildren,
                                                   timesPingPongInitialPopulation,
                                                   probabilityKP,
-                                                  probabilityParentSelection);
+                                                  probabilityParentSelection,
+                                                  permissibleResourceRemains);
     }
     return solve;
 }

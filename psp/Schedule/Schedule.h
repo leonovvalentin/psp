@@ -159,6 +159,13 @@ public:
 #pragma mark - functionality
 public:
     /**
+     Creating schedule by crossing 2 schedules.
+     @param schedule Schedule for crossing with current schedule.
+     @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
+     @return Child schedule.
+     */
+    shared_ptr<Schedule> cross(shared_ptr<Schedule> schedule, float permissibleResourceRemains);
+    /**
      Creating early schedule from current via sorting jobs list by begins of jobs.
      @return Early schedule.
      */
@@ -204,6 +211,12 @@ public:
 #pragma mark - helper methods
 private:
     /**
+     Find block of jobs which are performed simultaneously give small remaining unused resource.
+     @param permissibleResourceRemains Returned jobs are performed simultaneously will be give relative resource remains less or equal then this parameter (resource remains <= permissible resource remains).
+     */
+    shared_ptr<map<shared_ptr<vector<Job *>>, float>> denseJobsBlocks
+    (float permissibleResourceRemains);
+    /**
      Add jobs on schedule via early decoder.
      @param jobs Jobs which will be added on schedule.
      */
@@ -229,6 +242,12 @@ private:
     void addJobsOnScheduleViaLateParallelDecoder
     (vector<Job *> jobs,
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+    /**
+     Calculate active (which is in process or is started at this `time`) jobs.
+     @param time Time for which jobs will be calculated.
+     @return Active jobs.
+     */
+    shared_ptr<vector<Job *>> calcActiveJobs(int time);
     /**
      Calculate completed and active (which is in process or is started at this `time`) jobs.
      @param time Time for which jobs will be calculated.
@@ -286,6 +305,11 @@ private:
      @param time Step for shifting.
      */
     void shift(int time);
+    /**
+     @param time Time moment, result for which will be calculated.
+     @return Relative resource remains at specified time moment.
+     */
+    float relativeResourceRemains(int time);
 public:
     /**
      Validate schedule and create description.

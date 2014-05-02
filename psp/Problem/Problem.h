@@ -114,6 +114,7 @@ public:
      @param timesPingPongInitialPopulation Number of attempts to build a record in Ping-pong algorithm when we construct schedules for initial population.
      @param probabilityKP Probability for solving knapsack problem.
      @param probabilityParentSelection Probability for selectiong schedule from population to parents.
+     @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
      @return Found record.
      */
     shared_ptr<Schedule> scheduleMyGA(int maxGeneratedSchedules,
@@ -122,7 +123,8 @@ public:
                                       int maxChildren,
                                       int timesPingPongInitialPopulation,
                                       float probabilityKP,
-                                      float probabilityParentSelection) const;
+                                      float probabilityParentSelection,
+                                      float permissibleResourceRemains) const;
 };
 
 

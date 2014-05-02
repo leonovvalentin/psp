@@ -51,8 +51,9 @@ int main(int argc, const char * argv[])
      timesPingPongInitialPopulation = 100
      probabilityKP -
      probabilityParentSelection = 0.8
+     permissibleResourceRemains = 0.9
      */
-    auto solve = solver->solveWithMyGA(10, 7, 4, 6, 1, 0.5f, 0.8f);
+    auto solve = solver->solveWithMyGA(10, 7, 4, 6, 1, 0.5f, 0.8f, 0.9f);
     
     for (auto &pProblemSchedule : *solve) {
         cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()

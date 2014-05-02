@@ -321,6 +321,15 @@ const map<Resource *, shared_ptr<vector<int>>> * Schedule :: resourceRemains() c
 
 #pragma mark - functionality
 
+shared_ptr<Schedule> Schedule :: cross(shared_ptr<Schedule> schedule,
+                                       float permissibleResourceRemains)
+{
+    auto denseJobsBlocks = this->denseJobsBlocks(permissibleResourceRemains);
+    auto denseJobsBlocksOfSchedule = schedule->denseJobsBlocks(permissibleResourceRemains);
+    
+    return nullptr;
+}
+
 shared_ptr<Schedule> Schedule :: earlySchedule()
 {
     vector<Job *> jobs = *_activeList.jobList();

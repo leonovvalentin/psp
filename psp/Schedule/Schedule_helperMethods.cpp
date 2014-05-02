@@ -12,6 +12,48 @@
 
 
 
+shared_ptr<map<shared_ptr<vector<Job *>>, float>> Schedule ::
+denseJobsBlocks(float permissibleResourceRemains)
+{
+    shared_ptr<map<shared_ptr<vector<Job *>>, float>>
+    blocks(new map<shared_ptr<vector<Job *>>, float>);
+    
+    pair<shared_ptr<vector<Job *>>, float> prevBlock;
+    for (int t=0; t<duration(); t++) {
+        
+        float resourceRemains = relativeResourceRemains(t);
+        if (resourceRemains < permissibleResourceRemains) {
+            
+            auto activeJobs = this->calcActiveJobs(t);
+            
+            if (!prevBlock.first) {
+                (*blocks)[activeJobs] = resourceRemains;
+                prevBlock.first = activeJobs; prevBlock.second = resourceRemains;
+                continue;
+            }
+            
+            bool isIntersecting = false;
+            for (auto &job : *activeJobs) {
+                if (jobInList(job, prevBlock.first.get())) {
+                    isIntersecting = true;
+                    if (resourceRemains < prevBlock.second) {
+                        blocks->erase(prevBlock.first);
+                        (*blocks)[activeJobs] = resourceRemains;
+                        prevBlock.first = activeJobs; prevBlock.second = resourceRemains;
+                    }
+                    break;
+                }
+            }
+            if (!isIntersecting) {
+                (*blocks)[activeJobs] = resourceRemains;
+                prevBlock.first = activeJobs; prevBlock.second = resourceRemains;
+            }
+        }
+    }
+    
+    return blocks;
+}
+
 void Schedule :: addJobsOnScheduleViaEarlyDecoder(const vector<Job *> *jobs)
 {
     for (int i=0; i<jobs->size(); i++) {
@@ -154,6 +196,18 @@ void Schedule :: addJobsOnScheduleViaLateParallelDecoder
             if (startOfJob > time) time = startOfJob;
         }
     }
+}
+
+shared_ptr<vector<Job *>> Schedule :: calcActiveJobs(int time)
+{
+    shared_ptr<vector<Job *>> active(new vector<Job *>); active->reserve(_starts.size());
+    for (auto &pJobStart : _starts) {
+        Job *job = pJobStart.first;
+        int start = pJobStart.second;
+        int end = start + job->duration();
+        if (end > time && start <= time) active->push_back(job);
+    }
+    return active;
 }
 
 void Schedule :: calcCompletedAndActiveJobs(int time,
@@ -299,6 +353,18 @@ void Schedule :: shift(int time)
             remain->insert(remain->begin(), time, pResourceRemain.first->amount());
         }
     }
+}
+
+float Schedule :: relativeResourceRemains(int time)
+{
+    float relativeResourceRemains = 0.0f;
+    for (auto pResourceRemains : _resourceRemains) {
+        relativeResourceRemains +=
+        (*pResourceRemains.second)[time] / (float)(pResourceRemains.first->amount());
+    }
+    relativeResourceRemains /= _resourceRemains.size();
+    
+    return relativeResourceRemains;
 }
 
 shared_ptr<string> Schedule :: validationDescription()
