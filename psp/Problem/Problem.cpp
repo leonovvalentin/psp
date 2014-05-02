@@ -325,7 +325,8 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
                                              int timesPingPongInitialPopulation,
                                              float probabilityKP,
                                              float probabilityParentSelection,
-                                             float permissibleResourceRemains) const
+                                             float permissibleResourceRemains,
+                                             int swapAndMovePermissibleTimes) const
 {
     shared_ptr<Schedule> record = nullptr;
     
@@ -368,6 +369,8 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
             }
             
             auto child = parent1->cross(parent2, permissibleResourceRemains);
+            auto mutatedChild = child->swapAndMoveMutation(swapAndMovePermissibleTimes,
+                                                           swapAndMovePermissibleTimes);
         }
     }
     

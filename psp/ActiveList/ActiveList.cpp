@@ -49,6 +49,60 @@ ActiveList :: ActiveList(const vector<Job *> *jobList)
     _jobList = *jobList;
 }
 
+#pragma mark - interface
+
+shared_ptr<ActiveList> ActiveList :: swapAndMove(const int swapPermissibleTimes,
+                                                 const int insertPermissibleTimes) const
+{
+    vector<Job *> jobList(_jobList);
+    
+    long n1, n2;
+    for (int i=0; i<2*swapPermissibleTimes; i++) {
+        
+        n1 = Random :: randomLong(1, jobList.size());
+        long distance = distanceToSuccessor(n1);
+        
+        if (i % 2 == 0 && distance > 1) {
+            // Swap
+            n2 = Random :: randomLong(n1 + 1, n1 + distance - 1);
+            Job *job1 = jobList[n1];
+            Job *job2 = jobList[n2];
+            jobList[n1] = job2;
+            jobList[n2] = job1;
+        }
+        else if (distance > 2) {
+            // Move
+            n2 = Random :: randomLong(n1 + 2, n1 + distance);
+            Job *job1 = jobList[n1];
+            jobList.insert(jobList.begin() + n2, job1);
+            jobList.erase(jobList.begin() + n1);
+        }
+    }
+    
+    shared_ptr<ActiveList> activeList(new ActiveList(&jobList));
+    return activeList;
+}
+
+long ActiveList :: distanceToSuccessor(const long numberOfJob) const
+{
+    Job *job = _jobList[numberOfJob];
+    
+    long n = numberOfJob + 1;
+    while (n < _jobList.size()) {
+        
+        Job *nextJob = _jobList[n];
+        
+        if (job->hasSuccessor(nextJob)) {
+            return n - numberOfJob;
+        }
+        else {
+            n++;
+        }
+    }
+    
+    return n - 1 - numberOfJob;
+}
+
 #pragma mark - out
 
 ostream & operator<<(ostream &os, const ActiveList &activeList)

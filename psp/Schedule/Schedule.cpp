@@ -321,6 +321,16 @@ const map<Resource *, shared_ptr<vector<int>>> * Schedule :: resourceRemains() c
 
 #pragma mark - functionality
 
+shared_ptr<Schedule> Schedule :: swapAndMoveMutation(const int swapPermissibleTimes,
+                                                     const int movePermissibleTimes) const
+{
+    shared_ptr<ActiveList> mutatedActiveList =
+    _activeList.swapAndMove(swapPermissibleTimes, movePermissibleTimes);
+    
+    shared_ptr<Schedule> schedule(new Schedule(mutatedActiveList.get(), _resources));
+    return schedule;
+}
+
 shared_ptr<Schedule> Schedule :: cross(shared_ptr<Schedule> schedule,
                                        float permissibleResourceRemains)
 {

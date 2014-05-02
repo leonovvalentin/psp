@@ -115,6 +115,7 @@ public:
      @param probabilityKP Probability for solving knapsack problem.
      @param probabilityParentSelection Probability for selectiong schedule from population to parents.
      @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
+     @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
      @return Map of problems and found records.
      */
     shared_ptr<map<Problem *, shared_ptr<Schedule>>>
@@ -125,7 +126,8 @@ public:
                   int timesPingPongInitialPopulation,
                   float probabilityKP,
                   float probabilityParentSelection,
-                  float permissibleResourceRemains);
+                  float permissibleResourceRemains,
+                  int swapAndMovePermissibleTimes);
 };
 
 

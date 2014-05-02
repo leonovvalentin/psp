@@ -115,6 +115,7 @@ public:
      @param probabilityKP Probability for solving knapsack problem.
      @param probabilityParentSelection Probability for selectiong schedule from population to parents.
      @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
+     @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
      @return Found record.
      */
     shared_ptr<Schedule> scheduleMyGA(int maxGeneratedSchedules,
@@ -124,7 +125,8 @@ public:
                                       int timesPingPongInitialPopulation,
                                       float probabilityKP,
                                       float probabilityParentSelection,
-                                      float permissibleResourceRemains) const;
+                                      float permissibleResourceRemains,
+                                      int swapAndMovePermissibleTimes) const;
 };
 
 

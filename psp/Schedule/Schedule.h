@@ -153,6 +153,12 @@ public:
 #pragma mark - functionality
 public:
     /**
+     Creating mutated schedule, by applying swap and move random jobs, not more then specified number of times.
+     @return Mutated schedule.
+     */
+    shared_ptr<Schedule> swapAndMoveMutation(const int swapPermissibleTimes,
+                                             const int movePermissibleTimes) const;
+    /**
      Creating schedule by crossing 2 schedules.
      @param schedule Schedule for crossing with current schedule.
      @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.

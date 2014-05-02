@@ -31,9 +31,8 @@ private:
      */
     int _duration;
     
-public:
-
 #pragma mark - init
+public:
     /**
      Constructor.
      Create activeList with empty jobList.
@@ -53,11 +52,28 @@ public:
      */
     ActiveList(const vector<Job *> *jobList);
     
+#pragma mark - interface
+public:
+    /**
+     Swap 2 random jobs, and move some job to another position. Not more times than specified number of times for each operation.
+     @return ActiveList, created from current ActiveList by swapping and moving random jobs.
+     */
+    shared_ptr<ActiveList> swapAndMove(const int swapPermissibleTimes,
+                                       const int movePermissibleTimes) const;
+private:
+    /**
+     @param numberOfJob Number of job in current activeList, distance for which successor will be calculated.
+     @return Distance to first occurrence successor of specified job.
+     */
+    long distanceToSuccessor(const long numberOfJob) const;
+    
 #pragma mark - out
+public:
     friend ostream & operator<<(ostream &os, const ActiveList &activeList);
     string stringJobList() const;
     
 #pragma mark - getters
+public:
     const vector<Job *> * jobList() const;
     /**
      Duration.
