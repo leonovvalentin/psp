@@ -94,6 +94,46 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
     return selectedJobs;
 };
 
+long distanceToSuccessor(const vector<Job *> *jobs, const long numberOfJob)
+{
+    Job *job = (*jobs)[numberOfJob];
+    
+    long n = numberOfJob + 1;
+    while (n < jobs->size()) {
+        
+        Job *nextJob = (*jobs)[n];
+        
+        if (job->hasSuccessor(nextJob)) {
+            return n - numberOfJob;
+        }
+        else {
+            n++;
+        }
+    }
+    
+    return jobs->size() - 1 - numberOfJob;
+}
+
+long distanceToPredecessor(const vector<Job *> *jobs, const long numberOfJob)
+{
+    Job *job = (*jobs)[numberOfJob];
+    
+    long n = numberOfJob - 1;
+    while (n >= 0) {
+        
+        Job *prevJob = (*jobs)[n];
+        
+        if (job->hasPredecessor(prevJob)) {
+            return numberOfJob - n;
+        }
+        else {
+            n--;
+        }
+    }
+    
+    return numberOfJob;
+}
+
 void removeJobFromList(const Job *job, vector<Job *> *list)
 {
     auto jobIt = find(begin(*list), end(*list), job);

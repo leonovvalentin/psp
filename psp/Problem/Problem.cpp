@@ -370,7 +370,7 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
             
             auto child = parent1->cross(parent2, permissibleResourceRemains);
             auto mutatedChild = child->swapAndMoveMutation(swapAndMovePermissibleTimes,
-                                                           swapAndMovePermissibleTimes);
+                                                           swapAndMovePermissibleTimes)->pingPong();
         }
     }
     

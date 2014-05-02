@@ -54,21 +54,25 @@ ActiveList :: ActiveList(const vector<Job *> *jobList)
 shared_ptr<ActiveList> ActiveList :: swapAndMove(const int swapPermissibleTimes,
                                                  const int insertPermissibleTimes) const
 {
-    vector<Job *> jobList(_jobList);
+    vector<Job *> jobList;
+    jobList.reserve(_jobList.size() + 1);
+    jobList = _jobList;
     
     long n1, n2;
     for (int i=0; i<2*swapPermissibleTimes; i++) {
         
-        n1 = Random :: randomLong(1, jobList.size());
-        long distance = distanceToSuccessor(n1);
+        n1 = Random :: randomLong(1, jobList.size() - 1);
+        long distance = distanceToSuccessor(&jobList, n1);
         
         if (i % 2 == 0 && distance > 1) {
             // Swap
             n2 = Random :: randomLong(n1 + 1, n1 + distance - 1);
-            Job *job1 = jobList[n1];
-            Job *job2 = jobList[n2];
-            jobList[n1] = job2;
-            jobList[n2] = job1;
+            if (distanceToPredecessor(&jobList, n2) > n2 - n1) {
+                Job *job1 = jobList[n1];
+                Job *job2 = jobList[n2];
+                jobList[n1] = job2;
+                jobList[n2] = job1;
+            }
         }
         else if (distance > 2) {
             // Move
@@ -81,26 +85,6 @@ shared_ptr<ActiveList> ActiveList :: swapAndMove(const int swapPermissibleTimes,
     
     shared_ptr<ActiveList> activeList(new ActiveList(&jobList));
     return activeList;
-}
-
-long ActiveList :: distanceToSuccessor(const long numberOfJob) const
-{
-    Job *job = _jobList[numberOfJob];
-    
-    long n = numberOfJob + 1;
-    while (n < _jobList.size()) {
-        
-        Job *nextJob = _jobList[n];
-        
-        if (job->hasSuccessor(nextJob)) {
-            return n - numberOfJob;
-        }
-        else {
-            n++;
-        }
-    }
-    
-    return n - 1 - numberOfJob;
 }
 
 #pragma mark - out

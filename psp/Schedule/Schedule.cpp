@@ -321,6 +321,20 @@ const map<Resource *, shared_ptr<vector<int>>> * Schedule :: resourceRemains() c
 
 #pragma mark - functionality
 
+shared_ptr<Schedule> Schedule :: pingPong() const
+{
+    shared_ptr<Schedule> schedule = earlySchedule();
+    
+    bool stop = false;
+    while (!stop) {
+        shared_ptr<Schedule> scheduleEarly = schedule->lateSchedule()->earlySchedule();
+        if (scheduleEarly->duration() < schedule->duration()) schedule = scheduleEarly;
+        else stop = true;
+    }
+    
+    return schedule;
+}
+
 shared_ptr<Schedule> Schedule :: swapAndMoveMutation(const int swapPermissibleTimes,
                                                      const int movePermissibleTimes) const
 {
@@ -424,7 +438,7 @@ shared_ptr<Schedule> Schedule :: cross(shared_ptr<Schedule> schedule,
     return Schedule :: scheduleEarly(&childActiveList, _resources);
 }
 
-shared_ptr<Schedule> Schedule :: earlySchedule()
+shared_ptr<Schedule> Schedule :: earlySchedule() const
 {
     vector<Job *> jobs = *_activeList.jobList();
     sort(jobs.begin(), jobs.end(), [this](Job *job1, Job *job2){return start(job1) < start(job2);});
@@ -433,7 +447,7 @@ shared_ptr<Schedule> Schedule :: earlySchedule()
     return schedule;
 }
 
-shared_ptr<Schedule> Schedule :: lateSchedule()
+shared_ptr<Schedule> Schedule :: lateSchedule() const
 {
     vector<Job *> jobs = *_activeList.jobList();
     sort(jobs.begin(), jobs.end(), [this](Job *job1, Job *job2){return end(job1) < end(job2);});

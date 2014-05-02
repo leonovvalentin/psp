@@ -43,6 +43,19 @@ typedef shared_ptr<vector<Job *>> JOBS_VECTOR_PTR;
 JOBS_VECTOR_PTR selectJobFirstInActiveList(PARAMETERS_OF_SELECTING_FUNCTION);
 JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probability);
 
+/**
+ @param jobs Jobs list, search in which will be.
+ @param numberOfJob Number of job, distance for which successor will be calculated.
+ @return Distance to first successor occurrence.
+ */
+long distanceToSuccessor(const vector<Job *> *jobs, const long numberOfJob);
+/**
+ @param jobs Jobs list, search in which will be.
+ @param numberOfJob Number of job, distance for which predecessor will be calculated.
+ @return Distance to first predecessor occurrence.
+ */
+long distanceToPredecessor(const vector<Job *> *jobs, const long numberOfJob);
+
 void removeJobFromList(const Job *job, vector<Job *> *list);
 bool jobInList(const Job *job, const vector<Job *> *list);
 string stringMATLARRectangle(int x, int y, int width, int height,

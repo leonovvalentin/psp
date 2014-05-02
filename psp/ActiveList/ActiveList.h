@@ -60,12 +60,6 @@ public:
      */
     shared_ptr<ActiveList> swapAndMove(const int swapPermissibleTimes,
                                        const int movePermissibleTimes) const;
-private:
-    /**
-     @param numberOfJob Number of job in current activeList, distance for which successor will be calculated.
-     @return Distance to first occurrence successor of specified job.
-     */
-    long distanceToSuccessor(const long numberOfJob) const;
     
 #pragma mark - out
 public:
