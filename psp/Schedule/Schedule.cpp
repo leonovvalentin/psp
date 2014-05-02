@@ -327,8 +327,7 @@ shared_ptr<Schedule> Schedule :: swapAndMoveMutation(const int swapPermissibleTi
     shared_ptr<ActiveList> mutatedActiveList =
     _activeList.swapAndMove(swapPermissibleTimes, movePermissibleTimes);
     
-    shared_ptr<Schedule> schedule(new Schedule(mutatedActiveList.get(), _resources));
-    return schedule;
+    return scheduleEarly(mutatedActiveList.get(), _resources);
 }
 
 shared_ptr<Schedule> Schedule :: cross(shared_ptr<Schedule> schedule,

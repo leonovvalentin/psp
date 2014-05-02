@@ -154,7 +154,7 @@ public:
 public:
     /**
      Creating mutated schedule, by applying swap and move random jobs, not more then specified number of times.
-     @return Mutated schedule.
+     @return Early schedule, created from mutated activeList.
      */
     shared_ptr<Schedule> swapAndMoveMutation(const int swapPermissibleTimes,
                                              const int movePermissibleTimes) const;
