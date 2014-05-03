@@ -242,6 +242,8 @@ PSchedule Problem :: scheduleKochetovStolyar2003(float probabilityKP,
     
     for (int iteration = 0; iteration < maxIterationNumber; iteration++) {
         
+        LOG("iterations = " << (float)iteration / maxIterationNumber * 100 << "%");
+        
         // currentNeighbourhoodType
         
         if (stepsNoChange >= changingInterval) {

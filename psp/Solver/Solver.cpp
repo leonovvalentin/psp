@@ -184,20 +184,33 @@ shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithSchedulePingPong(int ti
     return solutions;
 }
 
-shared_ptr<map<Problem *, PSchedule>> Solver ::
+shared_ptr<map<Problem *, Solution>> Solver ::
 solveWithScheduleKochetovStolyar2003(float probabilityKP,
                                      float probabilitySN,
                                      int tabuListSize,
                                      int changingInterval,
                                      int maxIterationNumber)
 {
-    shared_ptr<map<Problem *, PSchedule>> solutions(new map<Problem *, PSchedule>);
+    shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     for (auto &problem : _problems) {
-        (*solutions)[problem] = problem->scheduleKochetovStolyar2003(probabilityKP,
-                                                                 probabilitySN,
-                                                                 tabuListSize,
-                                                                 changingInterval,
-                                                                 maxIterationNumber);
+        
+        time_t calculationTime; time(&calculationTime);
+        auto schedule = problem->scheduleKochetovStolyar2003(probabilityKP,
+                                                             probabilitySN,
+                                                             tabuListSize,
+                                                             changingInterval,
+                                                             maxIterationNumber);
+        calculationTime = time(NULL) - calculationTime;
+        
+        Solution solution = {
+            schedule,
+            (float)(schedule->duration() - _recordsData[problem]) / _recordsData[problem],
+            (float)(schedule->duration() - _criticalPathData[problem]) / _criticalPathData[problem],
+            calculationTime
+        };
+        (*solutions)[problem] = solution;
+        
+        LOG(*problem->name() << ": " << solution.str());
     }
     return solutions;
 }

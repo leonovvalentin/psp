@@ -18,6 +18,8 @@
 
 
 
+class Solution;
+class Problem;
 class Schedule;
 class ActiveList;
 class Job;
@@ -51,6 +53,9 @@ typedef shared_ptr<vector<Job *>> JOBS_VECTOR_PTR;
 
 JOBS_VECTOR_PTR selectJobFirstInActiveList(PARAMETERS_OF_SELECTING_FUNCTION);
 JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probability);
+
+string stringFromSolutions(shared_ptr<map<Problem *, Solution>> solutions);
+string stringFromSolutionsForTable(shared_ptr<map<Problem *, Solution>> solutions);
 
 /**
  @param jobs Jobs list, search in which will be.

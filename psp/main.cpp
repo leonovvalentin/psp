@@ -9,6 +9,7 @@
 
 
 #include "Solver.h"
+#include "utils.h"
 
 #include <iostream>
 #include <ctime>
@@ -39,7 +40,8 @@ int main(int argc, const char * argv[])
      changingInterval = 5..10
      maxIterationNumber = 1000..5000
      */
-//    auto solutions = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 1000);
+//    auto solutionsKS = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 5000);
+//    LOG(stringFromSolutions(solutionsKS));
     
     // My genetic algorithm
     /**
@@ -54,22 +56,8 @@ int main(int argc, const char * argv[])
      permissibleResourceRemains = 0.9
      swapAndMovePermissibleTimes = 10
      */
-    auto solutions = solver->solveWithMyGA(1000, 40, 20, 40, 10, 100, 0.5f, 0.8f, 0.9f, 10);
-    
-    float averageErrorToRecord = 0, averageErrorToCriticalPath = 0, averageCalculationTime = 0;
-    for (auto &pProblemResult : *solutions) {
-        
-        Solution solution = pProblemResult.second;
-        LOG(*pProblemResult.first->name() << ": " << solution.str());
-        
-        averageErrorToRecord += solution.errorToRecord / solutions->size();
-        averageErrorToCriticalPath += solution.errorToCriticalPath / solutions->size();
-        averageCalculationTime += (float)solution.calculationTime / solutions->size();
-    }
-    
-    LOG("averageErrorToRecord = " << averageErrorToRecord << "%"
-        << " averageErrorToCriticalPath = " << averageErrorToCriticalPath << "%"
-        << " averageCalculationTime = " << averageCalculationTime << "sec.");
+//    auto solutionsGA = solver->solveWithMyGA(5000, 40, 20, 40, 10, 100, 0.5f, 0.8f, 0.9f, 10);
+//    LOG(stringFromSolutions(solutionsGA));
     
     delete solver;
     

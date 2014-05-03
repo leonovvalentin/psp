@@ -52,35 +52,55 @@ ActiveList :: ActiveList(const vector<Job *> *jobList)
 #pragma mark - interface
 
 PActiveList ActiveList :: swapAndMove(const int swapPermissibleTimes,
-                                      const int insertPermissibleTimes) const
+                                      const int movePermissibleTimes) const
 {
     vector<Job *> jobList;
     jobList.reserve(_jobList.size() + 1);
     jobList = _jobList;
     
     long n1, n2;
-    for (int i=0; i<2*swapPermissibleTimes; i++) {
+    
+    // Swap
+    
+    int swapMax = Random :: randomInt(0, swapPermissibleTimes);
+    for (int i=0; i<swapMax; i++) {
         
         n1 = Random :: randomLong(1, jobList.size() - 1);
         long distance = distanceToSuccessor(&jobList, n1);
         
-        if (i % 2 == 0 && distance > 1) {
-            // Swap
+        if (distance > 1) {
             n2 = Random :: randomLong(n1 + 1, n1 + distance - 1);
             if (distanceToPredecessor(&jobList, n2) > n2 - n1) {
                 Job *job1 = jobList[n1];
                 Job *job2 = jobList[n2];
                 jobList[n1] = job2;
                 jobList[n2] = job1;
+                continue;
             }
         }
-        else if (distance > 2) {
-            // Move
+        
+        // If no swap, try again
+        i--;
+    }
+    
+    // Move
+    
+    int moveMax = Random :: randomInt(0, movePermissibleTimes);
+    for (int i=0; i<moveMax; i++) {
+        
+        n1 = Random :: randomLong(1, jobList.size() - 1);
+        long distance = distanceToSuccessor(&jobList, n1);
+        
+        if (distance > 2) {
             n2 = Random :: randomLong(n1 + 2, n1 + distance);
             Job *job1 = jobList[n1];
             jobList.insert(jobList.begin() + n2, job1);
             jobList.erase(jobList.begin() + n1);
+            continue;
         }
+        
+        // If no move, try again
+        i--;
     }
     
     PActiveList activeList(new ActiveList(&jobList));

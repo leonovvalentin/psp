@@ -8,6 +8,8 @@
 
 
 
+#include "Solver.h"
+#include "Problem.h"
 #include "Schedule.h"
 
 #include "utils.h"
@@ -93,6 +95,50 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
     
     return selectedJobs;
 };
+
+string stringFromSolutions(shared_ptr<map<Problem *, Solution>> solutions)
+{
+    stringstream ss;
+    
+    float averageErrorToRecord = 0, averageErrorToCriticalPath = 0, averageCalculationTime = 0;
+    for (auto &pProblemResult : *solutions) {
+        
+        Solution solution = pProblemResult.second;
+        ss << *pProblemResult.first->name() << ": " << solution.str() << endl;
+        
+        averageErrorToRecord += solution.errorToRecord / solutions->size();
+        averageErrorToCriticalPath += solution.errorToCriticalPath / solutions->size();
+        averageCalculationTime += (float)solution.calculationTime / solutions->size();
+    }
+    
+    ss << "averageErrorToRecord = " << averageErrorToRecord * 100 << "%"
+    << " averageErrorToCriticalPath = " << averageErrorToCriticalPath * 100 << "%"
+    << " averageCalculationTime = " << averageCalculationTime << "sec.";
+    
+    return ss.str();
+}
+
+string stringFromSolutionsForTable(shared_ptr<map<Problem *, Solution>> solutions)
+{
+    stringstream ss;
+    
+//    float averageErrorToRecord = 0, averageErrorToCriticalPath = 0, averageCalculationTime = 0;
+//    for (auto &pProblemResult : *solutions) {
+//        
+//        Solution solution = pProblemResult.second;
+//        ss << *pProblemResult.first->name() << "\t" << solution.strForTable() << endl;
+//        
+//        averageErrorToRecord += solution.errorToRecord / solutions->size();
+//        averageErrorToCriticalPath += solution.errorToCriticalPath / solutions->size();
+//        averageCalculationTime += (float)solution.calculationTime / solutions->size();
+//    }
+//    
+//    ss << "averageErrorToRecord = " << averageErrorToRecord * 100 << "%"
+//    << " averageErrorToCriticalPath = " << averageErrorToCriticalPath * 100 << "%"
+//    << " averageCalculationTime = " << averageCalculationTime << "sec.";
+    
+    return ss.str();
+}
 
 long distanceToSuccessor(const vector<Job *> *jobs, const long numberOfJob)
 {

@@ -15,35 +15,16 @@
 
 #include "Problem.h"
 #include "Schedule.h"
+#include "Solution.h"
 
 #include <iostream>
 #include <vector>
 #include <map>
 #include <sstream>
 
+
+
 using namespace std;
-
-
-
-struct Solution {
-    PSchedule schedule;
-    float errorToRecord;
-    float errorToCriticalPath;
-    time_t calculationTime;
-    
-    string str()
-    {
-        stringstream ss;
-        
-        ss << " duration = " << schedule->duration()
-        << " errorToRecord = " << errorToRecord * 100 << "%"
-        << " errorToCriticalPath = " << errorToCriticalPath * 100 << "%"
-        << " calculationTime = " << calculationTime << "sec."
-        << " isValid = " << *schedule->validationDescription();
-        
-        return ss.str();
-    }
-};
 
 
 
@@ -121,7 +102,7 @@ public:
      @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, PSchedule>>
+    shared_ptr<map<Problem *, Solution>>
     solveWithScheduleKochetovStolyar2003(float probabilityKP,
                                          float probabilitySN,
                                          int tabuListSize,

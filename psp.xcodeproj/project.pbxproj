@@ -36,6 +36,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5803492819152FEA00E81416 /* Solution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solution.h; sourceTree = "<group>"; };
 		58B143751914B43300554223 /* j120hrs.sm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = j120hrs.sm; sourceTree = "<group>"; };
 		58B143761914B43300554223 /* X16_1.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_1.RCP; sourceTree = "<group>"; };
 		58B143771914B43300554223 /* X16_2.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_2.RCP; sourceTree = "<group>"; };
@@ -198,6 +199,7 @@
 			children = (
 				58D631D118D42C0300C5F841 /* Solver.cpp */,
 				58D631D218D42C0300C5F841 /* Solver.h */,
+				5803492819152FEA00E81416 /* Solution.h */,
 			);
 			path = Solver;
 			sourceTree = "<group>";
