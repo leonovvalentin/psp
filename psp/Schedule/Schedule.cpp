@@ -21,9 +21,11 @@ Schedule :: Schedule(ActiveList *activeList, const vector<Resource *> *resources
     _activeList = *activeList;
     _resources = resources;
     _duration = 0;
-    for (auto &resource : *resources) {
-        _resourceRemains[resource] =
-        shared_ptr<vector<int>>(new vector<int>(activeList->duration(), resource->amount()));
+    if (resources) {
+        for (auto &resource : *resources) {
+            _resourceRemains[resource] =
+            shared_ptr<vector<int>>(new vector<int>(activeList->duration(), resource->amount()));
+        }
     }
 }
 
@@ -110,6 +112,22 @@ PSchedule Schedule :: schedulePartialyLateParallel
         if (jobStart.second < start) start = jobStart.second;
     }
     schedule->shift(-start);
+    
+    return schedule;
+}
+
+PSchedule Schedule :: scheduleEarlyWithoutResources(ActiveList *activeList)
+{
+    PSchedule schedule(new Schedule(activeList, NULL));
+    schedule->_type = ScheduleTypeEarly;
+    
+    for (int i=0; i<activeList->size(); i++) {
+        Job *job = (*activeList)[i];
+        schedule->_starts[job] = 0;
+        for (auto &predecessor : *job->predecessors()) {
+            schedule->_starts[job] = max(schedule->start(job), schedule->end(predecessor));
+        }
+    }
     
     return schedule;
 }

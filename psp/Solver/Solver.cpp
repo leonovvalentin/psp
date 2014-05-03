@@ -94,16 +94,18 @@ Solver :: Solver(string *path)
         optsData.close();
     }
     
-    // Problems and opts
+    // Problems, records, critical paths
     
     _problems = vector<Problem *>(0);
     
     for (auto &pIDPath : problemPaths) {
-        // Problem
-        string problemName =
-        to_string(pIDPath.first.first) + "_" + to_string(pIDPath.first.second);
+        
+        string problemName = to_string(pIDPath.first.first) + "_" + to_string(pIDPath.first.second);
         _problems.push_back(new Problem(&problemName, &pIDPath.second));
-        _recordsData[_problems[_problems.size() - 1]] = optsMap[pIDPath.first];
+        
+        Problem *problem = _problems[_problems.size() - 1];
+        _recordsData[problem] = optsMap[pIDPath.first];
+        _criticalPathData[problem] = problem->criticalPathDuration();
     }
 }
 
@@ -230,8 +232,8 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA(int maxGeneratedSch
         
         Solution solution = {
             schedule,
-            (float)(schedule->duration() - _recordsData[problem]) / _recordsData[problem] * 100,
-            0,
+            (float)(schedule->duration() - _recordsData[problem]) / _recordsData[problem],
+            (float)(schedule->duration() - _criticalPathData[problem]) / _criticalPathData[problem],
             calculationTime
         };
         (*solutions)[problem] = solution;

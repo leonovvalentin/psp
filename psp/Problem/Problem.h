@@ -30,6 +30,7 @@ private:
     string _name;
     vector <Job *> _jobs;
     vector <Resource *> _resources;
+    int _criticalPathDuration;
     
 public:
     
@@ -50,6 +51,7 @@ public:
     
 #pragma mark - getters
     const string * name() const;
+    const int criticalPathDuration();
     
 #pragma mark - functionality
     /**

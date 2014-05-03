@@ -67,7 +67,7 @@ int main(int argc, const char * argv[])
         averageCalculationTime += (float)solution.calculationTime / solutions->size();
     }
     
-    LOG(" averageErrorToRecord = " << averageErrorToRecord << "%"
+    LOG("averageErrorToRecord = " << averageErrorToRecord << "%"
         << " averageErrorToCriticalPath = " << averageErrorToCriticalPath << "%"
         << " averageCalculationTime = " << averageCalculationTime << "sec.");
     

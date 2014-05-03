@@ -36,8 +36,8 @@ struct Solution {
         stringstream ss;
         
         ss << " duration = " << schedule->duration()
-        << " errorToRecord = " << errorToRecord << "%"
-        << " errorToCriticalPath = " << errorToCriticalPath << "%"
+        << " errorToRecord = " << errorToRecord * 100 << "%"
+        << " errorToCriticalPath = " << errorToCriticalPath * 100 << "%"
         << " calculationTime = " << calculationTime << "sec."
         << " isValid = " << *schedule->validationDescription();
         
@@ -52,8 +52,7 @@ class Solver
 private:
     vector<Problem *> _problems;
     map<Problem *, int> _recordsData;
-#warning TODO
-    map<Problem *, int> _lowerBoundCriticalPathData;
+    map<Problem *, int> _criticalPathData;
     
 #pragma mark - init
 public:

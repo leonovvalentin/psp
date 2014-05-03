@@ -107,6 +107,12 @@ private:
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
 public:
     /**
+     Early schedule without resource constrains.
+     @param activeList ActiveList by which shedule will be created.
+     @return Schedule created by early decoder.
+     */
+    static PSchedule scheduleEarlyWithoutResources(ActiveList *activeList);
+    /**
      Early schedule.
      @param activeList ActiveList by which shedule will be created.
      @param resources Resources necessary for jobs in actilveList.

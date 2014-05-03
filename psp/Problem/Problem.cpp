@@ -22,6 +22,7 @@
 Problem :: Problem(string *name, string *path)
 {
     _name = *name;
+    _criticalPathDuration = 0;
     
     ifstream data(*path);
     
@@ -118,6 +119,16 @@ string Problem :: stringRelationshipJobsInGVFormat() const
 const string * Problem :: name() const
 {
     return &_name;
+}
+
+const int Problem :: criticalPathDuration()
+{
+    if (_criticalPathDuration == 0) {
+        ActiveList activeList(_jobs[0], _jobs.size());
+        _criticalPathDuration =
+        (Schedule :: scheduleEarlyWithoutResources(&activeList))->duration();
+    }
+    return _criticalPathDuration;
 }
 
 #pragma mark - functionality
