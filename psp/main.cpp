@@ -48,17 +48,18 @@ int main(int argc, const char * argv[])
      populationSize = 40
      maxParents = 20
      maxChildren = 40
+     numberOfChildrenInNextGeneration = 10
      timesPingPongInitialPopulation = 100
      probabilityKP -
      probabilityParentSelection = 0.8
      permissibleResourceRemains = 0.9
      swapAndMovePermissibleTimes = 10
      */
-    auto solve = solver->solveWithMyGA(10, 7, 4, 6, 1, 0.5f, 0.8f, 0.9f, 10);
+    auto solve = solver->solveWithMyGA(1000, 40, 20, 40, 10, 100, 0.5f, 0.8f, 0.9f, 10);
     
     for (auto &pProblemSchedule : *solve) {
         cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()
-        /*<< " " << *pProblemSchedule.second->validationDescription()*/ << endl;
+        << " " << *pProblemSchedule.second->validationDescription() << endl;
     }
     delete solver;
     

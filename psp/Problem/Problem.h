@@ -111,6 +111,7 @@ public:
      @param populationSize Size of population.
      @param maxParents Number of selected parents in each iteration. It should be greater then 1.
      @param maxChildren Number of generated children for each iteration.
+     @param numberOfChildrenInNextGeneration Number of created children which will be added to next generation.
      @param timesPingPongInitialPopulation Number of attempts to build a record in Ping-pong algorithm when we construct schedules for initial population.
      @param probabilityKP Probability for solving knapsack problem.
      @param probabilityParentSelection Probability for selectiong schedule from population to parents.
@@ -122,6 +123,7 @@ public:
                            int populationSize,
                            int maxParents,
                            int maxChildren,
+                           int numberOfChildrenInNextGeneration,
                            int timesPingPongInitialPopulation,
                            float probabilityKP,
                            float probabilityParentSelection,

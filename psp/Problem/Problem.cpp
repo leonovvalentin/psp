@@ -322,6 +322,7 @@ PSchedule Problem :: scheduleMyGA(int maxGeneratedSchedules,
                                   int populationSize,
                                   int maxParents,
                                   int maxChildren,
+                                  int numberOfChildrenInNextGeneration,
                                   int timesPingPongInitialPopulation,
                                   float probabilityKP,
                                   float probabilityParentSelection,
@@ -331,7 +332,8 @@ PSchedule Problem :: scheduleMyGA(int maxGeneratedSchedules,
     PSchedule record = nullptr;
     
     // initial population
-    vector<PSchedule> population(0); population.reserve(populationSize);
+    vector<PSchedule> population(0);
+    population.reserve(populationSize + numberOfChildrenInNextGeneration);
     for (int i=0; i<populationSize; i++) {
         PSchedule schedule = schedulePingPong(timesPingPongInitialPopulation, probabilityKP);
         population.push_back(schedule);
@@ -358,19 +360,41 @@ PSchedule Problem :: scheduleMyGA(int maxGeneratedSchedules,
             }
         }
         
-        int numberOfChildren = 0;
-        while (numberOfChildren < maxChildren) {
+        // create children
+        vector<PSchedule> children(0); children.reserve(maxChildren);
+        while (children.size() < maxChildren) {
             
+            // select 2 parents for crossing
             auto parent1 = parents[Random :: randomLong(0, parents.size() - 1)];
             auto parent2 = parents[Random :: randomLong(0, parents.size() - 1)];
             while (parent2 == parent1) {
                 parent2 = parents[Random :: randomLong(0, parents.size() - 1)];
             }
             
+            // crossing
             auto child = parent1->cross(parent2, permissibleResourceRemains);
             auto mutatedChild = child->swapAndMoveMutation(swapAndMovePermissibleTimes,
                                                            swapAndMovePermissibleTimes)->pingPong();
+            if (child->duration() < record->duration()) {
+                if (mutatedChild->duration() < child->duration()) child = mutatedChild;
+                record = child;
+            }
+            else {
+                child = mutatedChild;
+            }
+            
+            children.push_back(child);
+            numberOfGeneratedSchedules++;
         }
+        
+        // next population
+        sort(begin(children), end(children), [](PSchedule a, PSchedule b){
+            return a->duration() < b->duration();
+        });
+        population.insert(population.begin(),
+                          children.begin(),
+                          children.begin() + numberOfChildrenInNextGeneration);
+        population.erase(population.begin() + populationSize, population.end());
     }
     
     return record;

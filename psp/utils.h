@@ -63,6 +63,7 @@ bool jobInList(const Job *job, const vector<Job *> *list);
 string stringMATLARRectangle(int x, int y, int width, int height,
                              float redColor, float greenColor, float blueColor,
                              string textInside, string textOutside);
+string stringFromSchedulesVector(const vector<PSchedule> *schedules);
 string stringFromJobsVector(const vector<Job *> *jobs);
 string stringFromIntVector(const vector<int> *ints);
 string stringOfDurationsFromSchdulesVector(const vector<PSchedule> *schedules);

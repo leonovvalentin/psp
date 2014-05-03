@@ -165,6 +165,25 @@ string stringMATLARRectangle(int x, int y, int width, int height,
     return ss.str();
 }
 
+string stringFromSchedulesVector(const vector<PSchedule> *schedules)
+{
+    stringstream ss;
+    
+    if (!schedules->size()) {
+        ss << "Vector is empty";
+        return ss.str();
+    }
+    
+    bool first = true;
+    for (auto &schedule : *schedules) {
+        if (first) first = false;
+        else ss << ", ";
+        ss << schedule->duration();
+    }
+    
+    return ss.str();
+}
+
 string stringFromJobsVector(const vector<Job *> *jobs)
 {
     stringstream ss;
