@@ -122,20 +122,24 @@ string stringFromSolutionsForTable(shared_ptr<map<Problem *, Solution>> solution
 {
     stringstream ss;
     
-//    float averageErrorToRecord = 0, averageErrorToCriticalPath = 0, averageCalculationTime = 0;
-//    for (auto &pProblemResult : *solutions) {
-//        
-//        Solution solution = pProblemResult.second;
-//        ss << *pProblemResult.first->name() << "\t" << solution.strForTable() << endl;
-//        
-//        averageErrorToRecord += solution.errorToRecord / solutions->size();
-//        averageErrorToCriticalPath += solution.errorToCriticalPath / solutions->size();
-//        averageCalculationTime += (float)solution.calculationTime / solutions->size();
-//    }
-//    
-//    ss << "averageErrorToRecord = " << averageErrorToRecord * 100 << "%"
-//    << " averageErrorToCriticalPath = " << averageErrorToCriticalPath * 100 << "%"
-//    << " averageCalculationTime = " << averageCalculationTime << "sec.";
+    ss << "Name\t" << Solution :: strTitlesForTable() << endl;
+    
+    float averageErrorToRecord = 0, averageErrorToCriticalPath = 0, averageCalculationTime = 0;
+    for (auto &pProblemResult : *solutions) {
+        
+        Solution solution = pProblemResult.second;
+        ss << *pProblemResult.first->name() << "\t" << solution.strForTable() << endl;
+        
+        averageErrorToRecord += solution.errorToRecord / solutions->size();
+        averageErrorToCriticalPath += solution.errorToCriticalPath / solutions->size();
+        averageCalculationTime += (float)solution.calculationTime / solutions->size();
+    }
+    
+    ss
+    << "average\t\t"
+    << averageErrorToRecord * 100 << "\t"
+    << averageErrorToCriticalPath * 100 << "\t"
+    << averageCalculationTime;
     
     return ss.str();
 }

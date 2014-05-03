@@ -4,9 +4,11 @@
 
 
 #include "Schedule.h"
+#include "utils.h"
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 
 
@@ -21,6 +23,8 @@ struct Solution {
     float errorToCriticalPath;
     time_t calculationTime;
     
+#pragma mark - interface
+    
     string str()
     {
         stringstream ss;
@@ -33,17 +37,40 @@ struct Solution {
         
         return ss.str();
     }
-    string strForTable()
+    void checkOnRecord(const string *problemName)
+    {
+        if (errorToRecord < 0) {
+            
+            stringstream ss;
+            ss << "New record!"
+            << endl << "Problem: " << *problemName
+            << endl << *schedule << "MATLAB:" << endl << schedule->stringMATLAB();
+            
+            LOG(ss.str());
+            LOGF(ss.str())
+        }
+    }
+    
+#pragma mark - table
+    
+    static string strTitlesForTable()
     {
         stringstream ss;
         
         ss
         << "duration"
-        << "\terrorToRecord"
-        << "\terrorToCriticalPath"
-        << "\tcalculationTime"
-        << "\tisValid"
-        << endl
+        << "\terror to record, %"
+        << "\terror to critical path, %"
+        << "\tcalculation time, sec."
+        << "\tis valid";
+        
+        return ss.str();
+    }
+    string strForTable()
+    {
+        stringstream ss;
+        
+        ss
         << schedule->duration()
         << "\t" << errorToRecord * 100
         << "\t" << errorToCriticalPath * 100

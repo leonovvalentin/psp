@@ -37,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		5803492819152FEA00E81416 /* Solution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solution.h; sourceTree = "<group>"; };
+		5803492A19153CE500E81416 /* LOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LOG.txt; sourceTree = "<group>"; };
 		58B143751914B43300554223 /* j120hrs.sm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = j120hrs.sm; sourceTree = "<group>"; };
 		58B143761914B43300554223 /* X16_1.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_1.RCP; sourceTree = "<group>"; };
 		58B143771914B43300554223 /* X16_2.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_2.RCP; sourceTree = "<group>"; };
@@ -115,6 +116,7 @@
 				58D631D618D42C0300C5F841 /* utils.cpp */,
 				58D631D718D42C0300C5F841 /* utils.h */,
 				58D631B018D42B7600C5F841 /* main.cpp */,
+				5803492A19153CE500E81416 /* LOG.txt */,
 				58D631B218D42B7600C5F841 /* psp.1 */,
 			);
 			path = psp;

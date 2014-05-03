@@ -29,12 +29,21 @@ class Job;
 using namespace std;
 
 
+#define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/psp/psp/LOG.txt"
+#define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/psp/Data"
 
-#define LOG_IN_COLSOL 1
-#ifdef LOG_IN_COLSOL
+#define LOG_TO_COLSOL 1
+#ifdef LOG_TO_COLSOL
 #define LOG(str) do { cout << str << endl; } while (false)
 #else
 #define LOG(str)
+#endif
+
+#define LOG_TO_FILE 1
+#ifdef LOG_TO_FILE
+#define LOGF(str) ofstream f; f.open(PATH_TO_LOG_FILE, ios::app); f << "\n\n\n"; do { f << str << endl; } while (false); f.close();
+#else
+#define LOGF(str)
 #endif
 
 #define PARAMETERS_OF_SELECTING_FUNCTION const vector<Job *> *jobs,\

@@ -211,6 +211,7 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
+        solution.checkOnRecord(problem->name());
     }
     return solutions;
 }
@@ -252,6 +253,7 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA(int maxGeneratedSch
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
+        solution.checkOnRecord(problem->name());
     }
     
     return solutions;
