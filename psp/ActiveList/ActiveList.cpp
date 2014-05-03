@@ -51,8 +51,8 @@ ActiveList :: ActiveList(const vector<Job *> *jobList)
 
 #pragma mark - interface
 
-shared_ptr<ActiveList> ActiveList :: swapAndMove(const int swapPermissibleTimes,
-                                                 const int insertPermissibleTimes) const
+PActiveList ActiveList :: swapAndMove(const int swapPermissibleTimes,
+                                      const int insertPermissibleTimes) const
 {
     vector<Job *> jobList;
     jobList.reserve(_jobList.size() + 1);
@@ -83,7 +83,7 @@ shared_ptr<ActiveList> ActiveList :: swapAndMove(const int swapPermissibleTimes,
         }
     }
     
-    shared_ptr<ActiveList> activeList(new ActiveList(&jobList));
+    PActiveList activeList(new ActiveList(&jobList));
     return activeList;
 }
 

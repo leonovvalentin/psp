@@ -139,62 +139,55 @@ int Solver :: recordForProblem(Problem *problem) const
 
 #pragma mark - functionality
 
-shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver :: solveWithScheduleEarlyRandom(int times)
+shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithScheduleEarlyRandom(int times)
 {
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solve(new map<Problem *, shared_ptr<Schedule>>);
+    shared_ptr<map<Problem *, PSchedule>> solve(new map<Problem *, PSchedule>);
     for (auto &problem : _problems) (*solve)[problem] = problem->scheduleEarlyWithRandom(times);
     return solve;
 }
 
-shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver :: solveWithScheduleLateRandom(int times)
+shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithScheduleLateRandom(int times)
 {
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solve(new map<Problem *, shared_ptr<Schedule>>);
+    shared_ptr<map<Problem *, PSchedule>> solve(new map<Problem *, PSchedule>);
     for (auto &problem : _problems) (*solve)[problem] = problem->scheduleLateWithRandom(times);
     return solve;
 }
 
-shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver ::
-solveWithScheduleEarlyParallelSimple(int times)
+shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithScheduleEarlyParallelSimple(int times)
 {
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solve(new map<Problem *, shared_ptr<Schedule>>);
+    shared_ptr<map<Problem *, PSchedule>> solve(new map<Problem *, PSchedule>);
     for (auto &problem : _problems) (*solve)[problem] = problem->scheduleEarlyParallelSimple(times);
     return solve;
 }
 
-shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver ::
-solveWithScheduleEarlyParallelKP(int times, float probability)
+shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithScheduleEarlyParallelKP(int times,
+                                                                                 float probability)
 {
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solve(new map<Problem *, shared_ptr<Schedule>>);
+    shared_ptr<map<Problem *, PSchedule>> solve(new map<Problem *, PSchedule>);
     for (auto &problem : _problems) {
         (*solve)[problem] = problem->scheduleEarlyParallelKP(times, probability);
     }
     return solve;
 }
 
-shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver ::
-solveWithSchedulePingPong(int times, float probability)
+shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithSchedulePingPong(int times,
+                                                                          float probability)
 {
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solve(new map<Problem *, shared_ptr<Schedule>>);
+    shared_ptr<map<Problem *, PSchedule>> solve(new map<Problem *, PSchedule>);
     for (auto &problem : _problems) {
         (*solve)[problem] = problem->schedulePingPong(times, probability);
     }
     return solve;
 }
 
-shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver ::
+shared_ptr<map<Problem *, PSchedule>> Solver ::
 solveWithScheduleKochetovStolyar2003(float probabilityKP,
                                      float probabilitySN,
                                      int tabuListSize,
                                      int changingInterval,
                                      int maxIterationNumber)
 {
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solve(new map<Problem *, shared_ptr<Schedule>>);
+    shared_ptr<map<Problem *, PSchedule>> solve(new map<Problem *, PSchedule>);
     for (auto &problem : _problems) {
         (*solve)[problem] = problem->scheduleKochetovStolyar2003(probabilityKP,
                                                                  probabilitySN,
@@ -205,19 +198,17 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
     return solve;
 }
 
-shared_ptr<map<Problem *, shared_ptr<Schedule>>> Solver ::
-solveWithMyGA(int maxGeneratedSchedules,
-              int populationSize,
-              int maxParents,
-              int maxChildren,
-              int timesPingPongInitialPopulation,
-              float probabilityKP,
-              float probabilityParentSelection,
-              float permissibleResourceRemains,
-              int swapAndMovePermissibleTimes)
+shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithMyGA(int maxGeneratedSchedules,
+                                                              int populationSize,
+                                                              int maxParents,
+                                                              int maxChildren,
+                                                              int timesPingPongInitialPopulation,
+                                                              float probabilityKP,
+                                                              float probabilityParentSelection,
+                                                              float permissibleResourceRemains,
+                                                              int swapAndMovePermissibleTimes)
 {
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solve(new map<Problem *, shared_ptr<Schedule>>);
+    shared_ptr<map<Problem *, PSchedule>> solve(new map<Problem *, PSchedule>);
     for (auto &problem : _problems) {
         (*solve)[problem] = problem->scheduleMyGA(maxGeneratedSchedules,
                                                   populationSize,

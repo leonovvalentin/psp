@@ -122,84 +122,84 @@ const string * Problem :: name() const
 
 #pragma mark - functionality
 
-shared_ptr<Schedule> Problem :: scheduleEarlyWithRandom(int times) const
+PSchedule Problem :: scheduleEarlyWithRandom(int times) const
 {
-    shared_ptr<Schedule> record;
+    PSchedule record;
     for (int i=0; i<times; i++) {
         ActiveList activeList(_jobs[0], _jobs.size());
-        shared_ptr<Schedule> schedule = Schedule :: scheduleEarly(&activeList, &_resources);
+        PSchedule schedule = Schedule :: scheduleEarly(&activeList, &_resources);
         if (!record.get() || record->duration() > schedule->duration()) record = schedule;
     }
     return record;
 }
 
-shared_ptr<Schedule> Problem :: scheduleLateWithRandom(int times) const
+PSchedule Problem :: scheduleLateWithRandom(int times) const
 {
-    shared_ptr<Schedule> record;
+    PSchedule record;
     for (int i=0; i<times; i++) {
         ActiveList activeList(_jobs[0], _jobs.size());
-        shared_ptr<Schedule> schedule = Schedule :: scheduleLate(&activeList, &_resources);
+        PSchedule schedule = Schedule :: scheduleLate(&activeList, &_resources);
         if (!record.get() || record->duration() > schedule->duration()) record = schedule;
     }
     return record;
 }
 
-shared_ptr<Schedule> Problem :: scheduleEarlyParallelSimple(int times) const
+PSchedule Problem :: scheduleEarlyParallelSimple(int times) const
 {
     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
     [](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
         return selectJobFirstInActiveList(jobs, schedule, time, timeForStart);
     };
     
-    shared_ptr<Schedule> record;
+    PSchedule record;
     for (int i=0; i<times; i++) {
         ActiveList activeList(_jobs[0], _jobs.size());
-        shared_ptr<Schedule> schedule = Schedule :: scheduleEarlyParallel(&activeList,
-                                                                          &_resources,
-                                                                          functionForSelecting);
+        PSchedule schedule = Schedule :: scheduleEarlyParallel(&activeList,
+                                                               &_resources,
+                                                               functionForSelecting);
         if (!record.get() || record->duration() > schedule->duration()) record = schedule;
     }
     
     return record;
 }
 
-shared_ptr<Schedule> Problem :: scheduleEarlyParallelKP(int times, float probability) const
+PSchedule Problem :: scheduleEarlyParallelKP(int times, float probability) const
 {
     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
     [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
         return selectJobsViaKP(jobs, schedule, time, timeForStart, probability);
     };
     
-    shared_ptr<Schedule> record;
+    PSchedule record;
     for (int i=0; i<times; i++) {
         ActiveList activeList(_jobs[0], _jobs.size());
-        shared_ptr<Schedule> schedule = Schedule :: scheduleEarlyParallel(&activeList,
-                                                                          &_resources,
-                                                                          functionForSelecting);
+        PSchedule schedule = Schedule :: scheduleEarlyParallel(&activeList,
+                                                               &_resources,
+                                                               functionForSelecting);
         if (!record.get() || record->duration() > schedule->duration()) record = schedule;
     }
     
     return record;
 }
 
-shared_ptr<Schedule> Problem :: schedulePingPong(int times, float probability) const
+PSchedule Problem :: schedulePingPong(int times, float probability) const
 {
     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
     [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
         return selectJobsViaKP(jobs, schedule, time, timeForStart, probability);
     };
     
-    shared_ptr<Schedule> record;
+    PSchedule record;
     for (int i=0; i<times; i++) {
 #warning activeList must be created as in the article (see Кочетов, Столяр, ЗПЧР, с.39)
         ActiveList activeList(_jobs[0], _jobs.size());
-        shared_ptr<Schedule> schedule = Schedule :: scheduleEarlyParallel(&activeList,
-                                                                          &_resources,
-                                                                          functionForSelecting);
+        PSchedule schedule = Schedule :: scheduleEarlyParallel(&activeList,
+                                                               &_resources,
+                                                               functionForSelecting);
         bool stop = false;
         while (!stop) {
-            shared_ptr<Schedule> scheduleLate = schedule->lateSchedule();
-            shared_ptr<Schedule> scheduleEarly = scheduleLate->earlySchedule();
+            PSchedule scheduleLate = schedule->lateSchedule();
+            PSchedule scheduleEarly = scheduleLate->earlySchedule();
             if (scheduleEarly->duration() < schedule->duration()) schedule = scheduleEarly;
             else stop = true;
         }
@@ -209,11 +209,11 @@ shared_ptr<Schedule> Problem :: schedulePingPong(int times, float probability) c
     return record;
 }
 
-shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
-                                                            float probabilitySN,
-                                                            int tabuListSize,
-                                                            int changingInterval,
-                                                            int maxIterationNumber) const
+PSchedule Problem :: scheduleKochetovStolyar2003(float probabilityKP,
+                                                 float probabilitySN,
+                                                 int tabuListSize,
+                                                 int changingInterval,
+                                                 int maxIterationNumber) const
 {
     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
     [probabilityKP](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
@@ -225,8 +225,8 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
     int stepsNoChange = 0; // Number of steps without changing neighbourhood
     NeighbourhoodType currentNeighbourhoodType = NeighbourhoodTypeEarly;
     
-    shared_ptr<Schedule> schedule = schedulePingPong(1, probabilityKP); // Initial schedule
-    shared_ptr<Schedule> record = schedule;
+    PSchedule schedule = schedulePingPong(1, probabilityKP); // Initial schedule
+    PSchedule record = schedule;
     tabuList.add(schedule->sumOfStarts());
     
     for (int iteration = 0; iteration < maxIterationNumber; iteration++) {
@@ -249,13 +249,13 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
         
         // allNeighbours
         
-        shared_ptr<vector<shared_ptr<Schedule>>> allNeighbours =
+        shared_ptr<vector<PSchedule>> allNeighbours =
         schedule->neighboringSchedules(currentNeighbourhoodType, functionForSelecting);
         
         // neighboursWithoutTabu
         
         auto neighboursWithoutTabu =
-        shared_ptr<vector<shared_ptr<Schedule>>>(new vector<shared_ptr<Schedule>>(0));
+        shared_ptr<vector<PSchedule>>(new vector<PSchedule>(0));
         neighboursWithoutTabu->reserve(allNeighbours->size());
         
         while (neighboursWithoutTabu->size() == 0 && tabuList.size() != 0) {
@@ -279,7 +279,7 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
         // neighbours
         
         auto neighbours =
-        shared_ptr<vector<shared_ptr<Schedule>>>(new vector<shared_ptr<Schedule>>(0));
+        shared_ptr<vector<PSchedule>>(new vector<PSchedule>(0));
         neighbours->reserve(neighboursWithoutTabu->size());
         
         for (auto &neighbour : *neighboursWithoutTabu) {
@@ -293,7 +293,7 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
         
         // minNeighbour
         
-        shared_ptr<Schedule> minNeighbour = nullptr;
+        PSchedule minNeighbour = nullptr;
         int minNeighbourDuration = INT_MAX;
         
         for (auto &neighbour : *neighbours) {
@@ -318,23 +318,22 @@ shared_ptr<Schedule> Problem :: scheduleKochetovStolyar2003(float probabilityKP,
     return record;
 }
 
-shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
-                                             int populationSize,
-                                             int maxParents,
-                                             int maxChildren,
-                                             int timesPingPongInitialPopulation,
-                                             float probabilityKP,
-                                             float probabilityParentSelection,
-                                             float permissibleResourceRemains,
-                                             int swapAndMovePermissibleTimes) const
+PSchedule Problem :: scheduleMyGA(int maxGeneratedSchedules,
+                                  int populationSize,
+                                  int maxParents,
+                                  int maxChildren,
+                                  int timesPingPongInitialPopulation,
+                                  float probabilityKP,
+                                  float probabilityParentSelection,
+                                  float permissibleResourceRemains,
+                                  int swapAndMovePermissibleTimes) const
 {
-    shared_ptr<Schedule> record = nullptr;
+    PSchedule record = nullptr;
     
     // initial population
-    vector<shared_ptr<Schedule>> population(0); population.reserve(populationSize);
+    vector<PSchedule> population(0); population.reserve(populationSize);
     for (int i=0; i<populationSize; i++) {
-        shared_ptr<Schedule> schedule = schedulePingPong(timesPingPongInitialPopulation,
-                                                         probabilityKP);
+        PSchedule schedule = schedulePingPong(timesPingPongInitialPopulation, probabilityKP);
         population.push_back(schedule);
         if (!record || (schedule->duration() < record->duration())) record = schedule;
     }
@@ -343,10 +342,10 @@ shared_ptr<Schedule> Problem :: scheduleMyGA(int maxGeneratedSchedules,
     while (numberOfGeneratedSchedules < maxGeneratedSchedules) {
         
         // select parents as subset of population
-        sort(population.begin(), population.end(), [](shared_ptr<Schedule> a, shared_ptr<Schedule> b) {
+        sort(population.begin(), population.end(), [](PSchedule a, PSchedule b) {
             return a->duration() < b->duration();
         });
-        vector<shared_ptr<Schedule>> parents(0); parents.reserve(maxParents);
+        vector<PSchedule> parents(0); parents.reserve(maxParents);
         for (int i=0; i<population.size() && parents.size() < maxParents; i++) {
             if (Random :: randomFloatFrom0To1() < probabilityParentSelection) {
                 parents.push_back(population[i]);

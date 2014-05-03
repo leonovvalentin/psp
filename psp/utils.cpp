@@ -203,7 +203,7 @@ string stringFromIntVector(const vector<int> *ints)
     return ss.str();
 }
 
-string stringOfDurationsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules)
+string stringOfDurationsFromSchdulesVector(const vector<PSchedule> *schedules)
 {
     stringstream ss;
     
@@ -222,7 +222,7 @@ string stringOfDurationsFromSchdulesVector(const vector<shared_ptr<Schedule>> *s
     return ss.str();
 }
 
-string stringOfSumOfStartsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules)
+string stringOfSumOfStartsFromSchdulesVector(const vector<PSchedule> *schedules)
 {
     stringstream ss;
     

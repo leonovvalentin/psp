@@ -55,38 +55,36 @@ public:
      @param times Number of attempts to build a record for each problem.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>> solveWithScheduleEarlyRandom(int times);
+    shared_ptr<map<Problem *, PSchedule>> solveWithScheduleEarlyRandom(int times);
     /**
      Solve problems.
      Solve based on creating late random schedules.
      @param times Number of attempts to build a record for each problem.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>> solveWithScheduleLateRandom(int times);
+    shared_ptr<map<Problem *, PSchedule>> solveWithScheduleLateRandom(int times);
     /**
      Solve problems.
      Solve based on creating early parallel schedules where selection function selects first job from activeList.
      @param times Number of attempts to build a record for each problem.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solveWithScheduleEarlyParallelSimple(int times);
+    shared_ptr<map<Problem *, PSchedule>> solveWithScheduleEarlyParallelSimple(int times);
     /**
      Solve problems.
      Solve based on creating early parallel schedules where selection function based on greedy algorithm for knapsack problem.
      @param times Number of attempts to build a record for each problem.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solveWithScheduleEarlyParallelKP(int times, float probability);
+    shared_ptr<map<Problem *, PSchedule>> solveWithScheduleEarlyParallelKP(int times,
+                                                                           float probability);
     /**
      Solve problems.
      Solve based on creating early and late schedules.
      @param times Number of attempts to build a record for each problem.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>> solveWithSchedulePingPong(int times,
-                                                                               float probability);
+    shared_ptr<map<Problem *, PSchedule>> solveWithSchedulePingPong(int times, float probability);
     /**
      Solve problems.
      Solve based on algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
@@ -97,7 +95,7 @@ public:
      @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
+    shared_ptr<map<Problem *, PSchedule>>
     solveWithScheduleKochetovStolyar2003(float probabilityKP,
                                          float probabilitySN,
                                          int tabuListSize,
@@ -118,16 +116,15 @@ public:
      @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, shared_ptr<Schedule>>>
-    solveWithMyGA(int maxGeneratedSchedules,
-                  int populationSize,
-                  int maxParents,
-                  int maxChildren,
-                  int timesPingPongInitialPopulation,
-                  float probabilityKP,
-                  float probabilityParentSelection,
-                  float permissibleResourceRemains,
-                  int swapAndMovePermissibleTimes);
+    shared_ptr<map<Problem *, PSchedule>> solveWithMyGA(int maxGeneratedSchedules,
+                                                        int populationSize,
+                                                        int maxParents,
+                                                        int maxChildren,
+                                                        int timesPingPongInitialPopulation,
+                                                        float probabilityKP,
+                                                        float probabilityParentSelection,
+                                                        float permissibleResourceRemains,
+                                                        int swapAndMovePermissibleTimes);
 };
 
 

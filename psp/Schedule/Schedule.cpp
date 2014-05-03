@@ -27,7 +27,7 @@ Schedule :: Schedule(ActiveList *activeList, const vector<Resource *> *resources
     }
 }
 
-shared_ptr<Schedule> Schedule :: schedulePartialyEarlyParallel
+PSchedule Schedule :: schedulePartialyEarlyParallel
 (ActiveList *activeList,
  const vector<Resource *> *resources,
  vector<Job *> :: const_iterator minIterator,
@@ -35,7 +35,7 @@ shared_ptr<Schedule> Schedule :: schedulePartialyEarlyParallel
  const map<Job *, int> *starts,
  function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
-    shared_ptr<Schedule> schedule(new Schedule(activeList, resources));
+    PSchedule schedule(new Schedule(activeList, resources));
     schedule->_type = ScheduleTypeEarlyComposite;
     
     vector<Job *> segment1(activeList->jobList()->begin(), minIterator);
@@ -47,7 +47,7 @@ shared_ptr<Schedule> Schedule :: schedulePartialyEarlyParallel
     for (Job *job : segment1) {
         auto iterator = starts->find(job);
         if (iterator != starts->end()) schedule->_starts[job] = iterator->second;
-        else return shared_ptr<Schedule>(nullptr);
+        else return PSchedule(nullptr);
         schedule->reduceResourceRemain(job);
     }
     
@@ -62,7 +62,7 @@ shared_ptr<Schedule> Schedule :: schedulePartialyEarlyParallel
     return schedule;
 }
 
-shared_ptr<Schedule> Schedule :: schedulePartialyLateParallel
+PSchedule Schedule :: schedulePartialyLateParallel
 (ActiveList *activeList,
  const vector<Resource *> *resources,
  vector<Job *> :: const_iterator minIterator,
@@ -70,7 +70,7 @@ shared_ptr<Schedule> Schedule :: schedulePartialyLateParallel
  const map<Job *, int> *starts,
  function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
-    shared_ptr<Schedule> schedule(new Schedule(activeList, resources));
+    PSchedule schedule(new Schedule(activeList, resources));
     schedule->_type = ScheduleTypeLateComposite;
     
     vector<Job *> segment1(activeList->jobList()->begin(), minIterator);
@@ -82,7 +82,7 @@ shared_ptr<Schedule> Schedule :: schedulePartialyLateParallel
     for (Job *job : segment3) {
         auto iterator = starts->find(job);
         if (iterator != starts->end()) schedule->_starts[job] = iterator->second;
-        else return shared_ptr<Schedule>(nullptr);
+        else return PSchedule(nullptr);
         schedule->reduceResourceRemain(job);
     }
     
@@ -114,10 +114,10 @@ shared_ptr<Schedule> Schedule :: schedulePartialyLateParallel
     return schedule;
 }
 
-shared_ptr<Schedule> Schedule :: scheduleEarly(ActiveList *activeList,
-                                               const vector<Resource *> *resources)
+PSchedule Schedule :: scheduleEarly(ActiveList *activeList,
+                                    const vector<Resource *> *resources)
 {
-    shared_ptr<Schedule> schedule(new Schedule(activeList, resources));
+    PSchedule schedule(new Schedule(activeList, resources));
     schedule->_type = ScheduleTypeEarly;
     
     for (int i=0; i<activeList->size(); i++) {
@@ -145,10 +145,10 @@ shared_ptr<Schedule> Schedule :: scheduleEarly(ActiveList *activeList,
     return schedule;
 }
 
-shared_ptr<Schedule> Schedule :: scheduleLate(ActiveList *activeList,
-                                              const vector<Resource *> *resources)
+PSchedule Schedule :: scheduleLate(ActiveList *activeList,
+                                   const vector<Resource *> *resources)
 {
-    shared_ptr<Schedule> schedule(new Schedule(activeList, resources));
+    PSchedule schedule(new Schedule(activeList, resources));
     schedule->_type = ScheduleTypeLate;
     
     for (long i=activeList->size()-1; i>=0; i--) {
@@ -182,12 +182,12 @@ shared_ptr<Schedule> Schedule :: scheduleLate(ActiveList *activeList,
     return schedule;
 }
 
-shared_ptr<Schedule> Schedule :: scheduleEarlyParallel
+PSchedule Schedule :: scheduleEarlyParallel
 (ActiveList *activeList,
  const vector<Resource *> *resources,
  function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
-    shared_ptr<Schedule> schedule(new Schedule(activeList, resources));
+    PSchedule schedule(new Schedule(activeList, resources));
     schedule->_type = ScheduleTypeEarlyParallel;
     
     int time = 0;
@@ -321,13 +321,13 @@ const map<Resource *, shared_ptr<vector<int>>> * Schedule :: resourceRemains() c
 
 #pragma mark - functionality
 
-shared_ptr<Schedule> Schedule :: pingPong() const
+PSchedule Schedule :: pingPong() const
 {
-    shared_ptr<Schedule> schedule = earlySchedule();
+    PSchedule schedule = earlySchedule();
     
     bool stop = false;
     while (!stop) {
-        shared_ptr<Schedule> scheduleEarly = schedule->lateSchedule()->earlySchedule();
+        PSchedule scheduleEarly = schedule->lateSchedule()->earlySchedule();
         if (scheduleEarly->duration() < schedule->duration()) schedule = scheduleEarly;
         else stop = true;
     }
@@ -335,17 +335,16 @@ shared_ptr<Schedule> Schedule :: pingPong() const
     return schedule;
 }
 
-shared_ptr<Schedule> Schedule :: swapAndMoveMutation(const int swapPermissibleTimes,
-                                                     const int movePermissibleTimes) const
+PSchedule Schedule :: swapAndMoveMutation(const int swapPermissibleTimes,
+                                          const int movePermissibleTimes) const
 {
-    shared_ptr<ActiveList> mutatedActiveList =
+    PActiveList mutatedActiveList =
     _activeList.swapAndMove(swapPermissibleTimes, movePermissibleTimes);
     
     return scheduleEarly(mutatedActiveList.get(), _resources);
 }
 
-shared_ptr<Schedule> Schedule :: cross(shared_ptr<Schedule> schedule,
-                                       float permissibleResourceRemains)
+PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains)
 {
     auto denseJobsBlocks = this->denseJobsBlocks(permissibleResourceRemains);
     auto denseJobsBlocks2 = schedule->denseJobsBlocks(permissibleResourceRemains);
@@ -438,30 +437,30 @@ shared_ptr<Schedule> Schedule :: cross(shared_ptr<Schedule> schedule,
     return Schedule :: scheduleEarly(&childActiveList, _resources);
 }
 
-shared_ptr<Schedule> Schedule :: earlySchedule() const
+PSchedule Schedule :: earlySchedule() const
 {
     vector<Job *> jobs = *_activeList.jobList();
     sort(jobs.begin(), jobs.end(), [this](Job *job1, Job *job2){return start(job1) < start(job2);});
     ActiveList activeList(&jobs);
-    shared_ptr<Schedule> schedule = Schedule :: scheduleEarly(&activeList, _resources);
+    PSchedule schedule = Schedule :: scheduleEarly(&activeList, _resources);
     return schedule;
 }
 
-shared_ptr<Schedule> Schedule :: lateSchedule() const
+PSchedule Schedule :: lateSchedule() const
 {
     vector<Job *> jobs = *_activeList.jobList();
     sort(jobs.begin(), jobs.end(), [this](Job *job1, Job *job2){return end(job1) < end(job2);});
     ActiveList activeList(&jobs);
-    shared_ptr<Schedule> schedule = Schedule :: scheduleLate(&activeList, _resources);
+    PSchedule schedule = Schedule :: scheduleLate(&activeList, _resources);
     return schedule;
 }
 
-shared_ptr<vector<shared_ptr<Schedule>>> Schedule :: neighboringSchedules
+shared_ptr<vector<PSchedule>> Schedule :: neighboringSchedules
 (NeighbourhoodType neighbourhoodType,
  function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
 #warning Is it right? Are we needs to construct correct schedule first?
-    shared_ptr<Schedule> schedule = nullptr;
+    PSchedule schedule = nullptr;
     switch (neighbourhoodType) {
         case NeighbourhoodTypeEarly: {
             if (_type == ScheduleTypeEarly) schedule = shared_from_this();
@@ -475,11 +474,11 @@ shared_ptr<vector<shared_ptr<Schedule>>> Schedule :: neighboringSchedules
         }
     }
     
-    shared_ptr<vector<shared_ptr<Schedule>>> neighbors(new vector<shared_ptr<Schedule>>(0));
+    shared_ptr<vector<PSchedule>> neighbors(new vector<PSchedule>(0));
     neighbors->reserve(schedule->activeList()->size());
     
     for (Job *job : *schedule->activeList()->jobList()) {
-        shared_ptr<Schedule> neighbor = nullptr;
+        PSchedule neighbor = nullptr;
         switch (schedule->type()) {
             case ScheduleTypeEarly: {
                 neighbor = schedule->neighbourForEarlySchedule(job, functionForSelecting);
@@ -512,14 +511,14 @@ shared_ptr<vector<shared_ptr<Schedule>>> Schedule :: neighboringSchedules
     return neighbors;
 }
 
-shared_ptr<Schedule> Schedule :: neighbourForEarlySchedule
+PSchedule Schedule :: neighbourForEarlySchedule
 (Job *job,
  function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
-    if (_type != ScheduleTypeEarly) return shared_ptr<Schedule>(nullptr);
+    if (_type != ScheduleTypeEarly) return PSchedule(nullptr);
     
     shared_ptr<vector<Job *>> block = blockOfJobs(job, false, true);
-    if (!block) return shared_ptr<Schedule>(nullptr);
+    if (!block) return PSchedule(nullptr);
     shared_ptr<vector<Job *>> net = outgoingNetwork(job);
     
     auto minIterator = _activeList.jobList()->end();
@@ -542,14 +541,14 @@ shared_ptr<Schedule> Schedule :: neighbourForEarlySchedule
                                                      functionForSelecting);
 }
 
-shared_ptr<Schedule> Schedule :: neighbourForLateSchedule
+PSchedule Schedule :: neighbourForLateSchedule
 (Job *job,
  function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
-    if (_type != ScheduleTypeLate) return shared_ptr<Schedule>(nullptr);
+    if (_type != ScheduleTypeLate) return PSchedule(nullptr);
     
     shared_ptr<vector<Job *>> block = blockOfJobs(job, true, false);
-    if (!block) return shared_ptr<Schedule>(nullptr);
+    if (!block) return PSchedule(nullptr);
     shared_ptr<vector<Job *>> net = incomingNetwork(job);
     
     auto minIterator = _activeList.jobList()->end();

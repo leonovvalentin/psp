@@ -58,21 +58,21 @@ public:
      @param times Number of attempts to build a record.
      @return Found record.
      */
-    shared_ptr<Schedule> scheduleEarlyWithRandom(int times) const;
+    PSchedule scheduleEarlyWithRandom(int times) const;
     /**
      Solve problem.
      Solve based on creating random late schedules.
      @param times Number of attempts to build a record.
      @return Found record.
      */
-    shared_ptr<Schedule> scheduleLateWithRandom(int times) const;
+    PSchedule scheduleLateWithRandom(int times) const;
     /**
      Solve problem.
      Solve based on creating early parallel schedules where selection function selects first job from activeList.
      @param times Number of attempts to build a record.
      @return Found record.
      */
-    shared_ptr<Schedule> scheduleEarlyParallelSimple(int times) const;
+    PSchedule scheduleEarlyParallelSimple(int times) const;
     /**
      Solve problem.
      Solve based on creating early parallel schedules where selection function based on greedy algorithm for knapsack problem.
@@ -80,7 +80,7 @@ public:
      @param probability Probability for solving knapsack problem.
      @return Found record.
      */
-    shared_ptr<Schedule> scheduleEarlyParallelKP(int times, float probability) const;
+    PSchedule scheduleEarlyParallelKP(int times, float probability) const;
     /**
      Solve problem.
      Solve based on creating early and late schedules.
@@ -88,7 +88,7 @@ public:
      @param probability Probability for solving knapsack problem.
      @return Found record.
      */
-    shared_ptr<Schedule> schedulePingPong(int times, float probability) const;
+    PSchedule schedulePingPong(int times, float probability) const;
     /**
      Solve problem.
      Solve based on algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
@@ -99,11 +99,11 @@ public:
      @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
      @return Found record.
      */
-    shared_ptr<Schedule> scheduleKochetovStolyar2003(float probabilityKP,
-                                                     float probabilitySN,
-                                                     int tabuListSize,
-                                                     int changingInterval,
-                                                     int maxIterationNumber) const;
+    PSchedule scheduleKochetovStolyar2003(float probabilityKP,
+                                          float probabilitySN,
+                                          int tabuListSize,
+                                          int changingInterval,
+                                          int maxIterationNumber) const;
     /**
      Solve problem.
      Solve based on my genetic algorithm.
@@ -118,15 +118,15 @@ public:
      @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
      @return Found record.
      */
-    shared_ptr<Schedule> scheduleMyGA(int maxGeneratedSchedules,
-                                      int populationSize,
-                                      int maxParents,
-                                      int maxChildren,
-                                      int timesPingPongInitialPopulation,
-                                      float probabilityKP,
-                                      float probabilityParentSelection,
-                                      float permissibleResourceRemains,
-                                      int swapAndMovePermissibleTimes) const;
+    PSchedule scheduleMyGA(int maxGeneratedSchedules,
+                           int populationSize,
+                           int maxParents,
+                           int maxChildren,
+                           int timesPingPongInitialPopulation,
+                           float probabilityKP,
+                           float probabilityParentSelection,
+                           float permissibleResourceRemains,
+                           int swapAndMovePermissibleTimes) const;
 };
 
 

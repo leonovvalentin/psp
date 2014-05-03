@@ -13,15 +13,14 @@
 
 
 
-#include "Job.h"
-#include "ActiveList.h"
-
 #include <iostream>
 #include <vector>
 
 
 
 class Schedule;
+class ActiveList;
+class Job;
 
 
 
@@ -35,6 +34,9 @@ using namespace std;
                                          const bool timeForStart
 
 
+
+typedef shared_ptr<Schedule> PSchedule;
+typedef shared_ptr<ActiveList> PActiveList;
 
 typedef shared_ptr<vector<Job *>> JOBS_VECTOR_PTR;
 
@@ -63,8 +65,8 @@ string stringMATLARRectangle(int x, int y, int width, int height,
                              string textInside, string textOutside);
 string stringFromJobsVector(const vector<Job *> *jobs);
 string stringFromIntVector(const vector<int> *ints);
-string stringOfDurationsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules);
-string stringOfSumOfStartsFromSchdulesVector(const vector<shared_ptr<Schedule>> *schedules);
+string stringOfDurationsFromSchdulesVector(const vector<PSchedule> *schedules);
+string stringOfSumOfStartsFromSchdulesVector(const vector<PSchedule> *schedules);
 string stringFromBlocksVector
 (const shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>> blocks);
 string stringFromBlock(const shared_ptr<pair<shared_ptr<vector<Job *>>, float>> block);

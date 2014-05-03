@@ -14,6 +14,7 @@
 
 
 #include "Job.h"
+#include "utils.h"
 
 #include <iostream>
 #include <vector>
@@ -58,8 +59,8 @@ public:
      Swap 2 random jobs, and move some job to another position. Not more times than specified number of times for each operation.
      @return ActiveList, created from current ActiveList by swapping and moving random jobs.
      */
-    shared_ptr<ActiveList> swapAndMove(const int swapPermissibleTimes,
-                                       const int movePermissibleTimes) const;
+    PActiveList swapAndMove(const int swapPermissibleTimes,
+                            const int movePermissibleTimes) const;
     
 #pragma mark - out
 public:

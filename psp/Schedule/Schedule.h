@@ -79,7 +79,7 @@ private:
      @return Schedule created by partialy early parallel decoder.
      */
 #warning refactor to scheduleCompositeEarlyParallel
-    static shared_ptr<Schedule> schedulePartialyEarlyParallel
+    static PSchedule schedulePartialyEarlyParallel
     (ActiveList *activeList,
      const vector<Resource *> *resources,
      vector<Job *> :: const_iterator minIterator,
@@ -98,7 +98,7 @@ private:
      */
 #warning refactor to scheduleCompositeLateParallel
 #warning May be needs to add right handling of case when maxIterator contain end job(When section3 is empty)?
-    static shared_ptr<Schedule> schedulePartialyLateParallel
+    static PSchedule schedulePartialyLateParallel
     (ActiveList *activeList,
      const vector<Resource *> *resources,
      vector<Job *> :: const_iterator minIterator,
@@ -112,16 +112,16 @@ public:
      @param resources Resources necessary for jobs in actilveList.
      @return Schedule created by early decoder.
      */
-    static shared_ptr<Schedule> scheduleEarly(ActiveList *activeList,
-                                              const vector<Resource *> *resources);
+    static PSchedule scheduleEarly(ActiveList *activeList,
+                                   const vector<Resource *> *resources);
     /**
      Late schedule.
      @param activeList ActiveList by which shedule will be created.
      @param resources Resources necessary for jobs in actilveList.
      @return Schedule created by late decoder.
      */
-    static shared_ptr<Schedule> scheduleLate(ActiveList *activeList,
-                                             const vector<Resource *> *resources);
+    static PSchedule scheduleLate(ActiveList *activeList,
+                                  const vector<Resource *> *resources);
     /**
      Early parallel schedule.
      @param activeList ActiveList by which shedule will be created.
@@ -129,7 +129,7 @@ public:
      @param functionForSelecting Function for selecting jobs which will be next scheduled.
      @return Schedule created by early parallel decoder.
      */
-    static shared_ptr<Schedule> scheduleEarlyParallel
+    static PSchedule scheduleEarlyParallel
     (ActiveList *activeList,
      const vector<Resource *> *resources,
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
@@ -155,37 +155,37 @@ public:
     /**
      @return Schedule, created from current via ping-pong procedure.
      */
-    shared_ptr<Schedule> pingPong() const;
+    PSchedule pingPong() const;
     /**
      Creating mutated schedule, by applying swap and move random jobs, not more then specified number of times.
      @return Early schedule, created from mutated activeList.
      */
-    shared_ptr<Schedule> swapAndMoveMutation(const int swapPermissibleTimes,
-                                             const int movePermissibleTimes) const;
+    PSchedule swapAndMoveMutation(const int swapPermissibleTimes,
+                                  const int movePermissibleTimes) const;
     /**
      Creating schedule by crossing 2 schedules.
      @param schedule Schedule for crossing with current schedule.
      @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
      @return Child schedule.
      */
-    shared_ptr<Schedule> cross(shared_ptr<Schedule> schedule, float permissibleResourceRemains);
+    PSchedule cross(PSchedule schedule, float permissibleResourceRemains);
     /**
      Creating early schedule from current via sorting jobs list by begins of jobs.
      @return Early schedule.
      */
-    shared_ptr<Schedule> earlySchedule() const;
+    PSchedule earlySchedule() const;
     /**
      Creating late schedule from current via sorting jobs list by ends of jobs.
      @return Late schedule.
      */
-    shared_ptr<Schedule> lateSchedule() const;
+    PSchedule lateSchedule() const;
     /**
      Creating neghbour schedules from current, based on rescheduled jobs from block of some job.
      @param neighbourhoodType Type of neighborhood.
      @param functionForSelecting Function for selecting jobs which will be next scheduled.
      @return List of composite schedules constructed with specified neighborhood type.
      */
-    shared_ptr<vector<shared_ptr<Schedule>>> neighboringSchedules
+    shared_ptr<vector<PSchedule>> neighboringSchedules
     (NeighbourhoodType neighbourhoodType,
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
 private:
@@ -196,7 +196,7 @@ private:
      @param functionForSelecting Function for selecting jobs which will be next scheduled.
      @return Composite schedule, if current schedule is late, otherwise null_ptr.
      */
-    shared_ptr<Schedule> neighbourForLateSchedule
+    PSchedule neighbourForLateSchedule
     (Job *job,
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
@@ -206,7 +206,7 @@ private:
      @param functionForSelecting Function for selecting jobs which will be next scheduled.
      @return Composite schedule, if current schedule is early, otherwise null_ptr.
      */
-    shared_ptr<Schedule> neighbourForEarlySchedule
+    PSchedule neighbourForEarlySchedule
     (Job *job,
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
 public:
