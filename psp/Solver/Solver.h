@@ -19,8 +19,31 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <sstream>
 
 using namespace std;
+
+
+
+struct Solve {
+    PSchedule schedule;
+    float errorToRecord;
+    float errorToCriticalPath;
+    time_t calculationTime;
+    
+    string str()
+    {
+        stringstream ss;
+        
+        ss << " duration = " << schedule->duration()
+        << " errorToRecord = " << errorToRecord << "%"
+        << " errorToCriticalPath = " << errorToCriticalPath << "%"
+        << " calculationTime = " << calculationTime << "sec."
+        << " isValid = " << *schedule->validationDescription();
+        
+        return ss.str();
+    }
+};
 
 
 
@@ -29,10 +52,11 @@ class Solver
 private:
     vector<Problem *> _problems;
     map<Problem *, int> _recordsData;
-    
-public:
+#warning TODO
+    map<Problem *, int> _lowerBoundCriticalPathData;
     
 #pragma mark - init
+public:
     /**
      Constructor.
      Create new solver.
@@ -42,13 +66,16 @@ public:
     virtual ~Solver();
     
 #pragma mark - out
+public:
     friend ostream & operator<<(ostream &os, const Solver &solver);
     
 #pragma mark - getters
+public:
     const vector<Problem *> * problems() const;
     int recordForProblem(Problem *problem) const;
     
 #pragma mark - functionality
+public:
     /**
      Solve problems.
      Solve based on creating early random schedules.
@@ -117,16 +144,16 @@ public:
      @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, PSchedule>> solveWithMyGA(int maxGeneratedSchedules,
-                                                        int populationSize,
-                                                        int maxParents,
-                                                        int maxChildren,
-                                                        int numberOfChildrenInNextGeneration,
-                                                        int timesPingPongInitialPopulation,
-                                                        float probabilityKP,
-                                                        float probabilityParentSelection,
-                                                        float permissibleResourceRemains,
-                                                        int swapAndMovePermissibleTimes);
+    shared_ptr<map<Problem *, Solve>> solveWithMyGA(int maxGeneratedSchedules,
+                                                    int populationSize,
+                                                    int maxParents,
+                                                    int maxChildren,
+                                                    int numberOfChildrenInNextGeneration,
+                                                    int timesPingPongInitialPopulation,
+                                                    float probabilityKP,
+                                                    float probabilityParentSelection,
+                                                    float permissibleResourceRemains,
+                                                    int swapAndMovePermissibleTimes);
 };
 
 

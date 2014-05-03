@@ -28,6 +28,13 @@ using namespace std;
 
 
 
+#define LOG_IN_COLSOL 1
+#ifdef LOG_IN_COLSOL
+#define LOG(str) do { cout << str << endl; } while (false)
+#else
+#define LOG(str)
+#endif
+
 #define PARAMETERS_OF_SELECTING_FUNCTION const vector<Job *> *jobs,\
                                          const Schedule *schedule,\
                                          const int time,\

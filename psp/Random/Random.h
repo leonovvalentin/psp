@@ -18,8 +18,8 @@ using namespace std;
 
 
 
-#warning It is for test only
-#define RANDOM_FOR_DEBUGGING
+//#warning It is for test only
+//#define RANDOM_FOR_DEBUGGING 1
 
 
 

@@ -335,6 +335,7 @@ PSchedule Problem :: scheduleMyGA(int maxGeneratedSchedules,
     vector<PSchedule> population(0);
     population.reserve(populationSize + numberOfChildrenInNextGeneration);
     for (int i=0; i<populationSize; i++) {
+        LOG("initial population: " << (float)i/populationSize * 100 << "%");
         PSchedule schedule = schedulePingPong(timesPingPongInitialPopulation, probabilityKP);
         population.push_back(schedule);
         if (!record || (schedule->duration() < record->duration())) record = schedule;
@@ -342,6 +343,9 @@ PSchedule Problem :: scheduleMyGA(int maxGeneratedSchedules,
     
     int numberOfGeneratedSchedules = 0;
     while (numberOfGeneratedSchedules < maxGeneratedSchedules) {
+        
+        LOG("generated schedules: "
+            << (float)numberOfGeneratedSchedules/maxGeneratedSchedules * 100 << "%");
         
         // select parents as subset of population
         sort(population.begin(), population.end(), [](PSchedule a, PSchedule b) {

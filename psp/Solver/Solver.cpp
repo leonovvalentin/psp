@@ -198,29 +198,44 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
     return solve;
 }
 
-shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithMyGA(int maxGeneratedSchedules,
-                                                              int populationSize,
-                                                              int maxParents,
-                                                              int maxChildren,
-                                                              int numberOfChildrenInNextGeneration,
-                                                              int timesPingPongInitialPopulation,
-                                                              float probabilityKP,
-                                                              float probabilityParentSelection,
-                                                              float permissibleResourceRemains,
-                                                              int swapAndMovePermissibleTimes)
+shared_ptr<map<Problem *, Solve>> Solver :: solveWithMyGA(int maxGeneratedSchedules,
+                                                          int populationSize,
+                                                          int maxParents,
+                                                          int maxChildren,
+                                                          int numberOfChildrenInNextGeneration,
+                                                          int timesPingPongInitialPopulation,
+                                                          float probabilityKP,
+                                                          float probabilityParentSelection,
+                                                          float permissibleResourceRemains,
+                                                          int swapAndMovePermissibleTimes)
 {
-    shared_ptr<map<Problem *, PSchedule>> solve(new map<Problem *, PSchedule>);
+    shared_ptr<map<Problem *, Solve>> solves(new map<Problem *, Solve>);
+    
     for (auto &problem : _problems) {
-        (*solve)[problem] = problem->scheduleMyGA(maxGeneratedSchedules,
-                                                  populationSize,
-                                                  maxParents,
-                                                  maxChildren,
-                                                  numberOfChildrenInNextGeneration,
-                                                  timesPingPongInitialPopulation,
-                                                  probabilityKP,
-                                                  probabilityParentSelection,
-                                                  permissibleResourceRemains,
-                                                  swapAndMovePermissibleTimes);
+        
+        time_t calculationTime; time(&calculationTime);
+        auto schedule = problem->scheduleMyGA(maxGeneratedSchedules,
+                                              populationSize,
+                                              maxParents,
+                                              maxChildren,
+                                              numberOfChildrenInNextGeneration,
+                                              timesPingPongInitialPopulation,
+                                              probabilityKP,
+                                              probabilityParentSelection,
+                                              permissibleResourceRemains,
+                                              swapAndMovePermissibleTimes);
+        calculationTime = time(NULL) - calculationTime;
+        
+        Solve solve = {
+            schedule,
+            (float)(schedule->duration() - _recordsData[problem]) / _recordsData[problem] * 100,
+            0,
+            calculationTime
+        };
+        (*solves)[problem] = solve;
+        
+        LOG(*problem->name() << ": " << solve.str());
     }
-    return solve;
+    
+    return solves;
 }

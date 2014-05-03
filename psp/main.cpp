@@ -26,8 +26,7 @@ using namespace std;
 int main(int argc, const char * argv[])
 {
     cout << "Start" << endl;
-    time_t t;
-    time(&t);
+    time_t totalTime; time(&totalTime);
     
     string path = "/Users/valentinleonov/Documents/xCode/psp/psp/Data";
     Solver *solver = new Solver(&path);
@@ -40,7 +39,7 @@ int main(int argc, const char * argv[])
      changingInterval = 5..10
      maxIterationNumber = 1000..5000
      */
-//    auto solve = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 1000);
+//    auto results = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 1000);
     
     // My genetic algorithm
     /**
@@ -55,14 +54,25 @@ int main(int argc, const char * argv[])
      permissibleResourceRemains = 0.9
      swapAndMovePermissibleTimes = 10
      */
-    auto solve = solver->solveWithMyGA(1000, 40, 20, 40, 10, 100, 0.5f, 0.8f, 0.9f, 10);
+    auto results = solver->solveWithMyGA(1000, 40, 20, 40, 10, 100, 0.5f, 0.8f, 0.9f, 10);
     
-    for (auto &pProblemSchedule : *solve) {
-        cout << *pProblemSchedule.first->name() << " = " << pProblemSchedule.second->duration()
-        << " " << *pProblemSchedule.second->validationDescription() << endl;
+    float averageErrorToRecord = 0, averageErrorToCriticalPath = 0, averageCalculationTime = 0;
+    for (auto &pProblemResult : *results) {
+        
+        Solve result = pProblemResult.second;
+        LOG(*pProblemResult.first->name() << ": " << result.str());
+        
+        averageErrorToRecord += result.errorToRecord / results->size();
+        averageErrorToCriticalPath += result.errorToCriticalPath / results->size();
+        averageCalculationTime += (float)result.calculationTime / results->size();
     }
+    
+    LOG(" averageErrorToRecord = " << averageErrorToRecord << "%"
+        << " averageErrorToCriticalPath = " << averageErrorToCriticalPath << "%"
+        << " averageCalculationTime = " << averageCalculationTime << "sec.");
+    
     delete solver;
     
-    cout << "Finish. Duration =  " << time(NULL) - t << endl;
+    cout << "Finish. Total time =  " << time(NULL) - totalTime << "sec." << endl;
     return 0;
 }

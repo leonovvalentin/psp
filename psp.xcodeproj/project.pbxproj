@@ -36,13 +36,22 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		58B143751914B43300554223 /* j120hrs.sm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = j120hrs.sm; sourceTree = "<group>"; };
+		58B143761914B43300554223 /* X16_1.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_1.RCP; sourceTree = "<group>"; };
+		58B143771914B43300554223 /* X16_2.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_2.RCP; sourceTree = "<group>"; };
+		58B143781914B43300554223 /* X16_3.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_3.RCP; sourceTree = "<group>"; };
+		58B143791914B43300554223 /* X16_4.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_4.RCP; sourceTree = "<group>"; };
+		58B1437A1914B43300554223 /* X16_5.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_5.RCP; sourceTree = "<group>"; };
+		58B1437B1914B43300554223 /* X16_6.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_6.RCP; sourceTree = "<group>"; };
+		58B1437C1914B43300554223 /* X16_7.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_7.RCP; sourceTree = "<group>"; };
+		58B1437D1914B43300554223 /* X16_8.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_8.RCP; sourceTree = "<group>"; };
+		58B1437E1914B43300554223 /* X16_9.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_9.RCP; sourceTree = "<group>"; };
+		58B1437F1914B43300554223 /* X16_10.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_10.RCP; sourceTree = "<group>"; };
 		58D631AD18D42B7600C5F841 /* psp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = psp; sourceTree = BUILT_PRODUCTS_DIR; };
 		58D631B018D42B7600C5F841 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		58D631B218D42B7600C5F841 /* psp.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = psp.1; sourceTree = "<group>"; };
 		58D631BA18D42C0300C5F841 /* ActiveList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActiveList.cpp; sourceTree = "<group>"; };
 		58D631BB18D42C0300C5F841 /* ActiveList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActiveList.h; sourceTree = "<group>"; };
-		58D631BD18D42C0300C5F841 /* J301_1.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = J301_1.RCP; sourceTree = "<group>"; };
-		58D631BE18D42C0300C5F841 /* j30opt.sm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = j30opt.sm; sourceTree = "<group>"; };
 		58D631C018D42C0300C5F841 /* Job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Job.cpp; sourceTree = "<group>"; };
 		58D631C118D42C0300C5F841 /* Job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Job.h; sourceTree = "<group>"; };
 		58D631C318D42C0300C5F841 /* Problem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Problem.cpp; sourceTree = "<group>"; };
@@ -122,8 +131,17 @@
 		58D631BC18D42C0300C5F841 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				58D631BD18D42C0300C5F841 /* J301_1.RCP */,
-				58D631BE18D42C0300C5F841 /* j30opt.sm */,
+				58B143751914B43300554223 /* j120hrs.sm */,
+				58B143761914B43300554223 /* X16_1.RCP */,
+				58B143771914B43300554223 /* X16_2.RCP */,
+				58B143781914B43300554223 /* X16_3.RCP */,
+				58B143791914B43300554223 /* X16_4.RCP */,
+				58B1437A1914B43300554223 /* X16_5.RCP */,
+				58B1437B1914B43300554223 /* X16_6.RCP */,
+				58B1437C1914B43300554223 /* X16_7.RCP */,
+				58B1437D1914B43300554223 /* X16_8.RCP */,
+				58B1437E1914B43300554223 /* X16_9.RCP */,
+				58B1437F1914B43300554223 /* X16_10.RCP */,
 			);
 			path = Data;
 			sourceTree = "<group>";
