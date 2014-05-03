@@ -41,7 +41,7 @@ using namespace std;
 
 #define LOG_TO_FILE 1
 #ifdef LOG_TO_FILE
-#define LOGF(str) ofstream f; f.open(PATH_TO_LOG_FILE, ios::app); f << "\n\n\n"; do { f << str << endl; } while (false); f.close();
+#define LOGF(str) {ofstream f; f.open(PATH_TO_LOG_FILE, ios::app); f << "\n\n\n"; do { f << str << endl; } while (false); f.close();}
 #else
 #define LOGF(str)
 #endif

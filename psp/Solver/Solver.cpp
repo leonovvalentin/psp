@@ -189,8 +189,24 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
                                      float probabilitySN,
                                      int tabuListSize,
                                      int changingInterval,
-                                     int maxIterationNumber)
+                                     int maxIterationNumber,
+                                     string *userInfo)
 {
+    stringstream ss;
+    ss << "Method: solveWithScheduleKochetovStolyar2003" << endl
+    << "probabilityKP"
+    << "\t" << "probabilitySN"
+    << "\t" << "tabuListSize"
+    << "\t" << "changingInterval"
+    << "\t" << "maxIterationNumber"
+    << endl
+    << probabilityKP
+    << "\t" << probabilitySN
+    << "\t" << tabuListSize
+    << "\t" << changingInterval
+    << "\t" << maxIterationNumber;
+    *userInfo = ss.str();
+    
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     for (auto &problem : _problems) {
         
@@ -211,7 +227,7 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-        solution.checkOnRecord(problem->name());
+        solution.checkOnRecord(problem->name(), userInfo);
     }
     return solutions;
 }
@@ -225,8 +241,34 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA(int maxGeneratedSch
                                                              float probabilityKP,
                                                              float probabilityParentSelection,
                                                              float permissibleResourceRemains,
-                                                             int swapAndMovePermissibleTimes)
+                                                             int swapAndMovePermissibleTimes,
+                                                             string *userInfo)
 {
+    stringstream ss;
+    ss << "Method: solveWithMyGA" << endl
+    << "maxGeneratedSchedules"
+    << "\t" << "populationSize"
+    << "\t" << "maxParents"
+    << "\t" << "maxChildren"
+    << "\t" << "numberOfChildrenInNextGeneration"
+    << "\t" << "timesPingPongInitialPopulation"
+    << "\t" << "probabilityKP"
+    << "\t" << "probabilityParentSelection"
+    << "\t" << "permissibleResourceRemains"
+    << "\t" << "swapAndMovePermissibleTimes"
+    << endl
+    << maxGeneratedSchedules
+    << "\t" << populationSize
+    << "\t" << maxParents
+    << "\t" << maxChildren
+    << "\t" << numberOfChildrenInNextGeneration
+    << "\t" << timesPingPongInitialPopulation
+    << "\t" << probabilityKP
+    << "\t" << probabilityParentSelection
+    << "\t" << permissibleResourceRemains
+    << "\t" << swapAndMovePermissibleTimes;
+    *userInfo = ss.str();
+    
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     
     for (auto &problem : _problems) {
@@ -253,7 +295,7 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA(int maxGeneratedSch
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-        solution.checkOnRecord(problem->name());
+        solution.checkOnRecord(problem->name(), userInfo);
     }
     
     return solutions;

@@ -100,6 +100,7 @@ public:
      @param tabuListSize Length of tabu list.
      @param changingInterval Number of steps of algorithm before changing neighbourhood.
      @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
+     @param userInfo User info data will be written to this parameter.
      @return Map of problems and found records.
      */
     shared_ptr<map<Problem *, Solution>>
@@ -107,7 +108,8 @@ public:
                                          float probabilitySN,
                                          int tabuListSize,
                                          int changingInterval,
-                                         int maxIterationNumber);
+                                         int maxIterationNumber,
+                                         string *userInfo);
     
     /**
      Solve problems.
@@ -122,6 +124,7 @@ public:
      @param probabilityParentSelection Probability for selectiong schedule from population to parents.
      @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
      @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
+     @param userInfo User info data will be written to this parameter.
      @return Map of problems and found records.
      */
     shared_ptr<map<Problem *, Solution>> solveWithMyGA(int maxGeneratedSchedules,
@@ -133,7 +136,8 @@ public:
                                                        float probabilityKP,
                                                        float probabilityParentSelection,
                                                        float permissibleResourceRemains,
-                                                       int swapAndMovePermissibleTimes);
+                                                       int swapAndMovePermissibleTimes,
+                                                       string *userInfo);
 };
 
 

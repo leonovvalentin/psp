@@ -54,9 +54,15 @@ int main(int argc, const char * argv[])
      changingInterval = 5..10
      maxIterationNumber = 1000..5000
      */
-//    auto solutionsKS = solver->solveWithScheduleKochetovStolyar2003(0.5f, 0.2f, 5, 10, 5000);
-//    LOG(stringFromSolutions(solutionsKS));
-//    LOGF("KochetovStolyar2003" << endl << stringFromSolutionsForTable(solutionsKS));
+    string userInfoKS;
+    auto solutionsKS = solver->solveWithScheduleKochetovStolyar2003(0.5f,
+                                                                    0.2f,
+                                                                    5,
+                                                                    10,
+                                                                    5000,
+                                                                    &userInfoKS);
+    LOG(stringFromSolutions(solutionsKS));
+    LOGF(userInfoKS << endl << stringFromSolutionsForTable(solutionsKS));
     
     // My genetic algorithm
     /**
@@ -71,9 +77,20 @@ int main(int argc, const char * argv[])
      permissibleResourceRemains = 0.9
      swapAndMovePermissibleTimes = 10
      */
-    auto solutionsGA = solver->solveWithMyGA(5000, 40, 20, 40, 10, 100, 0.5f, 0.8f, 0.9f, 10);
+    string userInfoGA;
+    auto solutionsGA = solver->solveWithMyGA(5000,
+                                             40,
+                                             20,
+                                             40,
+                                             10,
+                                             100,
+                                             0.5f,
+                                             0.8f,
+                                             0.9f,
+                                             10,
+                                             &userInfoGA);
     LOG(stringFromSolutions(solutionsGA));
-    LOGF("MyGA:" << endl << stringFromSolutionsForTable(solutionsGA));
+    LOGF(userInfoGA << endl << stringFromSolutionsForTable(solutionsGA));
     
     delete solver;
     

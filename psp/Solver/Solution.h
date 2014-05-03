@@ -37,13 +37,14 @@ struct Solution {
         
         return ss.str();
     }
-    void checkOnRecord(const string *problemName)
+    void checkOnRecord(const string *problemName, const string *userInfo)
     {
         if (errorToRecord < 0) {
             
             stringstream ss;
             ss << "New record!"
             << endl << "Problem: " << *problemName
+            << endl << *userInfo
             << endl << *schedule << "MATLAB:" << endl << schedule->stringMATLAB();
             
             LOG(ss.str());
