@@ -25,7 +25,7 @@ using namespace std;
 
 
 
-struct Solve {
+struct Solution {
     PSchedule schedule;
     float errorToRecord;
     float errorToCriticalPath;
@@ -144,16 +144,16 @@ public:
      @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, Solve>> solveWithMyGA(int maxGeneratedSchedules,
-                                                    int populationSize,
-                                                    int maxParents,
-                                                    int maxChildren,
-                                                    int numberOfChildrenInNextGeneration,
-                                                    int timesPingPongInitialPopulation,
-                                                    float probabilityKP,
-                                                    float probabilityParentSelection,
-                                                    float permissibleResourceRemains,
-                                                    int swapAndMovePermissibleTimes);
+    shared_ptr<map<Problem *, Solution>> solveWithMyGA(int maxGeneratedSchedules,
+                                                       int populationSize,
+                                                       int maxParents,
+                                                       int maxChildren,
+                                                       int numberOfChildrenInNextGeneration,
+                                                       int timesPingPongInitialPopulation,
+                                                       float probabilityKP,
+                                                       float probabilityParentSelection,
+                                                       float permissibleResourceRemains,
+                                                       int swapAndMovePermissibleTimes);
 };
 
 
