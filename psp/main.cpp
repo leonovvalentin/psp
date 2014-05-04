@@ -8,6 +8,11 @@
 
 
 
+#define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/psp/psp/LOG.txt"
+#define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/psp/Data"
+
+
+
 #include "Solver.h"
 #include "utils.h"
 
@@ -44,7 +49,7 @@ int main(int argc, const char * argv[])
     time_t totalTime; time(&totalTime);
     
     string path = PATH_TO_DATA_FOLDER;
-    Solver *solver = new Solver(&path, [](long i, string name){return i < 10;});
+    Solver *solver = new Solver(&path, [](long i, string name){return i < 1;});
     
     // Kochetov, Stolyar, 2003
     /**

@@ -29,8 +29,13 @@ class Job;
 using namespace std;
 
 
-#define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/psp/psp/LOG.txt"
-#define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/psp/Data"
+
+#ifndef PATH_TO_LOG_FILE
+#define PATH_TO_LOG_FILE "you_should_set_your_path_to_LOG.txt_in_main.cpp"
+#endif
+#ifndef PATH_TO_DATA_FOLDER
+#define PATH_TO_DATA_FOLDER "you_should_set_your_path_to_Data_folder_in_main.cpp"
+#endif
 
 #define LOG_TO_COLSOL 1
 #ifdef LOG_TO_COLSOL
