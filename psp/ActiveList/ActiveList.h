@@ -61,6 +61,11 @@ public:
      */
     PActiveList swapAndMove(const int swapPermissibleTimes,
                             const int movePermissibleTimes) const;
+    /**
+     @param dispersion Indicates width (from the current position in specified activeList, current position ± dispertion) in which same element will be searched.
+     @return Hamming distance between current and specified activLists.
+     */
+    int hammingDistance(const ActiveList *activeList, const int dispersion) const;
     
 #pragma mark - out
 public:

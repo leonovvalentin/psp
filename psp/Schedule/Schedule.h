@@ -143,6 +143,7 @@ public:
 #pragma mark - out
 public:
     friend ostream & operator<<(ostream &os, const Schedule &schedule);
+    string str();
     string stringMATLAB();
     
 #pragma mark - getters

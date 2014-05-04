@@ -28,6 +28,14 @@ ostream &operator<<(ostream &os, const Schedule &schedule)
     return os;
 }
 
+string Schedule :: str()
+{
+    stringstream ss;
+    ss << "type = " << _type << " activeList = ";
+    ss << _activeList.stringJobList();
+    return ss.str();
+}
+
 string Schedule :: stringMATLAB()
 {
     stringstream ss;

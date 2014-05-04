@@ -107,6 +107,24 @@ PActiveList ActiveList :: swapAndMove(const int swapPermissibleTimes,
     return activeList;
 }
 
+int ActiveList :: hammingDistance(const ActiveList *activeList, const int dispersion) const
+{
+    int d = 0;
+    for (int i=0; i<_jobList.size(); i++) {
+        auto it1 = _jobList.begin() + i;
+        auto it2 = activeList->_jobList.begin() + i;
+        bool isEqual = false;
+        for (auto it=it2-dispersion; it<=it2+dispersion; it++) {
+            if (*it1 == *it) {
+                isEqual = true;
+                break;
+            }
+        }
+        if (!isEqual) d++;
+    }
+    return d;
+}
+
 #pragma mark - out
 
 ostream & operator<<(ostream &os, const ActiveList &activeList)
