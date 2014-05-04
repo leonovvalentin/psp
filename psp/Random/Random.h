@@ -18,11 +18,6 @@ using namespace std;
 
 
 
-//#warning It is for test only
-//#define RANDOM_FOR_DEBUGGING 1
-
-
-
 class Random
 {
 private:

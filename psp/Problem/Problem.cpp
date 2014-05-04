@@ -226,109 +226,12 @@ PSchedule Problem :: scheduleKochetovStolyar2003(float probabilityKP,
                                                  int changingInterval,
                                                  int maxIterationNumber) const
 {
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [probabilityKP](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
-        return selectJobsViaKP(jobs, schedule, time, timeForStart, probabilityKP);
-    };
-    
-    TabuList tabuList(tabuListSize);
-    
-    int stepsNoChange = 0; // Number of steps without changing neighbourhood
-    NeighbourhoodType currentNeighbourhoodType = NeighbourhoodTypeEarly;
-    
     PSchedule schedule = schedulePingPong(1, probabilityKP); // Initial schedule
-    PSchedule record = schedule;
-    tabuList.add(schedule->sumOfStarts());
-    
-    for (int iteration = 0; iteration < maxIterationNumber; iteration++) {
-        
-//        LOG("iterations = " << (float)iteration / maxIterationNumber * 100 << "%");
-        
-        // currentNeighbourhoodType
-        
-        if (stepsNoChange >= changingInterval) {
-            switch (currentNeighbourhoodType) {
-                case NeighbourhoodTypeEarly: {
-                    currentNeighbourhoodType = NeighbourhoodTypeLate;
-                    break;
-                }
-                case NeighbourhoodTypeLate: {
-                    currentNeighbourhoodType = NeighbourhoodTypeEarly;
-                    break;
-                }
-            }
-            stepsNoChange = 0;
-        }
-        
-        // allNeighbours
-        
-        shared_ptr<vector<PSchedule>> allNeighbours =
-        schedule->neighboringSchedules(currentNeighbourhoodType, functionForSelecting);
-        
-        // neighboursWithoutTabu
-        
-        auto neighboursWithoutTabu =
-        shared_ptr<vector<PSchedule>>(new vector<PSchedule>(0));
-        neighboursWithoutTabu->reserve(allNeighbours->size());
-        
-        while (neighboursWithoutTabu->size() == 0 && tabuList.size() != 0) {
-            for (auto &neighbour : *allNeighbours) {
-                if (!tabuList.containTabu(neighbour->sumOfStarts())) {
-                    neighboursWithoutTabu->push_back(neighbour);
-                }
-            }
-            if (neighboursWithoutTabu->size() == 0) {
-#warning Set number of tabu for removing as parameter of function?
-                tabuList.removeOlderTabu(1);
-            }
-        }
-        
-        if (neighboursWithoutTabu->size() == 0 && tabuList.size() == 0) {
-            neighboursWithoutTabu->insert(neighboursWithoutTabu->begin(),
-                                          allNeighbours->begin(),
-                                          allNeighbours->end());
-        }
-        
-        // neighbours
-        
-        auto neighbours =
-        shared_ptr<vector<PSchedule>>(new vector<PSchedule>(0));
-        neighbours->reserve(neighboursWithoutTabu->size());
-        
-        for (auto &neighbour : *neighboursWithoutTabu) {
-            if (Random :: randomFloatFrom0To1() < probabilitySN) neighbours->push_back(neighbour);
-        }
-        
-        if (neighbours->size() == 0) {
-            long randIndex = Random :: randomLong(0, neighboursWithoutTabu->size() - 1);
-            neighbours->push_back((*neighboursWithoutTabu)[randIndex]);
-        }
-        
-        // minNeighbour
-        
-        PSchedule minNeighbour = nullptr;
-        int minNeighbourDuration = INT_MAX;
-        
-        for (auto &neighbour : *neighbours) {
-            int neighbourDuration = neighbour->duration();
-            if (neighbourDuration < minNeighbourDuration) {
-                minNeighbour = neighbour;
-                minNeighbourDuration = neighbourDuration;
-            }
-        }
-        
-        // Update record, schedule, tabuList
-        
-        if (minNeighbourDuration < record->duration()) record = minNeighbour;
-        schedule = minNeighbour;
-        tabuList.add(minNeighbour->sumOfStarts());
-        
-        // Update stepsNoChange
-        
-        stepsNoChange++;
-    }
-    
-    return record;
+    return schedule->localSearchKochetovStolyar2003(probabilityKP,
+                                                    probabilitySN,
+                                                    tabuListSize,
+                                                    changingInterval,
+                                                    maxIterationNumber);
 }
 
 PSchedule Problem :: scheduleMyGA(int maxGeneratedSchedules,
@@ -414,5 +317,20 @@ PSchedule Problem :: scheduleMyGA(int maxGeneratedSchedules,
         population.erase(population.begin() + populationSize, population.end());
     }
     
+    return record;
+}
+
+PSchedule Problem :: scheduleMyGA2014(int maxGeneratedSchedules,
+                                      int populationSize,
+                                      int maxParents,
+                                      int maxChildren,
+                                      int numberOfChildrenInNextGeneration,
+                                      int timesPingPongInitialPopulation,
+                                      float probabilityKP,
+                                      float probabilityParentSelection,
+                                      float permissibleResourceRemains,
+                                      int swapAndMovePermissibleTimes) const
+{
+    PSchedule record = nullptr;
     return record;
 }

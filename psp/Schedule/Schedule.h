@@ -160,6 +160,19 @@ public:
 #pragma mark - functionality
 public:
     /**
+     @param probabilityKP Probability for solving knapsack problem.
+     @param probabilitySN Probability for creating subset of neighbours.
+     @param tabuListSize Length of tabu list.
+     @param changingInterval Number of steps of algorithm before changing neighbourhood.
+     @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
+     @return Schedule, created from current via local search algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
+     */
+    PSchedule localSearchKochetovStolyar2003(float probabilityKP,
+                                             float probabilitySN,
+                                             int tabuListSize,
+                                             int changingInterval,
+                                             int maxIterationNumber);
+    /**
      @return Schedule, created from current via ping-pong procedure.
      */
     PSchedule pingPong() const;

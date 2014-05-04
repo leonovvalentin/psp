@@ -111,7 +111,6 @@ public:
                                          int changingInterval,
                                          int maxIterationNumber,
                                          string *userInfo);
-    
     /**
      Solve problems.
      Solve based on my genetic algorithm.
@@ -139,6 +138,22 @@ public:
                                                        float permissibleResourceRemains,
                                                        int swapAndMovePermissibleTimes,
                                                        string *userInfo);
+    /**
+     Solve problems.
+     Solve based on my genetic algorithm, 2014.
+     @return Map of problems and found records.
+     */
+    shared_ptr<map<Problem *, Solution>> solveWithMyGA2014(int maxGeneratedSchedules,
+                                                           int populationSize,
+                                                           int maxParents,
+                                                           int maxChildren,
+                                                           int numberOfChildrenInNextGeneration,
+                                                           int timesPingPongInitialPopulation,
+                                                           float probabilityKP,
+                                                           float probabilityParentSelection,
+                                                           float permissibleResourceRemains,
+                                                           int swapAndMovePermissibleTimes,
+                                                           string *userInfo);
 };
 
 

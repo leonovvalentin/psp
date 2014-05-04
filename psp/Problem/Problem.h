@@ -131,6 +131,21 @@ public:
                            float probabilityParentSelection,
                            float permissibleResourceRemains,
                            int swapAndMovePermissibleTimes) const;
+    /**
+     Solve problem.
+     Solve based on my genetic algorithm, 2014.
+     @return Found record.
+     */
+    PSchedule scheduleMyGA2014(int maxGeneratedSchedules,
+                               int populationSize,
+                               int maxParents,
+                               int maxChildren,
+                               int numberOfChildrenInNextGeneration,
+                               int timesPingPongInitialPopulation,
+                               float probabilityKP,
+                               float probabilityParentSelection,
+                               float permissibleResourceRemains,
+                               int swapAndMovePermissibleTimes) const;
 };
 
 

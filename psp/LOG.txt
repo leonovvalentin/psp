@@ -246,3 +246,53 @@ Name	Duration	Error to record, %	Error to critical path, %	Calculation time, sec
 1_9	112	0	25,8427	17	OK
 1_10	108	0	21,3483	17	OK
 average		0,773394	29,2585	16,5
+
+
+
+Method: solveWithScheduleKochetovStolyar2003
+probabilityKP	probabilitySN	tabuListSize	changingInterval	maxIterationNumber
+0,5	0,2	5	10	5000
+Name	Duration	Error to record, %	Error to critical path, %	Calculation time, sec.	Is valid
+9_1	88	0	0	105	OK
+9_2	94	0	0	87	OK
+9_3	87	0	0	98	OK
+9_4	89	2,29885	11,25	109	OK
+9_6	99	1,02041	1,02041	99	OK
+9_7	80	0	0	92	OK
+9_8	80	0	0	73	OK
+9_9	87	0	0	87	OK
+9_10	84	0	0	113	OK
+8_1	96	1,05263	1,05263	115	OK
+8_2	107	3,8835	18,8889	120	OK
+8_4	99	5,31915	11,236	124	OK
+8_5	108	3,84615	18,6813	124	OK
+8_6	88	3,52941	7,31707	114	OK
+8_7	90	3,44828	3,44828	123	OK
+8_8	90	3,44828	3,44828	112	OK
+8_10	96	3,22581	15,6627	122	OK
+average		1,82779	5,41209	106,882
+
+
+
+Method: solveWithMyGA
+maxGeneratedSchedules	populationSize	maxParents	maxChildren	numberOfChildrenInNextGeneration	timesPingPongInitialPopulation	probabilityKP	probabilityParentSelection	permissibleResourceRemains	swapAndMovePermissibleTimes
+5000	40	20	40	10	100	0,5	0,8	0,9	10
+Name	Duration	Error to record, %	Error to critical path, %	Calculation time, sec.	Is valid
+9_1	88	0	0	19	OK
+9_2	94	0	0	16	OK
+9_3	87	0	0	18	OK
+9_4	88	1,14943	10	19	OK
+9_6	98	0	0	20	OK
+9_7	80	0	0	16	OK
+9_8	80	0	0	16	OK
+9_9	87	0	0	18	OK
+9_10	84	0	0	19	OK
+8_1	95	0	0	20	OK
+8_2	107	3,8835	18,8889	21	OK
+8_4	98	4,25532	10,1124	22	OK
+8_5	106	1,92308	16,4835	21	OK
+8_6	87	2,35294	6,09756	19	OK
+8_7	88	1,14943	1,14943	20	OK
+8_8	88	1,14943	1,14943	20	OK
+8_10	94	1,07527	13,253	21	OK
+average		0,996375	4,53731	19,1176

@@ -314,3 +314,51 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA(int maxGeneratedSch
     
     return solutions;
 }
+
+shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA2014(int maxGeneratedSchedules,
+                                                                 int populationSize,
+                                                                 int maxParents,
+                                                                 int maxChildren,
+                                                                 int numberOfChildrenInNextGeneration,
+                                                                 int timesPingPongInitialPopulation,
+                                                                 float probabilityKP,
+                                                                 float probabilityParentSelection,
+                                                                 float permissibleResourceRemains,
+                                                                 int swapAndMovePermissibleTimes,
+                                                                 string *userInfo)
+{
+#warning TODO
+//    *userInfo = ;
+    
+    shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
+    
+    for (auto &problem : _problems) {
+        
+        time_t calculationTime; time(&calculationTime);
+        auto schedule = problem->scheduleMyGA2014(maxGeneratedSchedules,
+                                                  populationSize,
+                                                  maxParents,
+                                                  maxChildren,
+                                                  numberOfChildrenInNextGeneration,
+                                                  timesPingPongInitialPopulation,
+                                                  probabilityKP,
+                                                  probabilityParentSelection,
+                                                  permissibleResourceRemains,
+                                                  swapAndMovePermissibleTimes);
+        calculationTime = time(NULL) - calculationTime;
+        
+        Solution solution = {
+            schedule,
+            (float)(schedule->duration() - _recordsData[problem]) / _recordsData[problem],
+            (float)(schedule->duration() - _criticalPathData[problem]) / _criticalPathData[problem],
+            calculationTime
+        };
+        (*solutions)[problem] = solution;
+        
+        LOG(*problem->name() << ": " << solution.str());
+        solution.checkOnRecord(problem->name(), userInfo);
+        solution.checkOnValid(problem->name(), userInfo);
+    }
+    
+    return solutions;
+}

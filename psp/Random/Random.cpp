@@ -13,7 +13,7 @@
 
 
 
-#ifdef RANDOM_FOR_DEBUGGING
+#ifdef DEBUG
 long Random :: _seed = 0;
 #else
 long Random :: _seed = (long)time(NULL);
