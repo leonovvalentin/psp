@@ -208,6 +208,10 @@ public:
     shared_ptr<vector<PSchedule>> neighboringSchedules
     (NeighbourhoodType neighbourhoodType,
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+    /**
+     @return ActiveList with jobs ordered by increasing of starts in current schedule.
+     */
+    PActiveList earlyActiveList() const;
 private:
     /**
      Creating neghbour for late schedule, based on rescheduled jobs from block of specified job.
@@ -231,6 +235,14 @@ private:
      function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
 public:
     ScheduleValid validation();
+    /**
+     @return true if hamming distance between early activeLists of current and specified schedules is equals to 0.
+     */
+    bool isEqualByHamming(PSchedule schedule, int hammingDispersion);
+    /**
+     @return Hamming distance between early activeLists of current and specified schedules.
+     */
+    int hammingDistance(PSchedule schedule, int hammingDispersion);
     
 #pragma mark - helper methods
 private:

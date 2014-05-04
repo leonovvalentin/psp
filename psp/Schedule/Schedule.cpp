@@ -365,11 +365,6 @@ PSchedule Schedule :: localSearchKochetovStolyar2003(float probabilityKP,
     
     for (int iteration = 0; iteration < maxIterationNumber; iteration++) {
         
-        if (iteration % 500 == 0) {
-            LOG("iterations = " << (float)iteration / maxIterationNumber * 100 << "%");
-            LOG(schedule->str());
-        }
-        
         // currentNeighbourhoodType
         
         if (stepsNoChange >= changingInterval) {
@@ -574,10 +569,8 @@ PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains
 
 PSchedule Schedule :: earlySchedule() const
 {
-    vector<Job *> jobs = *_activeList.jobList();
-    sort(jobs.begin(), jobs.end(), [this](Job *job1, Job *job2){return start(job1) < start(job2);});
-    ActiveList activeList(&jobs);
-    PSchedule schedule = Schedule :: scheduleEarly(&activeList, _resources);
+    PActiveList earlyActiveList = this->earlyActiveList();
+    PSchedule schedule = Schedule :: scheduleEarly(earlyActiveList.get(), _resources);
     return schedule;
 }
 
@@ -644,6 +637,17 @@ shared_ptr<vector<PSchedule>> Schedule :: neighboringSchedules
     }
     
     return neighbors;
+}
+
+PActiveList Schedule :: earlyActiveList() const
+{
+    vector<Job *> jobs = *_activeList.jobList();
+    auto starts = _starts;
+    sort(jobs.begin(), jobs.end(), [&starts](Job *job1, Job *job2){
+        return starts.find(job1)->second < starts.find(job2)->second;
+    });
+    PActiveList earlyActiveList(new ActiveList(&jobs));
+    return earlyActiveList;
 }
 
 PSchedule Schedule :: neighbourForEarlySchedule
@@ -747,4 +751,14 @@ ScheduleValid Schedule :: validation()
     }
     
     return ScheduleValidOK;
+}
+
+bool Schedule :: isEqualByHamming(PSchedule schedule, int hammingDispersion)
+{
+    return hammingDistance(schedule, hammingDispersion) == 0;
+}
+
+int Schedule :: hammingDistance(PSchedule schedule, int hammingDispersion)
+{
+    return earlyActiveList()->hammingDistance(schedule->earlyActiveList().get(), hammingDispersion);
 }
