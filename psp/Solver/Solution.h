@@ -1,3 +1,13 @@
+//
+//  Solution.h
+//  psp
+//
+//  Created by Valentin Leonov on 05/05/14.
+//  Copyright (c) 2014 Valentin Leonov. All rights reserved.
+//
+
+
+
 #ifndef __psp__Solution__
 #define __psp__Solution__
 

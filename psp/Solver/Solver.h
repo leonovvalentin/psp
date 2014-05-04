@@ -96,64 +96,26 @@ public:
     /**
      Solve problems.
      Solve based on algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
-     @param probabilityKP Probability for solving knapsack problem.
-     @param probabilitySN Probability for creating subset of neighbours.
-     @param tabuListSize Length of tabu list.
-     @param changingInterval Number of steps of algorithm before changing neighbourhood.
-     @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
      @param userInfo User info data will be written to this parameter.
      @return Map of problems and found records.
      */
     shared_ptr<map<Problem *, Solution>>
-    solveWithScheduleKochetovStolyar2003(float probabilityKP,
-                                         float probabilitySN,
-                                         int tabuListSize,
-                                         int changingInterval,
-                                         int maxIterationNumber,
-                                         string *userInfo);
+    solveWithScheduleKochetovStolyar2003(ParamsKochetovStolyar2003 params);
     /**
      Solve problems.
      Solve based on my genetic algorithm.
-     @param maxGeneratedSchedules Max number of generated schedules. It is stop criterion.
-     @param populationSize Size of population.
-     @param maxParents Number of selected parents in each iteration. It should be greater then 1.
-     @param maxChildren Number of generated children for each iteration.
-     @param numberOfChildrenInNextGeneration Number of created children which will be added to next generation.
-     @param timesPingPongInitialPopulation Number of attempts to build a record in Ping-pong algorithm when we construct schedules for initial population.
-     @param probabilityKP Probability for solving knapsack problem.
-     @param probabilityParentSelection Probability for selectiong schedule from population to parents.
-     @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
-     @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
-     @param userInfo User info data will be written to this parameter.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, Solution>> solveWithMyGA(int maxGeneratedSchedules,
-                                                       int populationSize,
-                                                       int maxParents,
-                                                       int maxChildren,
-                                                       int numberOfChildrenInNextGeneration,
-                                                       int timesPingPongInitialPopulation,
-                                                       float probabilityKP,
-                                                       float probabilityParentSelection,
-                                                       float permissibleResourceRemains,
-                                                       int swapAndMovePermissibleTimes,
-                                                       string *userInfo);
+    shared_ptr<map<Problem *, Solution>> solveWithScheduleMyGA(ParamsMyGA params);
     /**
      Solve problems.
      Solve based on my genetic algorithm, 2014.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, Solution>> solveWithMyGA2014(int maxGeneratedSchedules,
-                                                           int populationSize,
-                                                           int maxParents,
-                                                           int maxChildren,
-                                                           int numberOfChildrenInNextGeneration,
-                                                           int timesPingPongInitialPopulation,
-                                                           float probabilityKP,
-                                                           float probabilityParentSelection,
-                                                           float permissibleResourceRemains,
-                                                           int swapAndMovePermissibleTimes,
-                                                           string *userInfo);
+    shared_ptr<map<Problem *, Solution>>
+    solveWithScheduleMyGA2014(ParamsMyGA paramsGA,
+                              ParamsKochetovStolyar2003 paramsKS2003,
+                              int hammingDistance);
 };
 
 

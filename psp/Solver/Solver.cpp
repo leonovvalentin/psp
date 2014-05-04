@@ -197,37 +197,13 @@ shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithSchedulePingPong(int ti
 }
 
 shared_ptr<map<Problem *, Solution>> Solver ::
-solveWithScheduleKochetovStolyar2003(float probabilityKP,
-                                     float probabilitySN,
-                                     int tabuListSize,
-                                     int changingInterval,
-                                     int maxIterationNumber,
-                                     string *userInfo)
+solveWithScheduleKochetovStolyar2003(ParamsKochetovStolyar2003 params)
 {
-    stringstream ss;
-    ss << "Method: solveWithScheduleKochetovStolyar2003" << endl
-    << "probabilityKP"
-    << "\t" << "probabilitySN"
-    << "\t" << "tabuListSize"
-    << "\t" << "changingInterval"
-    << "\t" << "maxIterationNumber"
-    << endl
-    << probabilityKP
-    << "\t" << probabilitySN
-    << "\t" << tabuListSize
-    << "\t" << changingInterval
-    << "\t" << maxIterationNumber;
-    *userInfo = ss.str();
-    
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     for (auto &problem : _problems) {
         
         time_t calculationTime; time(&calculationTime);
-        auto schedule = problem->scheduleKochetovStolyar2003(probabilityKP,
-                                                             probabilitySN,
-                                                             tabuListSize,
-                                                             changingInterval,
-                                                             maxIterationNumber);
+        auto schedule = problem->scheduleKochetovStolyar2003(params);
         calculationTime = time(NULL) - calculationTime;
         
         Solution solution = {
@@ -239,64 +215,21 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-        solution.checkOnRecord(problem->name(), userInfo);
-        solution.checkOnValid(problem->name(), userInfo);
+        string userInfo = params.strForTable();
+        solution.checkOnRecord(problem->name(), &userInfo);
+        solution.checkOnValid(problem->name(), &userInfo);
     }
     return solutions;
 }
 
-shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA(int maxGeneratedSchedules,
-                                                             int populationSize,
-                                                             int maxParents,
-                                                             int maxChildren,
-                                                             int numberOfChildrenInNextGeneration,
-                                                             int timesPingPongInitialPopulation,
-                                                             float probabilityKP,
-                                                             float probabilityParentSelection,
-                                                             float permissibleResourceRemains,
-                                                             int swapAndMovePermissibleTimes,
-                                                             string *userInfo)
+shared_ptr<map<Problem *, Solution>> Solver :: solveWithScheduleMyGA(ParamsMyGA params)
 {
-    stringstream ss;
-    ss << "Method: solveWithMyGA" << endl
-    << "maxGeneratedSchedules"
-    << "\t" << "populationSize"
-    << "\t" << "maxParents"
-    << "\t" << "maxChildren"
-    << "\t" << "numberOfChildrenInNextGeneration"
-    << "\t" << "timesPingPongInitialPopulation"
-    << "\t" << "probabilityKP"
-    << "\t" << "probabilityParentSelection"
-    << "\t" << "permissibleResourceRemains"
-    << "\t" << "swapAndMovePermissibleTimes"
-    << endl
-    << maxGeneratedSchedules
-    << "\t" << populationSize
-    << "\t" << maxParents
-    << "\t" << maxChildren
-    << "\t" << numberOfChildrenInNextGeneration
-    << "\t" << timesPingPongInitialPopulation
-    << "\t" << probabilityKP
-    << "\t" << probabilityParentSelection
-    << "\t" << permissibleResourceRemains
-    << "\t" << swapAndMovePermissibleTimes;
-    *userInfo = ss.str();
-    
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     
     for (auto &problem : _problems) {
         
         time_t calculationTime; time(&calculationTime);
-        auto schedule = problem->scheduleMyGA(maxGeneratedSchedules,
-                                              populationSize,
-                                              maxParents,
-                                              maxChildren,
-                                              numberOfChildrenInNextGeneration,
-                                              timesPingPongInitialPopulation,
-                                              probabilityKP,
-                                              probabilityParentSelection,
-                                              permissibleResourceRemains,
-                                              swapAndMovePermissibleTimes);
+        auto schedule = problem->scheduleMyGA(params);
         calculationTime = time(NULL) - calculationTime;
         
         Solution solution = {
@@ -308,43 +241,25 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA(int maxGeneratedSch
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-        solution.checkOnRecord(problem->name(), userInfo);
-        solution.checkOnValid(problem->name(), userInfo);
+        string userInfo = params.strForTable();
+        solution.checkOnRecord(problem->name(), &userInfo);
+        solution.checkOnValid(problem->name(), &userInfo);
     }
     
     return solutions;
 }
 
-shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA2014(int maxGeneratedSchedules,
-                                                                 int populationSize,
-                                                                 int maxParents,
-                                                                 int maxChildren,
-                                                                 int numberOfChildrenInNextGeneration,
-                                                                 int timesPingPongInitialPopulation,
-                                                                 float probabilityKP,
-                                                                 float probabilityParentSelection,
-                                                                 float permissibleResourceRemains,
-                                                                 int swapAndMovePermissibleTimes,
-                                                                 string *userInfo)
+shared_ptr<map<Problem *, Solution>> Solver ::
+solveWithScheduleMyGA2014(ParamsMyGA paramsGA,
+                          ParamsKochetovStolyar2003 paramsKS2003,
+                          int hammingDistance)
 {
-#warning TODO
-//    *userInfo = ;
-    
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     
     for (auto &problem : _problems) {
         
         time_t calculationTime; time(&calculationTime);
-        auto schedule = problem->scheduleMyGA2014(maxGeneratedSchedules,
-                                                  populationSize,
-                                                  maxParents,
-                                                  maxChildren,
-                                                  numberOfChildrenInNextGeneration,
-                                                  timesPingPongInitialPopulation,
-                                                  probabilityKP,
-                                                  probabilityParentSelection,
-                                                  permissibleResourceRemains,
-                                                  swapAndMovePermissibleTimes);
+        auto schedule = problem->scheduleMyGA2014(paramsGA, paramsKS2003, hammingDistance);
         calculationTime = time(NULL) - calculationTime;
         
         Solution solution = {
@@ -356,8 +271,9 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA2014(int maxGenerate
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-        solution.checkOnRecord(problem->name(), userInfo);
-        solution.checkOnValid(problem->name(), userInfo);
+#warning TODO: + userInfo as params description
+        solution.checkOnRecord(problem->name(), NULL);
+        solution.checkOnValid(problem->name(), NULL);
     }
     
     return solutions;

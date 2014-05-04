@@ -38,6 +38,8 @@
 /* Begin PBXFileReference section */
 		5803492819152FEA00E81416 /* Solution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solution.h; sourceTree = "<group>"; };
 		5803492A19153CE500E81416 /* LOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LOG.txt; sourceTree = "<group>"; };
+		5850315F1916C8B200EA111B /* ParamsKochetovStolyar2003.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamsKochetovStolyar2003.h; sourceTree = "<group>"; };
+		585031601916C8DE00EA111B /* ParamsMyGA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamsMyGA.h; sourceTree = "<group>"; };
 		587CEDF5191576EE000DE047 /* X1_1.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X1_1.RCP; sourceTree = "<group>"; };
 		587CEDF6191576EE000DE047 /* X1_2.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X1_2.RCP; sourceTree = "<group>"; };
 		587CEDF7191576EE000DE047 /* X1_3.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X1_3.RCP; sourceTree = "<group>"; };
@@ -1343,6 +1345,8 @@
 			children = (
 				58D631C318D42C0300C5F841 /* Problem.cpp */,
 				58D631C418D42C0300C5F841 /* Problem.h */,
+				5850315F1916C8B200EA111B /* ParamsKochetovStolyar2003.h */,
+				585031601916C8DE00EA111B /* ParamsMyGA.h */,
 			);
 			path = Problem;
 			sourceTree = "<group>";
