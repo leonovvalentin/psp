@@ -24,7 +24,7 @@ const string recordsFileExtention = "sm";
 
 #pragma mark - init
 
-Solver :: Solver(string *path)
+Solver :: Solver(string *path, const function<bool(long, string)> &filter)
 {
     // Names and full paths to problem files
     
@@ -107,6 +107,18 @@ Solver :: Solver(string *path)
         _recordsData[problem] = optsMap[pIDPath.first];
         _criticalPathData[problem] = problem->criticalPathDuration();
     }
+    
+    // Filter
+    
+    for (long i=_problems.size()-1; i>= 0; i--) {
+        Problem *problem = _problems[i];
+        if (!filter(i, *problem->name())) {
+            delete problem;
+            _problems.erase(_problems.begin() + i);
+        }
+    }
+    LOG("Problems:");
+    for (Problem *problem : _problems) LOG(*problem->name());
 }
 
 Solver :: ~Solver()
@@ -228,6 +240,7 @@ solveWithScheduleKochetovStolyar2003(float probabilityKP,
         
         LOG(*problem->name() << ": " << solution.str());
         solution.checkOnRecord(problem->name(), userInfo);
+        solution.checkOnValid(problem->name(), userInfo);
     }
     return solutions;
 }
@@ -296,6 +309,7 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithMyGA(int maxGeneratedSch
         
         LOG(*problem->name() << ": " << solution.str());
         solution.checkOnRecord(problem->name(), userInfo);
+        solution.checkOnValid(problem->name(), userInfo);
     }
     
     return solutions;

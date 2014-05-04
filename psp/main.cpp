@@ -44,7 +44,7 @@ int main(int argc, const char * argv[])
     time_t totalTime; time(&totalTime);
     
     string path = PATH_TO_DATA_FOLDER;
-    Solver *solver = new Solver(&path);
+    Solver *solver = new Solver(&path, [](long i, string name){return i < 10;});
     
     // Kochetov, Stolyar, 2003
     /**

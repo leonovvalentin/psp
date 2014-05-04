@@ -51,6 +51,20 @@ struct Solution {
             LOGF(ss.str())
         }
     }
+    void checkOnValid(const string *problemName, const string *userInfo)
+    {
+        if (schedule->validation() != ScheduleValidOK) {
+            
+            stringstream ss;
+            ss << "Error! Schedule is not valid: " << *schedule->validationDescription()
+            << endl << "Problem: " << *problemName
+            << endl << *userInfo
+            << endl << *schedule << "MATLAB:" << endl << schedule->stringMATLAB();
+            
+            LOG(ss.str());
+            LOGF(ss.str())
+        }
+    }
     
 #pragma mark - table
     

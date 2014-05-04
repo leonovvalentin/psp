@@ -41,8 +41,9 @@ public:
      Constructor.
      Create new solver.
      @param path Path to folder with problem files in .RCP format and file with records in .sm format. In folder should be only one file with records. File with records should be in .sm format. Name of problem files should be in following format: ("J30", "J60" or "X")(some numbers)_(some numbers).RCP. Name of file with opts should be in following format: (arbitrary symbols)("opt" or "hrs").(optsFileExtention).
+     @para filter Only problems which will be filtered (problems on which filter returns true) will be considered. This function with two parameters: 1 - numbel of problem in problems list, 2 - name of problem
      */
-    Solver(string *path);
+    Solver(string *path, const function<bool(long, string)> &filter);
     virtual ~Solver();
     
 #pragma mark - out
