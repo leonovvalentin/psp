@@ -29,7 +29,7 @@ struct Solution {
     {
         stringstream ss;
         
-        ss << " duration = " << schedule->duration()
+        ss << "duration = " << schedule->duration()
         << " errorToRecord = " << errorToRecord * 100 << "%"
         << " errorToCriticalPath = " << errorToCriticalPath * 100 << "%"
         << " calculationTime = " << calculationTime << "sec."
@@ -59,11 +59,11 @@ struct Solution {
         stringstream ss;
         
         ss
-        << "duration"
-        << "\terror to record, %"
-        << "\terror to critical path, %"
-        << "\tcalculation time, sec."
-        << "\tis valid";
+        << "Duration"
+        << "\tError to record, %"
+        << "\tError to critical path, %"
+        << "\tCalculation time, sec."
+        << "\tIs valid";
         
         return ss.str();
     }
