@@ -47,6 +47,7 @@ struct Solution {
         
         return ss.str();
     }
+    
     void checkOnRecord(const string *problemName, const string *userInfo)
     {
         if (errorToRecord < 0) {
@@ -61,6 +62,7 @@ struct Solution {
             LOGF(ss.str())
         }
     }
+    
     void checkOnValid(const string *problemName, const string *userInfo)
     {
         if (schedule->validation() != ScheduleValidOK) {
@@ -91,7 +93,8 @@ struct Solution {
         
         return ss.str();
     }
-    string strForTable()
+    
+    string strValuesForTable()
     {
         stringstream ss;
         

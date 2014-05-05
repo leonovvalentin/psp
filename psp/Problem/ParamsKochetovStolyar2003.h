@@ -40,7 +40,9 @@ struct ParamsKochetovStolyar2003 {
     int changingInterval;
     int maxIterationNumber;
     
-    string strForTable()
+#pragma mark - table
+    
+    static string strTitlesForTable()
     {
         stringstream ss;
         
@@ -49,14 +51,29 @@ struct ParamsKochetovStolyar2003 {
         << "\tprobabilitySN"
         << "\ttabuListSize"
         << "\tchangingInterval"
-        << "\tmaxIterationNumber"
-        << endl
+        << "\tmaxIterationNumber";
+        
+        return ss.str();
+    }
+    
+    string strValuesForTable()
+    {
+        stringstream ss;
+        
+        ss
         << probabilityKP
         << "\t" << probabilitySN
         << "\t" << tabuListSize
         << "\t" << changingInterval
         << "\t" << maxIterationNumber;
         
+        return ss.str();
+    }
+    
+    string strForTable()
+    {
+        stringstream ss;
+        ss << strTitlesForTable() << endl << strValuesForTable();
         return ss.str();
     }
 };

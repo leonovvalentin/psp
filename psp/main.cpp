@@ -50,7 +50,7 @@ int main(int argc, const char * argv[])
     
     string path = PATH_TO_DATA_FOLDER;
     Solver *solver = new Solver(&path, [](long i, string name){
-        return i < 10;
+        return i >= 560 && i % 6 != 0;
     });
     
     // Kochetov, Stolyar, 2003
@@ -83,31 +83,32 @@ int main(int argc, const char * argv[])
 //    LOGF(paramsMyGA.strForTable() << endl << stringFromSolutionsForTable(solutionsGA));
     
     // My genetic algorithm, 2014
-//    ParamsMyGA paramsMyGA_2014 = {
-//        .maxGeneratedSchedules = 5000,
-//        .populationSize = 40,
-//        .maxParents = 20,
-//        .maxChildren = 40,
-//        .numberOfChildrenInNextGeneration = 10,
-//        .timesPingPongInitialPopulation = 100,
-//        .probabilityKP = 0.5f,
-//        .probabilityParentSelection = 0.8f,
-//        .permissibleResourceRemains = 0.9f,
-//        .swapAndMovePermissibleTimes = 10
-//    };
-//    ParamsKochetovStolyar2003 paramsKS2003_2014 = {
-//        .probabilityKP = 0.5f,
-//        .probabilitySN = 0.2f,
-//        .tabuListSize = 1,
-//        .changingInterval = 1,
-//        .maxIterationNumber = 10
-//    };
-//    auto solutionsGA2014 = solver->solveWithScheduleMyGA2014(paramsMyGA_2014,
-//                                                             paramsKS2003_2014,
-//                                                             10);
-//    LOG(stringFromSolutions(solutionsGA2014));
-//#warning TODO: + parameters description
-//    LOGF("TODO: + parameters description" << endl << stringFromSolutionsForTable(solutionsGA2014));
+    ParamsMyGA paramsGA_2014 = {
+        .maxGeneratedSchedules = 5000,
+        .populationSize = 40,
+        .maxParents = 20,
+        .maxChildren = 40,
+        .numberOfChildrenInNextGeneration = 10,
+        .timesPingPongInitialPopulation = 100,
+        .probabilityKP = 0.5f,
+        .probabilityParentSelection = 0.8f,
+        .permissibleResourceRemains = 0.9f,
+        .swapAndMovePermissibleTimes = 10
+    };
+    ParamsKochetovStolyar2003 paramsKS2003_2014 = {
+        .probabilityKP = 0.5f,
+        .probabilitySN = 0.2f,
+        .tabuListSize = 1,
+        .changingInterval = 1,
+        .maxIterationNumber = 10
+    };
+    int hammingDispersion = 10;
+    auto solutionsGA2014 = solver->solveWithScheduleMyGA2014(paramsGA_2014,
+                                                             paramsKS2003_2014,
+                                                             hammingDispersion);
+    LOG(stringFromSolutions(solutionsGA2014));
+    LOGF(strForTableFromParamsMyGA2014(paramsGA_2014, paramsKS2003_2014, hammingDispersion)
+         << endl << stringFromSolutionsForTable(solutionsGA2014));
     
     delete solver;
     

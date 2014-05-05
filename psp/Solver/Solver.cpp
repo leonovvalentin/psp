@@ -271,9 +271,9 @@ solveWithScheduleMyGA2014(ParamsMyGA paramsGA,
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-#warning TODO: + userInfo as params description
-        solution.checkOnRecord(problem->name(), NULL);
-        solution.checkOnValid(problem->name(), NULL);
+        string userInfo = strForTableFromParamsMyGA2014(paramsGA, paramsKS2003, hammingDistance);
+        solution.checkOnRecord(problem->name(), &userInfo);
+        solution.checkOnValid(problem->name(), &userInfo);
     }
     
     return solutions;

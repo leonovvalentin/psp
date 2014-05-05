@@ -96,6 +96,24 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
     return selectedJobs;
 };
 
+string strForTableFromParamsMyGA2014(ParamsMyGA paramsGA,
+                                     ParamsKochetovStolyar2003 paramsKS2003,
+                                     int hammingDispersion)
+{
+    stringstream ss;
+    
+    ss
+    << paramsGA.strTitlesForTable()
+    << "\t" << paramsKS2003.strTitlesForTable() <<
+    "\thammingDispersion"
+    << endl
+    << paramsGA.strValuesForTable()
+    << "\t" << paramsKS2003.strValuesForTable()
+    << "\t" << hammingDispersion;
+    
+    return ss.str();
+}
+
 string stringFromSolutions(shared_ptr<map<Problem *, Solution>> solutions)
 {
     stringstream ss;
@@ -128,7 +146,7 @@ string stringFromSolutionsForTable(shared_ptr<map<Problem *, Solution>> solution
     for (auto &pProblemResult : *solutions) {
         
         Solution solution = pProblemResult.second;
-        ss << *pProblemResult.first->name() << "\t" << solution.strForTable() << endl;
+        ss << *pProblemResult.first->name() << "\t" << solution.strValuesForTable() << endl;
         
         averageErrorToRecord += solution.errorToRecord / solutions->size();
         averageErrorToCriticalPath += solution.errorToCriticalPath / solutions->size();

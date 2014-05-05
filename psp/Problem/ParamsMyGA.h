@@ -39,7 +39,9 @@ struct ParamsMyGA {
     float permissibleResourceRemains;
     int swapAndMovePermissibleTimes;
     
-    string strForTable()
+#pragma mark - table
+    
+    static string strTitlesForTable()
     {
         stringstream ss;
         
@@ -53,8 +55,16 @@ struct ParamsMyGA {
         << "\tprobabilityKP"
         << "\tprobabilityParentSelection"
         << "\tpermissibleResourceRemains"
-        << "\tswapAndMovePermissibleTimes"
-        << endl
+        << "\tswapAndMovePermissibleTimes";
+        
+        return ss.str();
+    }
+    
+    string strValuesForTable()
+    {
+        stringstream ss;
+        
+        ss
         << maxGeneratedSchedules
         << "\t" << populationSize
         << "\t" << maxParents
@@ -66,6 +76,13 @@ struct ParamsMyGA {
         << "\t" << permissibleResourceRemains
         << "\t" << swapAndMovePermissibleTimes;
         
+        return ss.str();
+    }
+    
+    string strForTable()
+    {
+        stringstream ss;
+        ss << strTitlesForTable() << endl << strValuesForTable();
         return ss.str();
     }
 };
