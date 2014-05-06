@@ -317,20 +317,309 @@ PSchedule Problem :: scheduleMyGA(ParamsMyGA params) const
     return record;
 }
 
+//PSchedule Problem :: scheduleMyGA2014(ParamsMyGA paramsGA,
+//                                      ParamsKochetovStolyar2003 paramsKS2003,
+//                                      int hammingDispersion) const
+//{
+//    #warning add to params of method
+//    float probability = 0.3;
+//    int maxAttemptsNumber = paramsGA.populationSize;
+//    int tabuListSize = 3;
+//    
+//    auto isScheduleCanBeAddedToThePopulation =
+//    [hammingDispersion, probability](PSchedule schedule, vector<PSchedule> *schedules) -> bool {
+//        for (PSchedule sch : *schedules) {
+//            if (schedule->isEqualByHamming(sch, hammingDispersion)) {
+//                if (Random :: randomFloatFrom0To1() < probability) return true;
+//                else return false;
+//            }
+//        }
+//        return true;
+//    };
+//    
+//    PSchedule record = nullptr;
+//    TabuList tabuList(tabuListSize);
+//    
+//    // initial population
+//    
+//    vector<PSchedule> population(0);
+//    population.reserve(paramsGA.populationSize + paramsGA.numberOfChildrenInNextGeneration);
+//    for (int i=0; i<paramsGA.populationSize; i++) {
+//        
+//        LOG("initial population: "
+//            << (float)i/paramsGA.populationSize * 100 << "%"
+//            << " record = " << (record ? record->duration() : INT_MAX));
+//        
+//        PSchedule schedule = schedulePingPong(paramsGA.timesPingPongInitialPopulation,
+//                                              paramsGA.probabilityKP);
+//        
+//        if (!record || (schedule->duration() < record->duration())) {
+//            population.push_back(schedule);
+//            tabuList.add(schedule->sumOfStarts());
+//            record = schedule;
+//        }
+//        else if (isScheduleCanBeAddedToThePopulation(schedule, &population)) {
+//            if (!tabuList.containTabu(schedule->sumOfStarts())) {
+//                population.push_back(schedule);
+//                tabuList.add(schedule->sumOfStarts());
+//            }
+//        }
+//    }
+//    
+//    // generations
+//    
+//    int numberOfGeneratedSchedules = 0;
+//    while (numberOfGeneratedSchedules < paramsGA.maxGeneratedSchedules) {
+//        
+//        LOG("generated schedules: "
+//            << (float)numberOfGeneratedSchedules/paramsGA.maxGeneratedSchedules * 100 << "%"
+//            << " record = " << record->duration());
+//        
+//        // select parents as subset of population
+//        sort(population.begin(), population.end(), [](PSchedule a, PSchedule b) {
+//            return a->duration() < b->duration();
+//        });
+//        vector<PSchedule> parents(0); parents.reserve(paramsGA.maxParents);
+//        for (int i=0; i<population.size() && parents.size()<paramsGA.maxParents; i++) {
+//            if (Random :: randomFloatFrom0To1() < paramsGA.probabilityParentSelection) {
+//                parents.push_back(population[i]);
+//            }
+//        }
+//        for (int i=0; parents.size()<paramsGA.maxParents; i++) {
+//            auto schedule = population[i];
+//            if (find(begin(parents), end(parents), schedule) == end(parents)) {
+//                parents.push_back(schedule);
+//            }
+//        }
+//        
+//        // create children
+//        vector<PSchedule> children(0); children.reserve(paramsGA.maxChildren);
+//        while (children.size() < paramsGA.maxChildren) {
+//            
+//            // select 2 parents for crossing
+//            auto parent1 = parents[Random :: randomLong(0, parents.size() - 1)];
+//            auto parent2 = parents[Random :: randomLong(0, parents.size() - 1)];
+//            int attemptNumber = 0;
+//            while (attemptNumber < maxAttemptsNumber
+//                   && parent2 == parent1
+//                   && !parent2->isEqualByHamming(parent1, hammingDispersion)) {
+//                parent2 = parents[Random :: randomLong(0, parents.size() - 1)];
+//                attemptNumber++;
+//            }
+//            if (attemptNumber == maxAttemptsNumber) {
+//                while (parent2 == parent1
+//                       && !parent2->isEqualByHamming(parent1, hammingDispersion)) {
+//                    parent2 = parents[Random :: randomLong(0, parents.size() - 1)];
+//                }
+//            }
+//            
+//            // crossing
+//            auto child = parent1->cross(parent2, paramsGA.permissibleResourceRemains);
+//            auto mutatedChild =
+//            child->swapAndMoveMutation(paramsGA.swapAndMovePermissibleTimes,
+//                                       paramsGA.swapAndMovePermissibleTimes)->pingPong();
+//            if (child->duration() < record->duration()) {
+//                if (mutatedChild->duration() < child->duration()) child = mutatedChild;
+//                record = child;
+//            }
+//            else {
+//                child = mutatedChild;
+//            }
+//            
+//            if (child == record) {
+//                children.push_back(child);
+//                tabuList.add(child->sumOfStarts());
+//            }
+//            else if (isScheduleCanBeAddedToThePopulation(child, &population)) {
+//                if (!tabuList.containTabu(child->sumOfStarts())) {
+//                    children.push_back(child);
+//                    tabuList.add(child->sumOfStarts());
+//                }
+//            }
+//            numberOfGeneratedSchedules++;
+//        }
+//        
+//        // next population
+//        sort(begin(children), end(children), [](PSchedule a, PSchedule b){
+//            return a->duration() < b->duration();
+//        });
+//        population.insert(population.begin(),
+//                          children.begin(),
+//                          children.begin() + paramsGA.numberOfChildrenInNextGeneration);
+//        population.erase(population.begin() + paramsGA.populationSize, population.end());
+//    }
+//    
+//    return record;
+//}
+
 PSchedule Problem :: scheduleMyGA2014(ParamsMyGA paramsGA,
                                       ParamsKochetovStolyar2003 paramsKS2003,
                                       int hammingDispersion) const
 {
-    auto scheduleInListByHamming =
-    [hammingDispersion](PSchedule schedule, vector<PSchedule> *schedules) -> bool {
-        for (PSchedule sch : *schedules) {
-            if (schedule->isEqualByHamming(sch, hammingDispersion)) {
-                return true;
+#warning add to parameters of method
+    float probabilityEarly = 0.5;
+    
+    vector<PSchedule> populationEarly(0);
+    populationEarly.reserve(paramsGA.populationSize + paramsGA.numberOfChildrenInNextGeneration);
+    vector<PSchedule> populationLate(0);
+    populationLate.reserve(paramsGA.populationSize + paramsGA.numberOfChildrenInNextGeneration);
+    
+    auto createEarlyOrLate =
+    [probabilityEarly](PSchedule schedule) -> PSchedule {
+        if (Random :: randomFloatFrom0To1() < probabilityEarly) return schedule->earlySchedule();
+        else return schedule->lateSchedule();
+    };
+    
+    auto addToPopulationBegin =
+    [&populationEarly, &populationLate, probabilityEarly](PSchedule schedule) -> void {
+        if (schedule->type() == ScheduleTypeEarly) {
+            populationEarly.insert(populationEarly.begin(), schedule);
+        }
+        else if (schedule->type() == ScheduleTypeLate) {
+            populationLate.insert(populationLate.begin(), schedule);
+        }
+        else {
+            if (Random :: randomFloatFrom0To1() < probabilityEarly) {
+                populationEarly.insert(populationEarly.begin(), schedule->earlySchedule());
+            }
+            else {
+                populationLate.insert(populationLate.begin(), schedule->lateSchedule());
             }
         }
-        return false;
+    };
+    
+    auto selectParentsAsSubsetOfPopulation =
+    [paramsGA](vector<PSchedule> *population) -> vector<PSchedule> {
+        
+        sort(population->begin(), population->end(), [](PSchedule a, PSchedule b) {
+            return a->duration() < b->duration();
+        });
+        
+        vector<PSchedule> parents(0); parents.reserve(paramsGA.maxParents / 2.0f);
+        for (int i=0; i<population->size() && parents.size()<paramsGA.maxParents; i++) {
+            if (Random :: randomFloatFrom0To1() < paramsGA.probabilityParentSelection) {
+                parents.push_back((*population)[i]);
+            }
+        }
+        for (int i=0; parents.size()<paramsGA.maxParents; i++) {
+            auto schedule = (*population)[i];
+            if (find(begin(parents), end(parents), schedule) == end(parents)) {
+                parents.push_back(schedule);
+            }
+        }
+        
+        return parents;
     };
     
     PSchedule record = nullptr;
+    
+    // initial population
+    
+    for (int i=0; i<paramsGA.populationSize; i++) {
+        
+//        LOG("initial population: "
+//            << (float)i/paramsGA.populationSize * 100 << "%"
+//            << " record = " << (record ? record->duration() : INT_MAX));
+        
+        PSchedule scheduleEarly = schedulePingPong(paramsGA.timesPingPongInitialPopulation,
+                                                   paramsGA.probabilityKP)->earlySchedule();
+        addToPopulationBegin(scheduleEarly);
+        if (!record || (scheduleEarly->duration() < record->duration())) record = scheduleEarly;
+        
+        PSchedule scheduleLate = schedulePingPong(paramsGA.timesPingPongInitialPopulation,
+                                                  paramsGA.probabilityKP)->lateSchedule();
+        addToPopulationBegin(scheduleLate);
+        if (!record || (scheduleLate->duration() < record->duration())) record = scheduleLate;
+
+    }
+    
+    // generations
+    
+    int numberOfGeneratedSchedules = 0;
+    while (numberOfGeneratedSchedules < paramsGA.maxGeneratedSchedules) {
+        
+//        LOG("generated schedules: "
+//            << (float)numberOfGeneratedSchedules/paramsGA.maxGeneratedSchedules * 100 << "%"
+//            << " record = " << record->duration());
+        
+        // select parents as subset of population
+        vector<PSchedule> parentsEarly = selectParentsAsSubsetOfPopulation(&populationEarly);
+        vector<PSchedule> parentsLate = selectParentsAsSubsetOfPopulation(&populationLate);
+        
+        // create children
+        vector<PSchedule> children(0); children.reserve(paramsGA.maxChildren);
+        while (children.size() < paramsGA.maxChildren) {
+            
+            // select 2 parents for crossing
+            auto parent1 = parentsEarly[Random :: randomLong(0, parentsEarly.size() - 1)];
+            auto parent2 = parentsLate[Random :: randomLong(0, parentsLate.size() - 1)];
+            
+//#warning test
+//            LOG("p1 =  " << parent1->str());
+//            LOG("p2 =  " << parent2->str());
+            
+            // crossing
+#warning TODO create specific crossover method for various types?
+            auto child = createEarlyOrLate(parent1->cross(parent2,
+                                                          paramsGA.permissibleResourceRemains));
+//#warning test
+//            LOG("ch =  " << child->str());
+            
+            auto mutatedChild =
+            child->swapAndMoveMutation(paramsGA.swapAndMovePermissibleTimes,
+                                       paramsGA.swapAndMovePermissibleTimes)->pingPong();
+            mutatedChild = createEarlyOrLate(mutatedChild);
+            
+//#warning test
+//            LOG("chM = " << mutatedChild->str());
+            
+            if (child->duration() < record->duration()) {
+                if (mutatedChild->duration() < child->duration()) child = mutatedChild;
+                record = child;
+            }
+            else {
+                child = mutatedChild;
+            }
+            
+            children.push_back(child);
+            numberOfGeneratedSchedules++;
+        }
+        
+        // next population
+        
+//#warning test
+//        LOG(stringFromSchedulesVector(&children));
+        
+        sort(begin(children), end(children), [](PSchedule a, PSchedule b){
+            return a->duration() < b->duration();
+        });
+        
+//#warning test
+//        LOG(stringFromSchedulesVector(&children));
+        
+//#warning test
+//        LOG("e = " << stringFromSchedulesVector(&populationEarly));
+//        LOG("l = " << stringFromSchedulesVector(&populationLate));
+        
+        for(auto it=children.begin();
+            it<children.begin()+paramsGA.numberOfChildrenInNextGeneration;
+            it++) {
+            addToPopulationBegin(*it);
+        }
+        
+//#warning test
+//        LOG("e = " << stringFromSchedulesVector(&populationEarly));
+//        LOG("l = " << stringFromSchedulesVector(&populationLate));
+        
+        populationEarly.erase(populationEarly.begin() + paramsGA.populationSize / 2.0f,
+                              populationEarly.end());
+        populationLate.erase(populationLate.begin() + paramsGA.populationSize / 2.0f,
+                             populationLate.end());
+        
+//#warning test
+//        LOG("e = " << stringFromSchedulesVector(&populationEarly));
+//        LOG("l = " << stringFromSchedulesVector(&populationLate));
+    }
+    
     return record;
 }

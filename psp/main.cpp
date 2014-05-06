@@ -19,6 +19,7 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <thread>
 
 
 
@@ -50,7 +51,7 @@ int main(int argc, const char * argv[])
     
     string path = PATH_TO_DATA_FOLDER;
     Solver *solver = new Solver(&path, [](long i, string name){
-        return i >= 560 && i % 6 != 0;
+        return true;
     });
     
     // Kochetov, Stolyar, 2003

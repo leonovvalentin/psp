@@ -476,12 +476,16 @@ PSchedule Schedule :: swapAndMoveMutation(const int swapPermissibleTimes,
 
 PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains)
 {
+    bool isEarly = (_type == ScheduleTypeEarly);
+    bool isEarly2 = (schedule->type() == ScheduleTypeEarly);
+    
     auto denseJobsBlocks = this->denseJobsBlocks(permissibleResourceRemains);
     auto denseJobsBlocks2 = schedule->denseJobsBlocks(permissibleResourceRemains);
     
     auto jobsList = *_activeList.jobList();
     auto jobsList2 = *schedule->activeList()->jobList();
-    vector<Job *> childJobsList(0);
+    vector<Job *> childJobsList(jobsList.size());
+    long leftPosition = 0, rightPosition = childJobsList.size() - 1;
     
     while (denseJobsBlocks->size() != 0 || denseJobsBlocks2->size() != 0) {
         
@@ -491,29 +495,36 @@ PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains
         shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>>
         bestDenseJobsBlocks = nullptr, otherDenseJobsBlocks = nullptr;
         
+        bool bestIsEarly = false;
+        
         if (denseJobsBlocks->size() != 0 && denseJobsBlocks2->size() == 0) {
-            bestBlock = (*denseJobsBlocks)[0];
+            bestBlock = (*denseJobsBlocks)[isEarly ? 0 : denseJobsBlocks->size() - 1];
             bestJobsList = &jobsList;
+            bestIsEarly = isEarly;
             bestDenseJobsBlocks = denseJobsBlocks;
             otherDenseJobsBlocks = denseJobsBlocks2;
         }
         else if (denseJobsBlocks->size() == 0 && denseJobsBlocks2->size() != 0) {
-            bestBlock = (*denseJobsBlocks2)[0];
+            bestBlock = (*denseJobsBlocks2)[isEarly2 ? 0 : denseJobsBlocks2->size() - 1];
             bestJobsList = &jobsList2;
+            bestIsEarly = isEarly2;
             bestDenseJobsBlocks = denseJobsBlocks2;
             otherDenseJobsBlocks = denseJobsBlocks;
         }
         else {
-            auto block = (*denseJobsBlocks)[0], block2 = (*denseJobsBlocks2)[0];
+            auto block = (*denseJobsBlocks)[isEarly ? 0 : denseJobsBlocks->size() - 1];
+            auto block2 = (*denseJobsBlocks2)[isEarly2 ? 0 : denseJobsBlocks2->size() - 1];
             if (block->second < block2->second) {
                 bestBlock = block;
                 bestJobsList = &jobsList;
+                bestIsEarly = isEarly;
                 bestDenseJobsBlocks = denseJobsBlocks;
                 otherDenseJobsBlocks = denseJobsBlocks2;
             }
             else {
                 bestBlock = block2;
                 bestJobsList = &jobsList2;
+                bestIsEarly = isEarly2;
                 bestDenseJobsBlocks = denseJobsBlocks2;
                 otherDenseJobsBlocks = denseJobsBlocks;
             }
@@ -521,9 +532,15 @@ PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains
         
         while (bestJobsList->size()) {
             
-            Job *job = (*bestJobsList)[0];
-            
-            childJobsList.push_back(job);
+            Job *job = NULL;
+            if (bestIsEarly) {
+                job = (*bestJobsList)[0];
+                childJobsList[leftPosition] = job; leftPosition++;
+            }
+            else {
+                job = (*bestJobsList)[bestJobsList->size() - 1];
+                childJobsList[rightPosition] = job; rightPosition--;
+            }
             
             removeJobFromList(job, &jobsList);
             removeJobFromList(job, &jobsList2);
@@ -550,17 +567,22 @@ PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains
             }
             
             if (!bestBlock->first->size()) {
-                bestDenseJobsBlocks->erase(bestDenseJobsBlocks->begin());
+                bestDenseJobsBlocks->erase(bestIsEarly ?
+                                           bestDenseJobsBlocks->begin() :
+                                           (bestDenseJobsBlocks->end() - 1));
                 break;
             }
         }
     }
     
-    if (childJobsList.size() != _activeList.jobList()->size()) {
+    if (leftPosition <= rightPosition) {
         vector<Job *> *bestJobsList = NULL;
         if (duration() < schedule->duration()) bestJobsList = &jobsList;
         else bestJobsList = &jobsList2;
-        childJobsList.insert(childJobsList.end(), bestJobsList->begin(), bestJobsList->end());
+        int i = 0;
+        while (leftPosition <= rightPosition) {
+            childJobsList[leftPosition] = (*bestJobsList)[i]; leftPosition++; i++;
+        }
     }
     
     ActiveList childActiveList(&childJobsList);
