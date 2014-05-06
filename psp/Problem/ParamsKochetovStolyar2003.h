@@ -26,11 +26,11 @@ using namespace std;
 
 /**
  Parameters for scheduleKochetovStolyar2003 methtod.
- @param probabilityKP_KS Probability for solving knapsack problem.
- @param probabilitySN_KS Probability for creating subset of neighbours.
- @param tabuListSize_KS Length of tabu list.
- @param changingInterval_KS Number of steps of algorithm before changing neighbourhood.
- @param maxIterationNumber_KS Number of iterations to go through the neighborhood. It is stop criteria.
+ @param probabilityKP Probability for solving knapsack problem.
+ @param probabilitySN Probability for creating subset of neighbours.
+ @param tabuListSize Length of tabu list.
+ @param changingInterval Number of steps of algorithm before changing neighbourhood.
+ @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
  */
 struct ParamsKochetovStolyar2003 {
     

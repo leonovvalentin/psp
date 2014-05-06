@@ -265,7 +265,7 @@ string stringFromJobsVector(const vector<Job *> *jobs)
     for (auto &job : *jobs) {
         if (first) first = false;
         else ss << ", ";
-        ss << *job->name();
+        ss << (job ? (*job->name()) : "NULL");
     }
     
     return ss.str();

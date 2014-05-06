@@ -42,14 +42,14 @@ using namespace std;
 
 #define LOG_TO_COLSOL 1
 #ifdef LOG_TO_COLSOL
-#define LOG(str) do { cout << str << endl; } while (false)
+#define LOG(str) cout << str << endl;
 #else
 #define LOG(str)
 #endif
 
 #define LOG_TO_FILE 1
 #ifdef LOG_TO_FILE
-#define LOGF(str) {ofstream f; f.open(PATH_TO_LOG_FILE, ios::app); f << "\n\n\n"; do { f << str << endl; } while (false); f.close();}
+#define LOGF(str) {ofstream f; f.open(PATH_TO_LOG_FILE, ios::app); f << "\n\n\n"; f << str << endl; f.close();}
 #else
 #define LOGF(str)
 #endif
