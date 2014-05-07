@@ -183,14 +183,15 @@ void Schedule :: addJobsOnScheduleViaLateParallelDecoder
                 permissibleBySuccessors.push_back(job);
         }
         
-        if (!active.size() && !permissibleBySuccessors.size()) {
-            time--;
-            continue;
-        }
-        
         shared_ptr<vector<Job *>> permissible = permissibleJobsByResources(&permissibleBySuccessors,
                                                                            time,
                                                                            false);
+        
+#warning Do similar for early?
+        if (!active.size() && !permissible->size()) {
+            time--;
+            continue;
+        }
         
         while (permissible->size()) {
             shared_ptr<vector<Job *>> newActiveJobs = functionForSelecting(permissible.get(),
