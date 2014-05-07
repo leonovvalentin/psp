@@ -451,7 +451,7 @@ PSchedule Schedule :: localSearchKochetovStolyar2003(float probabilityKP,
     return record;
 }
 
-PSchedule Schedule :: pingPong() const
+PSchedule Schedule :: pingPongSchedule() const
 {
     PSchedule schedule = earlySchedule();
     

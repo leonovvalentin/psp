@@ -209,8 +209,7 @@ PSchedule Problem :: schedulePingPong(int times, float probability) const
                                                                functionForSelecting);
         bool stop = false;
         while (!stop) {
-            PSchedule scheduleLate = schedule->lateSchedule();
-            PSchedule scheduleEarly = scheduleLate->earlySchedule();
+            PSchedule scheduleEarly = schedule->lateSchedule()->earlySchedule();
             if (scheduleEarly->duration() < schedule->duration()) schedule = scheduleEarly;
             else stop = true;
         }
@@ -291,7 +290,7 @@ PSchedule Problem :: scheduleMyGA(ParamsMyGA params) const
             auto child = parent1->cross(parent2, params.permissibleResourceRemains);
             auto mutatedChild =
             child->swapAndMoveMutation(params.swapAndMovePermissibleTimes,
-                                       params.swapAndMovePermissibleTimes)->pingPong();
+                                       params.swapAndMovePermissibleTimes)->pingPongSchedule();
             if (child->duration() < record->duration()) {
                 if (mutatedChild->duration() < child->duration()) child = mutatedChild;
                 record = child;
