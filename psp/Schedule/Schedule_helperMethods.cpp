@@ -182,6 +182,12 @@ void Schedule :: addJobsOnScheduleViaLateParallelDecoder
             if (job->validBySuccessors(&started) && !jobInList(job, &permissibleBySuccessors))
                 permissibleBySuccessors.push_back(job);
         }
+        
+        if (!active.size() && !permissibleBySuccessors.size()) {
+            time--;
+            continue;
+        }
+        
         shared_ptr<vector<Job *>> permissible = permissibleJobsByResources(&permissibleBySuccessors,
                                                                            time,
                                                                            false);
