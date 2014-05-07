@@ -365,3 +365,31 @@ bool sameJobsInVector(const vector<Job *> *jobs)
     
     return false;
 }
+
+int minHammingDistance(vector<PSchedule> *schedules, int hammingDispersion)
+{
+    int minDist = INT_MAX;
+    for (int i=0; i<schedules->size(); i++) {
+        PSchedule schedule1 = (*schedules)[i];
+        for (int j=i+1; j<schedules->size(); j++) {
+            PSchedule schedule2 = (*schedules)[j];
+            int dist = schedule1->hammingDistance(schedule2, hammingDispersion);
+            if (dist < minDist) minDist = dist;
+        }
+    }
+    return minDist;
+}
+
+int maxHammingDistance(vector<PSchedule> *schedules, int hammingDispersion)
+{
+    int maxDist = INT_MIN;
+    for (int i=0; i<schedules->size(); i++) {
+        PSchedule schedule1 = (*schedules)[i];
+        for (int j=i+1; j<schedules->size(); j++) {
+            PSchedule schedule2 = (*schedules)[j];
+            int dist = schedule1->hammingDistance(schedule2, hammingDispersion);
+            if (dist > maxDist) maxDist = dist;
+        }
+    }
+    return maxDist;
+}

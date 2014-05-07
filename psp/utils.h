@@ -106,6 +106,9 @@ string stringFromBlocksVector
 string stringFromBlock(const shared_ptr<pair<shared_ptr<vector<Job *>>, float>> block);
 bool sameJobsInVector(const vector<Job *> *jobs);
 
+int minHammingDistance(vector<PSchedule> *schedules, int hammingDispersion);
+int maxHammingDistance(vector<PSchedule> *schedules, int hammingDispersion);
+
 
 
 #endif /* defined(__psp2__utils__) */
