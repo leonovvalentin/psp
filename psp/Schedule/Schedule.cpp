@@ -476,11 +476,16 @@ PSchedule Schedule :: swapAndMoveMutation(const int swapPermissibleTimes,
 
 PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains)
 {
-    auto denseJobsBlocks = this->denseJobsBlocks(permissibleResourceRemains);
-    auto denseJobsBlocks2 = schedule->denseJobsBlocks(permissibleResourceRemains);
+    PSchedule earlySchedule =
+    (this->type() == ScheduleTypeEarly) ? shared_from_this() : this->earlySchedule();
+    PSchedule earlySchedule2 =
+    (schedule->type() == ScheduleTypeEarly) ? schedule : schedule->earlySchedule();
     
-    auto jobsList = *_activeList.jobList();
-    auto jobsList2 = *schedule->activeList()->jobList();
+    auto denseJobsBlocks = earlySchedule->denseJobsBlocks(permissibleResourceRemains);
+    auto denseJobsBlocks2 = earlySchedule2->denseJobsBlocks(permissibleResourceRemains);
+    
+    auto jobsList = *earlySchedule->activeList()->jobList();
+    auto jobsList2 = *earlySchedule2->activeList()->jobList();
     vector<Job *> childJobsList(0);
     
     while (denseJobsBlocks->size() != 0 || denseJobsBlocks2->size() != 0) {
@@ -556,9 +561,9 @@ PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains
         }
     }
     
-    if (childJobsList.size() != _activeList.jobList()->size()) {
+    if (childJobsList.size() != earlySchedule->activeList()->size()) {
         vector<Job *> *bestJobsList = NULL;
-        if (duration() < schedule->duration()) bestJobsList = &jobsList;
+        if (earlySchedule->duration() < earlySchedule2->duration()) bestJobsList = &jobsList;
         else bestJobsList = &jobsList2;
         childJobsList.insert(childJobsList.end(), bestJobsList->begin(), bestJobsList->end());
     }
