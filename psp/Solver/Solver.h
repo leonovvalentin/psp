@@ -99,29 +99,28 @@ public:
      @param userInfo User info data will be written to this parameter.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, Solution>>
-    solveWithScheduleKochetovStolyar2003(ParamsKochetovStolyar2003 params);
+    shared_ptr<map<Problem *, Solution>> solveWithScheduleKS(ParamsKS params);
     /**
      Solve problems.
      Solve based on my genetic algorithm.
      @return Map of problems and found records.
      */
-    shared_ptr<map<Problem *, Solution>> solveWithScheduleMyGA(ParamsMyGA params);
+    shared_ptr<map<Problem *, Solution>> solveWithScheduleGA(ParamsGA params);
     /**
      Solve problems.
      Solve based on my genetic algorithm, 2014.
      @param permissibleNoChangeRecord Number of iterations without changing record, before trying to apply population thinning.
      @param numberOfSubstitutions Number of schedules which will be substituted to random ping-pong schedules (while population thinning).
-     @param numberOfLocalSearchKS2003 Number of schedules which will be improved via local search method of Kochetov Stolyar 2003 (while population thinning).
+     @param numberOfLocalSearchKS Number of schedules which will be improved via local search method of Kochetov Stolyar 2003 () (while population thinning).
      @return Map of problems and found records.
      */
     shared_ptr<map<Problem *, Solution>>
-    solveWithScheduleMyGA2014(ParamsMyGA paramsGA,
-                              ParamsKochetovStolyar2003 paramsKS2003,
-                              ParamsCross paramsCross,
-                              int permissibleNoChangeRecord,
-                              int numberOfSubstitutions,
-                              int numberOfLocalSearchKS2003);
+    solveWithScheduleGA2014(ParamsGA paramsGA,
+                            ParamsKS paramsKS,
+                            ParamsCross paramsCross,
+                            int permissibleNoChangeRecord,
+                            int numberOfSubstitutions,
+                            int numberOfLocalSearchKS);
 };
 
 

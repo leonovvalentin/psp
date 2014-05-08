@@ -166,7 +166,7 @@ public:
     /**
      @return Schedule, created from current via local search algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
      */
-    PSchedule localSearchKochetovStolyar2003(ParamsKochetovStolyar2003 params);
+    PSchedule localSearchKS(ParamsKS params);
     /**
      @return Schedule, created from current via ping-pong procedure.
      */

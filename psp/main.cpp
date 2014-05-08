@@ -55,19 +55,19 @@ int main(int argc, const char * argv[])
     });
     
     // Kochetov, Stolyar, 2003
-//    ParamsKochetovStolyar2003 paramsKS2003 = {
+//    ParamsKS paramsKS = {
 //        .probabilityKP = 0.5f, // ?
 //        .probabilitySN = 0.2f, // 0.2
 //        .tabuListSize = 5, // 5
 //        .changingInterval = 10, // 5-10
 //        .maxIterationNumber = 5000 // 1000-5000
 //    };
-//    auto solutionsKS = solver->solveWithScheduleKochetovStolyar2003(paramsKS2003);
+//    auto solutionsKS = solver->solveWithScheduleKS(paramsKS);
 //    LOG(stringFromSolutions(solutionsKS));
-//    LOGF(paramsKS2003.strForTable() << endl << stringFromSolutionsForTable(solutionsKS));
+//    LOGF(paramsKS.str() << endl << stringFromSolutionsForTable(solutionsKS));
     
     // My genetic algorithm
-//    ParamsMyGA paramsMyGA = {
+//    ParamsGA paramsGA = {
 //        .maxGeneratedSchedules = 5000, // 5000
 //        .populationSize = 40, // 40
 //        .maxParents = 20, // 20
@@ -79,12 +79,12 @@ int main(int argc, const char * argv[])
 //        .permissibleResourceRemains = 0.9f, // 0.9
 //        .swapAndMovePermissibleTimes = 10 // 10
 //    };
-//    auto solutionsGA = solver->solveWithScheduleMyGA(paramsMyGA);
+//    auto solutionsGA = solver->solveWithScheduleGA(paramsGA);
 //    LOG(stringFromSolutions(solutionsGA));
-//    LOGF(paramsMyGA.strForTable() << endl << stringFromSolutionsForTable(solutionsGA));
+//    LOGF(paramsGA.str() << endl << stringFromSolutionsForTable(solutionsGA));
     
     // My genetic algorithm, 2014
-    ParamsMyGA paramsGA_2014 = {
+    ParamsGA paramsGA = {
         .maxGeneratedSchedules = 5000,
         .populationSize = 40,
         .maxParents = 20,
@@ -96,7 +96,7 @@ int main(int argc, const char * argv[])
         .permissibleResourceRemains = 0.9f,
         .swapAndMovePermissibleTimes = 10
     };
-    ParamsKochetovStolyar2003 paramsKS2003_2014 = {
+    ParamsKS paramsKS = {
         .probabilityKP = 0.5f,
         .probabilitySN = 0.2f,
         .tabuListSize = 1,
@@ -111,20 +111,20 @@ int main(int argc, const char * argv[])
     };
     int permissibleNoChangeRecord = 20;
     int numberOfSubstitutions = 10;
-    int numberOfLocalSearchKS2003 = 10;
-    auto solutionsGA2014 = solver->solveWithScheduleMyGA2014(paramsGA_2014,
-                                                             paramsKS2003_2014,
-                                                             paramsCross,
-                                                             permissibleNoChangeRecord,
-                                                             numberOfSubstitutions,
-                                                             numberOfLocalSearchKS2003);
+    int numberOfLocalSearchKS = 10;
+    auto solutionsGA2014 = solver->solveWithScheduleGA2014(paramsGA,
+                                                           paramsKS,
+                                                           paramsCross,
+                                                           permissibleNoChangeRecord,
+                                                           numberOfSubstitutions,
+                                                           numberOfLocalSearchKS);
     LOG(stringFromSolutions(solutionsGA2014));
-    LOGF(strForTableFromParamsMyGA2014(paramsGA_2014,
-                                       paramsKS2003_2014,
-                                       paramsCross,
-                                       permissibleNoChangeRecord,
-                                       numberOfSubstitutions,
-                                       numberOfLocalSearchKS2003)
+    LOGF(strParamsGA2014(paramsGA,
+                         paramsKS,
+                         paramsCross,
+                         permissibleNoChangeRecord,
+                         numberOfSubstitutions,
+                         numberOfLocalSearchKS)
          << endl << stringFromSolutionsForTable(solutionsGA2014));
     
     delete solver;

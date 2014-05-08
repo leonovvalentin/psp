@@ -196,14 +196,13 @@ shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithSchedulePingPong(int ti
     return solutions;
 }
 
-shared_ptr<map<Problem *, Solution>> Solver ::
-solveWithScheduleKochetovStolyar2003(ParamsKochetovStolyar2003 params)
+shared_ptr<map<Problem *, Solution>> Solver :: solveWithScheduleKS(ParamsKS params)
 {
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     for (auto &problem : _problems) {
         
         time_t calculationTime; time(&calculationTime);
-        auto schedule = problem->scheduleKochetovStolyar2003(params);
+        auto schedule = problem->scheduleKS(params);
         calculationTime = time(NULL) - calculationTime;
         
         Solution solution = {
@@ -222,14 +221,14 @@ solveWithScheduleKochetovStolyar2003(ParamsKochetovStolyar2003 params)
     return solutions;
 }
 
-shared_ptr<map<Problem *, Solution>> Solver :: solveWithScheduleMyGA(ParamsMyGA params)
+shared_ptr<map<Problem *, Solution>> Solver :: solveWithScheduleGA(ParamsGA params)
 {
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     
     for (auto &problem : _problems) {
         
         time_t calculationTime; time(&calculationTime);
-        auto schedule = problem->scheduleMyGA(params);
+        auto schedule = problem->scheduleGA(params);
         calculationTime = time(NULL) - calculationTime;
         
         Solution solution = {
@@ -250,24 +249,24 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithScheduleMyGA(ParamsMyGA 
 }
 
 shared_ptr<map<Problem *, Solution>> Solver ::
-solveWithScheduleMyGA2014(ParamsMyGA paramsGA,
-                          ParamsKochetovStolyar2003 paramsKS2003,
-                          ParamsCross paramsCross,
-                          int permissibleNoChangeRecord,
-                          int numberOfSubstitutions,
-                          int numberOfLocalSearchKS2003)
+solveWithScheduleGA2014(ParamsGA paramsGA,
+                        ParamsKS paramsKS,
+                        ParamsCross paramsCross,
+                        int permissibleNoChangeRecord,
+                        int numberOfSubstitutions,
+                        int numberOfLocalSearchKS)
 {
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     
     for (auto &problem : _problems) {
         
         time_t calculationTime; time(&calculationTime);
-        auto schedule = problem->scheduleMyGA2014(paramsGA,
-                                                  paramsKS2003,
-                                                  paramsCross,
-                                                  permissibleNoChangeRecord,
-                                                  numberOfSubstitutions,
-                                                  numberOfLocalSearchKS2003);
+        auto schedule = problem->scheduleGA2014(paramsGA,
+                                                paramsKS,
+                                                paramsCross,
+                                                permissibleNoChangeRecord,
+                                                numberOfSubstitutions,
+                                                numberOfLocalSearchKS);
         calculationTime = time(NULL) - calculationTime;
         
         Solution solution = {
@@ -279,12 +278,12 @@ solveWithScheduleMyGA2014(ParamsMyGA paramsGA,
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-        string userInfo = strForTableFromParamsMyGA2014(paramsGA,
-                                                        paramsKS2003,
-                                                        paramsCross,
-                                                        permissibleNoChangeRecord,
-                                                        numberOfSubstitutions,
-                                                        numberOfLocalSearchKS2003);
+        string userInfo = strForTableFromParamsGA2014(paramsGA,
+                                                      paramsKS,
+                                                      paramsCross,
+                                                      permissibleNoChangeRecord,
+                                                      numberOfSubstitutions,
+                                                      numberOfLocalSearchKS);
         solution.checkOnRecord(problem->name(), &userInfo);
         solution.checkOnValid(problem->name(), &userInfo);
     }

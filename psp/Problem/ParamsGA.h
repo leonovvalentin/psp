@@ -1,5 +1,5 @@
 //
-//  ParamsMyGA.h
+//  ParamsGA.h
 //  psp
 //
 //  Created by Valentin Leonov on 05/05/14.
@@ -8,13 +8,13 @@
 
 
 
-#ifndef psp_ParamsMyGA_h
-#define psp_ParamsMyGA_h
+#ifndef psp_ParamsGA_h
+#define psp_ParamsGA_h
 
 
 
 /**
- Parameters for scheduleMyGA methtod.
+ Parameters for scheduleGA methtod.
  @param maxGeneratedSchedules Max number of generated schedules. It is stop criterion.
  @param populationSize Size of population.
  @param maxParents Number of selected parents in each iteration. It should be greater then 1.
@@ -26,7 +26,7 @@
  @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
  @param swapAndMovePermissibleTimes Premissible number of times the swap and insert mutation procedure will be applied to child shedule.
  */
-struct ParamsMyGA {
+struct ParamsGA {
     
     int maxGeneratedSchedules;
     int populationSize;
@@ -83,6 +83,25 @@ struct ParamsMyGA {
     {
         stringstream ss;
         ss << strTitlesForTable() << endl << strValuesForTable();
+        return ss.str();
+    }
+    
+    string str()
+    {
+        stringstream ss;
+        
+        ss
+        << "maxGeneratedSchedules = " << maxGeneratedSchedules
+        << "\npopulationSize = " << populationSize
+        << "\nmaxParents = " << maxParents
+        << "\nmaxChildren = " << maxChildren
+        << "\nnumberOfChildrenInNextGeneration = " << numberOfChildrenInNextGeneration
+        << "\ntimesPingPongInitialPopulation = " << timesPingPongInitialPopulation
+        << "\nprobabilityKP = " << probabilityKP
+        << "\nprobabilityParentSelection = " << probabilityParentSelection
+        << "\npermissibleResourceRemains = " << permissibleResourceRemains
+        << "\nswapAndMovePermissibleTimes = " << swapAndMovePermissibleTimes;
+        
         return ss.str();
     }
 };

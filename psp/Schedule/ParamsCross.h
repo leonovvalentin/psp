@@ -62,6 +62,19 @@ struct ParamsCross {
         ss << strTitlesForTable() << endl << strValuesForTable();
         return ss.str();
     }
+    
+    string str()
+    {
+        stringstream ss;
+        
+        ss
+        << "permissibleResourceRemains = " << permissibleResourceRemains
+        << "\nprobabilityKP = " << probabilityKP
+        << "\nwithNet = " << withNet
+        << "\nisEarlyComposite = " << isEarlyComposite;
+        
+        return ss.str();
+    }
 };
 
 

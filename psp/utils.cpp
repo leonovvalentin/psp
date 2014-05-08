@@ -96,29 +96,50 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
     return selectedJobs;
 };
 
-string strForTableFromParamsMyGA2014(ParamsMyGA paramsGA,
-                                     ParamsKochetovStolyar2003 paramsKS2003,
-                                     ParamsCross paramsCross,
-                                     int permissibleNoChangeRecord,
-                                     int numberOfSubstitutions,
-                                     int numberOfLocalSearchKS2003)
+string strParamsGA2014(ParamsGA paramsGA,
+                       ParamsKS paramsKS,
+                       ParamsCross paramsCross,
+                       int permissibleNoChangeRecord,
+                       int numberOfSubstitutions,
+                       int numberOfLocalSearchKS)
+{
+    stringstream ss;
+    
+    ss
+    << "ParamsGA:\n"
+    << paramsGA.str()
+    << "\n\nParamsKS:\n" << paramsKS.str()
+    << "\n\nParamsCross:\n" << paramsCross.str()
+    << "\n\npermissibleNoChangeRecord = " << permissibleNoChangeRecord
+    << "\nnumberOfSubstitutions = " << numberOfSubstitutions
+    << "\nnumberOfLocalSearchKS = " << numberOfLocalSearchKS;
+    
+    return ss.str();
+}
+
+string strForTableFromParamsGA2014(ParamsGA paramsGA,
+                                   ParamsKS paramsKS,
+                                   ParamsCross paramsCross,
+                                   int permissibleNoChangeRecord,
+                                   int numberOfSubstitutions,
+                                   int numberOfLocalSearchKS)
 {
     stringstream ss;
     
     ss
     << paramsGA.strTitlesForTable()
-    << "\t" << paramsKS2003.strTitlesForTable()
+    << "\t" << paramsKS.strTitlesForTable()
     << "\t" << paramsCross.strTitlesForTable()
     << "\tpermissibleNoChangeRecord"
     << "\tnumberOfSubstitutions" <<
-    "\tnumberOfLocalSearchKS2003"
+    "\tnumberOfLocalSearchKS"
     << endl
     << paramsGA.strValuesForTable()
-    << "\t" << paramsKS2003.strValuesForTable()
+    << "\t" << paramsKS.strValuesForTable()
     << "\t" << paramsCross.strValuesForTable()
     << "\t" << permissibleNoChangeRecord
     << "\t" << numberOfSubstitutions
-    << "\t" << numberOfLocalSearchKS2003;
+    << "\t" << numberOfLocalSearchKS;
     
     return ss.str();
 }

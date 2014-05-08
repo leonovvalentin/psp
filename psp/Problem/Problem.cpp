@@ -219,13 +219,13 @@ PSchedule Problem :: schedulePingPong(int times, float probability) const
     return record;
 }
 
-PSchedule Problem :: scheduleKochetovStolyar2003(ParamsKochetovStolyar2003 params) const
+PSchedule Problem :: scheduleKS(ParamsKS params) const
 {
     PSchedule schedule = schedulePingPong(1, params.probabilityKP); // Initial schedule
-    return schedule->localSearchKochetovStolyar2003(params);
+    return schedule->localSearchKS(params);
 }
 
-PSchedule Problem :: scheduleMyGA(ParamsMyGA params) const
+PSchedule Problem :: scheduleGA(ParamsGA params) const
 {
     PSchedule record = nullptr;
     
@@ -313,12 +313,12 @@ PSchedule Problem :: scheduleMyGA(ParamsMyGA params) const
     return record;
 }
 
-PSchedule Problem :: scheduleMyGA2014(ParamsMyGA paramsGA,
-                                      ParamsKochetovStolyar2003 paramsKS2003,
-                                      ParamsCross paramsCross,
-                                      int permissibleNoChangeRecord,
-                                      int numberOfSubstitutions,
-                                      int numberOfLocalSearchKS2003) const
+PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
+                                    ParamsKS paramsKS,
+                                    ParamsCross paramsCross,
+                                    int permissibleNoChangeRecord,
+                                    int numberOfSubstitutions,
+                                    int numberOfLocalSearchKS) const
 {
     PSchedule record = nullptr;
     
@@ -432,9 +432,9 @@ PSchedule Problem :: scheduleMyGA2014(ParamsMyGA paramsGA,
                     prevRecordDuration = record->duration();
                 }
             }
-            for (int i=0; i<numberOfLocalSearchKS2003; i++) {
+            for (int i=0; i<numberOfLocalSearchKS; i++) {
                 auto schedule = population[Random :: randomLong(0, population.size()-1)];
-                schedule = schedule->localSearchKochetovStolyar2003(paramsKS2003);
+                schedule = schedule->localSearchKS(paramsKS);
                 if (schedule->duration() < record->duration()) {
                     record = schedule;
                     prevRecordDuration = record->duration();

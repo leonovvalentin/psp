@@ -13,8 +13,8 @@
 
 
 
-#include "ParamsKochetovStolyar2003.h"
-#include "ParamsMyGA.h"
+#include "ParamsKS.h"
+#include "ParamsGA.h"
 #include "ParamsCross.h"
 
 #include <iostream>
@@ -72,12 +72,19 @@ typedef shared_ptr<vector<Job *>> JOBS_VECTOR_PTR;
 JOBS_VECTOR_PTR selectJobFirstInActiveList(PARAMETERS_OF_SELECTING_FUNCTION);
 JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probability);
 
-string strForTableFromParamsMyGA2014(ParamsMyGA paramsGA,
-                                     ParamsKochetovStolyar2003 paramsKS2003,
-                                     ParamsCross paramsCross,
-                                     int permissibleNoChangeRecord,
-                                     int numberOfSubstitutions,
-                                     int numberOfLocalSearchKS2003);
+string strParamsGA2014(ParamsGA paramsGA,
+                       ParamsKS paramsKS,
+                       ParamsCross paramsCross,
+                       int permissibleNoChangeRecord,
+                       int numberOfSubstitutions,
+                       int numberOfLocalSearchKS);
+
+string strForTableFromParamsGA2014(ParamsGA paramsGA,
+                                   ParamsKS paramsKS,
+                                   ParamsCross paramsCross,
+                                   int permissibleNoChangeRecord,
+                                   int numberOfSubstitutions,
+                                   int numberOfLocalSearchKS);
 
 string stringFromSolutions(shared_ptr<map<Problem *, Solution>> solutions);
 string stringFromSolutionsForTable(shared_ptr<map<Problem *, Solution>> solutions);

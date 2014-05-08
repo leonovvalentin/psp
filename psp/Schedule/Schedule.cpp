@@ -361,7 +361,7 @@ const map<Resource *, shared_ptr<vector<int>>> * Schedule :: resourceRemains() c
 
 #pragma mark - functionality
 
-PSchedule Schedule :: localSearchKochetovStolyar2003(ParamsKochetovStolyar2003 params)
+PSchedule Schedule :: localSearchKS(ParamsKS params)
 {
     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
     [params](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {

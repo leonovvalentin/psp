@@ -1,5 +1,5 @@
 //
-//  ParamsKochetovStolyar2003.h
+//  ParamsKS.h
 //  psp
 //
 //  Created by Valentin Leonov on 05/05/14.
@@ -8,8 +8,8 @@
 
 
 
-#ifndef psp_ParamsKochetovStolyar2003_h
-#define psp_ParamsKochetovStolyar2003_h
+#ifndef psp_ParamsKS_h
+#define psp_ParamsKS_h
 
 
 
@@ -25,14 +25,14 @@ using namespace std;
 
 
 /**
- Parameters for scheduleKochetovStolyar2003 methtod.
+ Parameters for scheduleKS methtod.
  @param probabilityKP Probability for solving knapsack problem.
  @param probabilitySN Probability for creating subset of neighbours.
  @param tabuListSize Length of tabu list.
  @param changingInterval Number of steps of algorithm before changing neighbourhood.
  @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
  */
-struct ParamsKochetovStolyar2003 {
+struct ParamsKS {
     
     float probabilityKP;
     float probabilitySN;
@@ -74,6 +74,20 @@ struct ParamsKochetovStolyar2003 {
     {
         stringstream ss;
         ss << strTitlesForTable() << endl << strValuesForTable();
+        return ss.str();
+    }
+    
+    string str()
+    {
+        stringstream ss;
+        
+        ss
+        << "probabilityKP = " << probabilityKP
+        << "\nprobabilitySN = " << probabilitySN
+        << "\ntabuListSize = " << tabuListSize
+        << "\nchangingInterval = " << changingInterval
+        << "\nmaxIterationNumber = " << maxIterationNumber;
+        
         return ss.str();
     }
 };

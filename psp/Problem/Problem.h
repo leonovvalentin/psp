@@ -17,8 +17,8 @@
 #include "Resource.h"
 #include "Schedule.h"
 
-#include "ParamsKochetovStolyar2003.h"
-#include "ParamsMyGA.h"
+#include "ParamsKS.h"
+#include "ParamsGA.h"
 
 #include <iostream>
 #include <vector>
@@ -99,25 +99,25 @@ public:
      Solve based on algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
      @return Found record.
      */
-    PSchedule scheduleKochetovStolyar2003(ParamsKochetovStolyar2003 params) const;
+    PSchedule scheduleKS(ParamsKS params) const;
     /**
      Solve problem.
      Solve based on my genetic algorithm.
      @return Found record.
      */
-    PSchedule scheduleMyGA(ParamsMyGA params) const;
+    PSchedule scheduleGA(ParamsGA params) const;
     /**
      Solve problem.
      Solve based on my genetic algorithm, 2014.
      @return Found record.
      */
 #warning remove permissibleResourceRemains from paramsGA, it only from paramsCross is used now
-    PSchedule scheduleMyGA2014(ParamsMyGA paramsGA,
-                               ParamsKochetovStolyar2003 paramsKS2003,
-                               ParamsCross paramsCross,
-                               int permissibleNoChangeRecord,
-                               int numberOfSubstitutions,
-                               int numberOfLocalSearchKS2003) const;
+    PSchedule scheduleGA2014(ParamsGA paramsGA,
+                             ParamsKS paramsKS,
+                             ParamsCross paramsCross,
+                             int permissibleNoChangeRecord,
+                             int numberOfSubstitutions,
+                             int numberOfLocalSearchKS) const;
 };
 
 
