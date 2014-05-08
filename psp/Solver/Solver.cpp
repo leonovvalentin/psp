@@ -252,14 +252,22 @@ shared_ptr<map<Problem *, Solution>> Solver :: solveWithScheduleMyGA(ParamsMyGA 
 shared_ptr<map<Problem *, Solution>> Solver ::
 solveWithScheduleMyGA2014(ParamsMyGA paramsGA,
                           ParamsKochetovStolyar2003 paramsKS2003,
-                          int hammingDistance)
+                          ParamsCross paramsCross,
+                          int permissibleNoChangeRecord,
+                          int numberOfSubstitutions,
+                          int numberOfLocalSearchKS2003)
 {
     shared_ptr<map<Problem *, Solution>> solutions(new map<Problem *, Solution>);
     
     for (auto &problem : _problems) {
         
         time_t calculationTime; time(&calculationTime);
-        auto schedule = problem->scheduleMyGA2014(paramsGA, paramsKS2003, hammingDistance);
+        auto schedule = problem->scheduleMyGA2014(paramsGA,
+                                                  paramsKS2003,
+                                                  paramsCross,
+                                                  permissibleNoChangeRecord,
+                                                  numberOfSubstitutions,
+                                                  numberOfLocalSearchKS2003);
         calculationTime = time(NULL) - calculationTime;
         
         Solution solution = {
@@ -271,7 +279,12 @@ solveWithScheduleMyGA2014(ParamsMyGA paramsGA,
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-        string userInfo = strForTableFromParamsMyGA2014(paramsGA, paramsKS2003, hammingDistance);
+        string userInfo = strForTableFromParamsMyGA2014(paramsGA,
+                                                        paramsKS2003,
+                                                        paramsCross,
+                                                        permissibleNoChangeRecord,
+                                                        numberOfSubstitutions,
+                                                        numberOfLocalSearchKS2003);
         solution.checkOnRecord(problem->name(), &userInfo);
         solution.checkOnValid(problem->name(), &userInfo);
     }

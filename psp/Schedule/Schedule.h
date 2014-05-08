@@ -16,6 +16,8 @@
 #include "ActiveList.h"
 #include "Job.h"
 #include "Resource.h"
+
+#include "ParamsCross.h"
 #include "utils.h"
 
 #include <iostream>
@@ -162,18 +164,9 @@ public:
 #pragma mark - functionality
 public:
     /**
-     @param probabilityKP Probability for solving knapsack problem.
-     @param probabilitySN Probability for creating subset of neighbours.
-     @param tabuListSize Length of tabu list.
-     @param changingInterval Number of steps of algorithm before changing neighbourhood.
-     @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
      @return Schedule, created from current via local search algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
      */
-    PSchedule localSearchKochetovStolyar2003(float probabilityKP,
-                                             float probabilitySN,
-                                             int tabuListSize,
-                                             int changingInterval,
-                                             int maxIterationNumber);
+    PSchedule localSearchKochetovStolyar2003(ParamsKochetovStolyar2003 params);
     /**
      @return Schedule, created from current via ping-pong procedure.
      */
@@ -185,12 +178,18 @@ public:
     PSchedule swapAndMoveMutation(const int swapPermissibleTimes,
                                   const int movePermissibleTimes) const;
     /**
-     Creating schedule by crossing 2 schedules.
+     Creating schedule by crossing 2 schedules. Based on previewing of all the blocks and construct child activeList with alternate picking good blocks.
      @param schedule Schedule for crossing with current schedule.
      @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
      @return Child schedule.
      */
-    PSchedule cross(PSchedule schedule, float permissibleResourceRemains);
+    PSchedule crossViaPreviewAllBlocks(PSchedule schedule, float permissibleResourceRemains);
+    /**
+     Creating schedule by crossing 2 schedules. Based on selecting most dense block from both schedules and construct child schedule with this block and parent schedule which not contain this block.
+     @param schedule Schedule for crossing with current schedule.
+     @return Child schedule.
+     */
+    PSchedule crossViaSelectOneBlock(PSchedule schedule, ParamsCross paramsCross);
     /**
      Creating early schedule from current via sorting jobs list by begins of jobs.
      @return Early schedule.

@@ -8,6 +8,7 @@
 
 
 
+#error Set correct paths
 #define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/psp/psp/LOG.txt"
 #define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/psp/Data"
 
@@ -50,7 +51,7 @@ int main(int argc, const char * argv[])
     
     string path = PATH_TO_DATA_FOLDER;
     Solver *solver = new Solver(&path, [](long i, string name){
-        return i >= 560 && i % 6 != 0;
+        return i < 1;
     });
     
     // Kochetov, Stolyar, 2003
@@ -100,14 +101,30 @@ int main(int argc, const char * argv[])
         .probabilitySN = 0.2f,
         .tabuListSize = 1,
         .changingInterval = 1,
-        .maxIterationNumber = 10
+        .maxIterationNumber = 2
     };
-    int hammingDispersion = 10;
+    ParamsCross paramsCross = {
+        .permissibleResourceRemains = 0.9f,
+        .probabilityKP = 0.5f,
+        .withNet = true,
+        .isEarlyComposite = false
+    };
+    int permissibleNoChangeRecord = 20;
+    int numberOfSubstitutions = 10;
+    int numberOfLocalSearchKS2003 = 10;
     auto solutionsGA2014 = solver->solveWithScheduleMyGA2014(paramsGA_2014,
                                                              paramsKS2003_2014,
-                                                             hammingDispersion);
+                                                             paramsCross,
+                                                             permissibleNoChangeRecord,
+                                                             numberOfSubstitutions,
+                                                             numberOfLocalSearchKS2003);
     LOG(stringFromSolutions(solutionsGA2014));
-    LOGF(strForTableFromParamsMyGA2014(paramsGA_2014, paramsKS2003_2014, hammingDispersion)
+    LOGF(strForTableFromParamsMyGA2014(paramsGA_2014,
+                                       paramsKS2003_2014,
+                                       paramsCross,
+                                       permissibleNoChangeRecord,
+                                       numberOfSubstitutions,
+                                       numberOfLocalSearchKS2003)
          << endl << stringFromSolutionsForTable(solutionsGA2014));
     
     delete solver;

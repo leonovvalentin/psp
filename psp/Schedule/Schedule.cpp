@@ -361,18 +361,14 @@ const map<Resource *, shared_ptr<vector<int>>> * Schedule :: resourceRemains() c
 
 #pragma mark - functionality
 
-PSchedule Schedule :: localSearchKochetovStolyar2003(float probabilityKP,
-                                                     float probabilitySN,
-                                                     int tabuListSize,
-                                                     int changingInterval,
-                                                     int maxIterationNumber)
+PSchedule Schedule :: localSearchKochetovStolyar2003(ParamsKochetovStolyar2003 params)
 {
     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [probabilityKP](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
-        return selectJobsViaKP(jobs, schedule, time, timeForStart, probabilityKP);
+    [params](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+        return selectJobsViaKP(jobs, schedule, time, timeForStart, params.probabilityKP);
     };
     
-    TabuList tabuList(tabuListSize);
+    TabuList tabuList(params.tabuListSize);
     
     int stepsNoChange = 0; // Number of steps without changing neighbourhood
     NeighbourhoodType currentNeighbourhoodType = NeighbourhoodTypeEarly;
@@ -381,15 +377,15 @@ PSchedule Schedule :: localSearchKochetovStolyar2003(float probabilityKP,
     PSchedule record = schedule;
     tabuList.add(schedule->sumOfStarts());
     
-    for (int iteration = 0; iteration < maxIterationNumber; iteration++) {
+    for (int iteration = 0; iteration < params.maxIterationNumber; iteration++) {
         
         LOG("iterations: "
-            << (float)iteration/maxIterationNumber * 100 << "%"
+            << (float)iteration/params.maxIterationNumber * 100 << "%"
             << " record = " << record->duration());
         
         // currentNeighbourhoodType
         
-        if (stepsNoChange >= changingInterval) {
+        if (stepsNoChange >= params.changingInterval) {
             switch (currentNeighbourhoodType) {
                 case NeighbourhoodTypeEarly: {
                     currentNeighbourhoodType = NeighbourhoodTypeLate;
@@ -438,7 +434,9 @@ PSchedule Schedule :: localSearchKochetovStolyar2003(float probabilityKP,
         neighbours->reserve(neighboursWithoutTabu->size());
         
         for (auto &neighbour : *neighboursWithoutTabu) {
-            if (Random :: randomFloatFrom0To1() < probabilitySN) neighbours->push_back(neighbour);
+            if (Random :: randomFloatFrom0To1() < params.probabilitySN) {
+                neighbours->push_back(neighbour);
+            }
         }
         
         if (neighbours->size() == 0) {
@@ -497,7 +495,7 @@ PSchedule Schedule :: swapAndMoveMutation(const int swapPermissibleTimes,
     return scheduleEarly(mutatedActiveList.get(), _resources);
 }
 
-PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains)
+PSchedule Schedule :: crossViaPreviewAllBlocks(PSchedule schedule, float permissibleResourceRemains)
 {
     PSchedule earlySchedule =
     (this->type() == ScheduleTypeEarly) ? shared_from_this() : this->earlySchedule();
@@ -593,6 +591,92 @@ PSchedule Schedule :: cross(PSchedule schedule, float permissibleResourceRemains
     
     ActiveList childActiveList(&childJobsList);
     return Schedule :: scheduleEarly(&childActiveList, _resources);
+}
+
+PSchedule Schedule :: crossViaSelectOneBlock(PSchedule schedule, ParamsCross paramsCross)
+{
+    PSchedule earlySchedule =
+    (this->type() == ScheduleTypeEarly) ? shared_from_this() : this->earlySchedule();
+    PSchedule earlySchedule2 =
+    (schedule->type() == ScheduleTypeEarly) ? schedule : schedule->earlySchedule();
+    
+    auto denseJobsBlocks = earlySchedule->denseJobsBlocks(paramsCross.permissibleResourceRemains);
+    auto denseJobsBlocks2 = earlySchedule2->denseJobsBlocks(paramsCross.permissibleResourceRemains);
+    
+    auto jobsList = *earlySchedule->activeList()->jobList();
+    auto jobsList2 = *earlySchedule2->activeList()->jobList();
+    
+    shared_ptr<pair<shared_ptr<vector<Job *>>, float>> bestBlock = nullptr;
+    vector<Job *> *otherJobsList = NULL;
+    PSchedule otherSchedule = nullptr;
+    
+    for (auto &block : *denseJobsBlocks) {
+        if (!bestBlock || block->second < bestBlock->second) {
+            bestBlock = block;
+            otherJobsList = &jobsList2;
+            otherSchedule = earlySchedule2;
+        }
+    }
+    for (auto &block : *denseJobsBlocks2) {
+        if (!bestBlock || block->second < bestBlock->second) {
+            bestBlock = block;
+            otherJobsList = &jobsList;
+            otherSchedule = earlySchedule;
+        }
+    }
+    
+    vector<Job *> childJobsList(*otherJobsList);
+    ActiveList childActiveList(&childJobsList);
+    
+    auto minIterator = childActiveList.jobList()->end();
+    auto maxIterator = childActiveList.jobList()->begin();
+    for (Job *job : *bestBlock->first) {
+        auto iterator = find(childActiveList.jobList()->begin(),
+                             childActiveList.jobList()->end(),
+                             job);
+        if (iterator < minIterator) minIterator = iterator;
+        if (iterator > maxIterator) maxIterator = iterator;
+    }
+    if (paramsCross.withNet) {
+        for (Job *job : *bestBlock->first) {
+            shared_ptr<vector<Job *>> net = nullptr;
+            if (paramsCross.isEarlyComposite) net = otherSchedule->outgoingNetwork(job);
+            else net = otherSchedule->incomingNetwork(job);
+            for (Job *j : *net) {
+                auto iterator = find(childActiveList.jobList()->begin(),
+                                     childActiveList.jobList()->end(),
+                                     j);
+                if (paramsCross.isEarlyComposite && iterator > maxIterator) {
+                    maxIterator = iterator;
+                }
+                else if ((!paramsCross.isEarlyComposite) && iterator < minIterator) {
+                    minIterator = iterator;
+                }
+            }
+        }
+    }
+    
+    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [paramsCross](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+        return selectJobsViaKP(jobs, schedule, time, timeForStart, paramsCross.probabilityKP);
+    };
+    
+    if (paramsCross.isEarlyComposite) {
+        return Schedule :: schedulePartialyEarlyParallel(&childActiveList,
+                                                         _resources,
+                                                         minIterator,
+                                                         maxIterator,
+                                                         &otherSchedule->_starts,
+                                                         functionForSelecting);
+    }
+    else {
+        return Schedule :: schedulePartialyLateParallel(&childActiveList,
+                                                        _resources,
+                                                        minIterator,
+                                                        maxIterator,
+                                                        &otherSchedule->_starts,
+                                                        functionForSelecting);
+    }
 }
 
 PSchedule Schedule :: earlySchedule() const
