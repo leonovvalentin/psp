@@ -98,18 +98,27 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
 
 string strForTableFromParamsMyGA2014(ParamsMyGA paramsGA,
                                      ParamsKochetovStolyar2003 paramsKS2003,
-                                     int hammingDispersion)
+                                     ParamsCross paramsCross,
+                                     int permissibleNoChangeRecord,
+                                     int numberOfSubstitutions,
+                                     int numberOfLocalSearchKS2003)
 {
     stringstream ss;
     
     ss
     << paramsGA.strTitlesForTable()
-    << "\t" << paramsKS2003.strTitlesForTable() <<
-    "\thammingDispersion"
+    << "\t" << paramsKS2003.strTitlesForTable()
+    << "\t" << paramsCross.strTitlesForTable()
+    << "\tpermissibleNoChangeRecord"
+    << "\tnumberOfSubstitutions" <<
+    "\tnumberOfLocalSearchKS2003"
     << endl
     << paramsGA.strValuesForTable()
     << "\t" << paramsKS2003.strValuesForTable()
-    << "\t" << hammingDispersion;
+    << "\t" << paramsCross.strValuesForTable()
+    << "\t" << permissibleNoChangeRecord
+    << "\t" << numberOfSubstitutions
+    << "\t" << numberOfLocalSearchKS2003;
     
     return ss.str();
 }

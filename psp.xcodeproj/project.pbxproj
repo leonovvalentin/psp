@@ -639,6 +639,7 @@
 		587CF049191576F1000DE047 /* X60_8.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X60_8.RCP; sourceTree = "<group>"; };
 		587CF04A191576F1000DE047 /* X60_9.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X60_9.RCP; sourceTree = "<group>"; };
 		587CF04B191576F1000DE047 /* X60_10.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X60_10.RCP; sourceTree = "<group>"; };
+		58AA8EED191B32C9008E5A6E /* ParamsCross.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamsCross.h; sourceTree = "<group>"; };
 		58B143751914B43300554223 /* j120hrs.sm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = j120hrs.sm; sourceTree = "<group>"; };
 		58B143761914B43300554223 /* X16_1.RCP */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = X16_1.RCP; sourceTree = "<group>"; };
 		58D631AD18D42B7600C5F841 /* psp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = psp; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1376,6 +1377,7 @@
 				58D631CD18D42C0300C5F841 /* Schedule.h */,
 				58D631CE18D42C0300C5F841 /* Schedule_helperMethods.cpp */,
 				58D631CF18D42C0300C5F841 /* Schedule_out.cpp */,
+				58AA8EED191B32C9008E5A6E /* ParamsCross.h */,
 			);
 			path = Schedule;
 			sourceTree = "<group>";

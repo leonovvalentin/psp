@@ -15,6 +15,7 @@
 
 #include "ParamsKochetovStolyar2003.h"
 #include "ParamsMyGA.h"
+#include "ParamsCross.h"
 
 #include <iostream>
 #include <vector>
@@ -73,7 +74,10 @@ JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probabil
 
 string strForTableFromParamsMyGA2014(ParamsMyGA paramsGA,
                                      ParamsKochetovStolyar2003 paramsKS2003,
-                                     int hammingDispersion);
+                                     ParamsCross paramsCross,
+                                     int permissibleNoChangeRecord,
+                                     int numberOfSubstitutions,
+                                     int numberOfLocalSearchKS2003);
 
 string stringFromSolutions(shared_ptr<map<Problem *, Solution>> solutions);
 string stringFromSolutionsForTable(shared_ptr<map<Problem *, Solution>> solutions);
