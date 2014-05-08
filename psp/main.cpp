@@ -101,7 +101,7 @@ int main(int argc, const char * argv[])
         .probabilitySN = 0.2f,
         .tabuListSize = 1,
         .changingInterval = 1,
-        .maxIterationNumber = 2
+        .maxIterationNumber = 20
     };
     ParamsCross paramsCross = {
         .permissibleResourceRemains = 0.9f,

@@ -106,13 +106,13 @@ string strParamsGA2014(ParamsGA paramsGA,
     stringstream ss;
     
     ss
-    << "ParamsGA:\n"
+    << "ParamsGA: "
     << paramsGA.str()
-    << "\n\nParamsKS:\n" << paramsKS.str()
-    << "\n\nParamsCross:\n" << paramsCross.str()
+    << "\n\nParamsKS: " << paramsKS.str()
+    << "\n\nParamsCross: " << paramsCross.str()
     << "\n\npermissibleNoChangeRecord = " << permissibleNoChangeRecord
-    << "\nnumberOfSubstitutions = " << numberOfSubstitutions
-    << "\nnumberOfLocalSearchKS = " << numberOfLocalSearchKS;
+    << ", numberOfSubstitutions = " << numberOfSubstitutions
+    << ", numberOfLocalSearchKS = " << numberOfLocalSearchKS;
     
     return ss.str();
 }

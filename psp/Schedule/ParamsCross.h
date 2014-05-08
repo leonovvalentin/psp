@@ -69,9 +69,9 @@ struct ParamsCross {
         
         ss
         << "permissibleResourceRemains = " << permissibleResourceRemains
-        << "\nprobabilityKP = " << probabilityKP
-        << "\nwithNet = " << withNet
-        << "\nisEarlyComposite = " << isEarlyComposite;
+        << ", probabilityKP = " << probabilityKP
+        << ", withNet = " << withNet
+        << ", isEarlyComposite = " << isEarlyComposite;
         
         return ss.str();
     }

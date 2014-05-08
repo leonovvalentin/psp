@@ -83,10 +83,10 @@ struct ParamsKS {
         
         ss
         << "probabilityKP = " << probabilityKP
-        << "\nprobabilitySN = " << probabilitySN
-        << "\ntabuListSize = " << tabuListSize
-        << "\nchangingInterval = " << changingInterval
-        << "\nmaxIterationNumber = " << maxIterationNumber;
+        << ", probabilitySN = " << probabilitySN
+        << ", tabuListSize = " << tabuListSize
+        << ", changingInterval = " << changingInterval
+        << ", maxIterationNumber = " << maxIterationNumber;
         
         return ss.str();
     }

@@ -92,15 +92,15 @@ struct ParamsGA {
         
         ss
         << "maxGeneratedSchedules = " << maxGeneratedSchedules
-        << "\npopulationSize = " << populationSize
-        << "\nmaxParents = " << maxParents
-        << "\nmaxChildren = " << maxChildren
-        << "\nnumberOfChildrenInNextGeneration = " << numberOfChildrenInNextGeneration
-        << "\ntimesPingPongInitialPopulation = " << timesPingPongInitialPopulation
-        << "\nprobabilityKP = " << probabilityKP
-        << "\nprobabilityParentSelection = " << probabilityParentSelection
-        << "\npermissibleResourceRemains = " << permissibleResourceRemains
-        << "\nswapAndMovePermissibleTimes = " << swapAndMovePermissibleTimes;
+        << ", populationSize = " << populationSize
+        << ", maxParents = " << maxParents
+        << ", maxChildren = " << maxChildren
+        << ", numberOfChildrenInNextGeneration = " << numberOfChildrenInNextGeneration
+        << ", timesPingPongInitialPopulation = " << timesPingPongInitialPopulation
+        << ", probabilityKP = " << probabilityKP
+        << ", probabilityParentSelection = " << probabilityParentSelection
+        << ", permissibleResourceRemains = " << permissibleResourceRemains
+        << ", swapAndMovePermissibleTimes = " << swapAndMovePermissibleTimes;
         
         return ss.str();
     }
