@@ -313,10 +313,28 @@ int Schedule :: start(Job *job) const
     return INT_MAX;
 }
 
+int Schedule :: start(string jobName) const
+{
+    for (auto iterator=_starts.begin(); iterator!=_starts.end(); iterator++) {
+        if ((*iterator->first->name()) == jobName) return iterator->second;
+    }
+    return INT_MAX;
+}
+
 int Schedule :: end(Job *job) const
 {
     auto iterator = _starts.find(job);
     if (iterator != _starts.end()) return iterator->second + job->duration();
+    return INT_MAX;
+}
+
+int Schedule :: end(string jobName) const
+{
+    for (auto iterator=_starts.begin(); iterator!=_starts.end(); iterator++) {
+        if ((*iterator->first->name()) == jobName) {
+            return iterator->second + iterator->first->duration();
+        }
+    }
     return INT_MAX;
 }
 
@@ -364,6 +382,10 @@ PSchedule Schedule :: localSearchKochetovStolyar2003(float probabilityKP,
     tabuList.add(schedule->sumOfStarts());
     
     for (int iteration = 0; iteration < maxIterationNumber; iteration++) {
+        
+        LOG("iterations: "
+            << (float)iteration/maxIterationNumber * 100 << "%"
+            << " record = " << record->duration());
         
         // currentNeighbourhoodType
         
@@ -439,7 +461,8 @@ PSchedule Schedule :: localSearchKochetovStolyar2003(float probabilityKP,
         
         // Update record, schedule, tabuList
         
-        if (minNeighbourDuration < record->duration()) record = minNeighbour;
+#warning (<=) or (<) ? May be move it to parametes of method?
+        if (minNeighbourDuration <= record->duration()) record = minNeighbour;
         schedule = minNeighbour;
         tabuList.add(minNeighbour->sumOfStarts());
         

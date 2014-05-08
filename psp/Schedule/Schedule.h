@@ -152,7 +152,9 @@ public:
     const ActiveList * activeList() const;
     int duration();
     int start(Job *job) const;
+    int start(string jobName) const;
     int end(Job *job) const;
+    int end(string jobName) const;
     int resourceRemain(Resource *resource, int timeMoment) const;
     shared_ptr<map<Resource *, int>> resourceRemain(int timeMoment) const;
     const map<Resource *, shared_ptr<vector<int>>> * resourceRemains() const;
