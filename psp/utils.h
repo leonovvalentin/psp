@@ -34,6 +34,11 @@ using namespace std;
 
 
 
+#define LOG_SCHEDULE_H 1
+#define LOG_PROBLEM_H 1
+
+
+
 #ifndef PATH_TO_LOG_FILE
 #define PATH_TO_LOG_FILE "you_should_set_your_path_to_LOG.txt_in_main.cpp"
 #endif

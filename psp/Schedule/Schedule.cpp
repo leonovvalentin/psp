@@ -379,9 +379,11 @@ PSchedule Schedule :: localSearchKS(ParamsKS params)
     
     for (int iteration = 0; iteration < params.maxIterationNumber; iteration++) {
         
+#ifdef LOG_SCHEDULE_H
         LOG("iterations: "
             << (float)iteration/params.maxIterationNumber * 100 << "%"
             << " record = " << record->duration());
+#endif
         
         // currentNeighbourhoodType
         

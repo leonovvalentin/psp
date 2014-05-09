@@ -235,9 +235,11 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
     population.reserve(params.populationSize + params.numberOfChildrenInNextGeneration);
     for (int i=0; i<params.populationSize; i++) {
         
+#ifdef LOG_PROBLEM_H
         LOG("initial population: "
             << (float)i/params.populationSize * 100 << "%"
             << " record = " << (record ? record->duration() : INT_MAX));
+#endif
         
         PSchedule schedule = schedulePingPong(params.timesPingPongInitialPopulation,
                                               params.probabilityKP);
@@ -250,9 +252,11 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
     int numberOfGeneratedSchedules = 0;
     while (numberOfGeneratedSchedules < params.maxGeneratedSchedules) {
         
+#ifdef LOG_PROBLEM_H
         LOG("generated schedules: "
             << (float)numberOfGeneratedSchedules/params.maxGeneratedSchedules * 100 << "%"
             << " record = " << record->duration());
+#endif
         
         // select parents as subset of population
         sort(population.begin(), population.end(), [](PSchedule a, PSchedule b) {
@@ -328,9 +332,11 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
     population.reserve(paramsGA.populationSize + paramsGA.numberOfChildrenInNextGeneration);
     for (int i=0; i<paramsGA.populationSize; i++) {
         
+#ifdef LOG_PROBLEM_H
         LOG("initial population: "
             << (float)i/paramsGA.populationSize * 100 << "%"
             << " record = " << (record ? record->duration() : INT_MAX));
+#endif
         
         PSchedule schedule = schedulePingPong(paramsGA.timesPingPongInitialPopulation,
                                               paramsGA.probabilityKP);
@@ -345,9 +351,11 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
     int numberOfGeneratedSchedules = 0;
     while (numberOfGeneratedSchedules < paramsGA.maxGeneratedSchedules) {
         
+#ifdef LOG_PROBLEM_H
         LOG("generated schedules: "
             << (float)numberOfGeneratedSchedules/paramsGA.maxGeneratedSchedules * 100 << "%"
             << " record = " << record->duration());
+#endif
         
         // select parents as subset of population
         sort(population.begin(), population.end(), [](PSchedule a, PSchedule b) {
