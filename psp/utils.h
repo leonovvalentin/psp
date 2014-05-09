@@ -34,11 +34,6 @@ using namespace std;
 
 
 
-#define LOG_SCHEDULE_H 1
-#define LOG_PROBLEM_H 1
-
-
-
 #ifndef PATH_TO_LOG_FILE
 #define PATH_TO_LOG_FILE "you_should_set_your_path_to_LOG.txt_in_main.cpp"
 #endif
@@ -46,14 +41,12 @@ using namespace std;
 #define PATH_TO_DATA_FOLDER "you_should_set_your_path_to_Data_folder_in_main.cpp"
 #endif
 
-#define LOG_TO_COLSOL 1
 #ifdef LOG_TO_COLSOL
 #define LOG(str) cout << str << endl;
 #else
 #define LOG(str)
 #endif
 
-#define LOG_TO_FILE 1
 #ifdef LOG_TO_FILE
 #define LOGF(str) {ofstream f; f.open(PATH_TO_LOG_FILE, ios::app); f << "\n\n\n"; f << str << endl; f.close();}
 #else

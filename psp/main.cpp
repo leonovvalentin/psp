@@ -12,6 +12,11 @@
 #define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/psp/psp/LOG.txt"
 #define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/psp/Data"
 
+#define LOG_TO_COLSOL 1
+#define LOG_TO_FILE 1
+#define LOG_TO_CONSOL_SCHEDULE_H 1
+#define LOG_TO_CONSOL_PROBLEM_H 1
+
 
 
 #include "Solver.h"
@@ -103,7 +108,7 @@ int main(int argc, const char * argv[])
         .probabilitySN = 0.2f,
         .tabuListSize = 1,
         .changingInterval = 1,
-        .numberOfReturnsToRecord = 5 // ?
+        .numberOfReturnsToRecord = 0
     };
     ParamsCross paramsCross = {
         .permissibleResourceRemains = 0.9f,
