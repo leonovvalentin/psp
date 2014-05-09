@@ -385,6 +385,12 @@ PSchedule Schedule :: localSearchKS(ParamsKS params)
             << " record = " << record->duration());
 #endif
         
+        // intensification
+        if (params.numberOfReturnsToRecord != 0 &&
+            (iteration % (params.maxIterationNumber / params.numberOfReturnsToRecord) == 0)) {
+            schedule = record;
+        }
+        
         // currentNeighbourhoodType
         
         if (stepsNoChange >= params.changingInterval) {

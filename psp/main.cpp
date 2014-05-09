@@ -56,11 +56,12 @@ int main(int argc, const char * argv[])
     
     // Kochetov, Stolyar, 2003
 //    ParamsKS paramsKS = {
+//        .maxIterationNumber = 5000, // 1000-5000
 //        .probabilityKP = 0.5f, // ?
 //        .probabilitySN = 0.2f, // 0.2
 //        .tabuListSize = 5, // 5
 //        .changingInterval = 10, // 5-10
-//        .maxIterationNumber = 5000 // 1000-5000
+//        .numberOfReturnsToRecord = 5 // 5
 //    };
 //    auto solutionsKS = solver->solveWithScheduleKS(paramsKS);
 //    LOG(stringFromSolutions(solutionsKS));
@@ -97,11 +98,12 @@ int main(int argc, const char * argv[])
         .swapAndMovePermissibleTimes = 10
     };
     ParamsKS paramsKS = {
+        .maxIterationNumber = 20,
         .probabilityKP = 0.5f,
         .probabilitySN = 0.2f,
         .tabuListSize = 1,
         .changingInterval = 1,
-        .maxIterationNumber = 20
+        .numberOfReturnsToRecord = 5 // ?
     };
     ParamsCross paramsCross = {
         .permissibleResourceRemains = 0.9f,
