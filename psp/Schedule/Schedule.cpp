@@ -39,7 +39,7 @@ PSchedule Schedule :: schedulePartialyEarlyParallel
  vector<Job *> :: const_iterator minIterator,
  vector<Job *> :: const_iterator maxIterator,
  const map<Job *, int> *starts,
- function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
+ function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
     PSchedule schedule(new Schedule(activeList, resources));
     schedule->_type = ScheduleTypeEarlyComposite;
@@ -74,7 +74,7 @@ PSchedule Schedule :: schedulePartialyLateParallel
  vector<Job *> :: const_iterator minIterator,
  vector<Job *> :: const_iterator maxIterator,
  const map<Job *, int> *starts,
- function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
+ function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
     PSchedule schedule(new Schedule(activeList, resources));
     schedule->_type = ScheduleTypeLateComposite;
@@ -207,7 +207,7 @@ PSchedule Schedule :: scheduleLate(ActiveList *activeList,
 PSchedule Schedule :: scheduleEarlyParallel
 (ActiveList *activeList,
  const vector<Resource *> *resources,
- function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
+ function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
     PSchedule schedule(new Schedule(activeList, resources));
     schedule->_type = ScheduleTypeEarlyParallel;
@@ -221,14 +221,17 @@ PSchedule Schedule :: scheduleEarlyParallel
     permissibleByPredecessor.reserve(activeList->size());
     
     while (active.size() + complited.size() < activeList->size()) {
-        shared_ptr<vector<Job *>> permissible =
-        schedule->permissibleJobsByResources(&permissibleByPredecessor, time, true);
+        
+        PVectorJobs permissible = schedule->permissibleJobsByResources(&permissibleByPredecessor,
+                                                                       time,
+                                                                       true);
         
         while (permissible->size()) {
-            shared_ptr<vector<Job *>> newActiveJobs = functionForSelecting(permissible.get(),
-                                                                           schedule.get(),
-                                                                           time,
-                                                                           true);
+            
+            PVectorJobs newActiveJobs = functionForSelecting(permissible.get(),
+                                                             schedule.get(),
+                                                             time,
+                                                             true);
             
             for (auto &job : *newActiveJobs) {
                 schedule->_starts[job] = time;
@@ -363,8 +366,8 @@ const map<Resource *, shared_ptr<vector<int>>> * Schedule :: resourceRemains() c
 
 PSchedule Schedule :: localSearchKS(ParamsKS params)
 {
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [params](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+    function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [params](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
         return selectJobsViaKP(jobs, schedule, time, timeForStart, params.probabilityKP);
     };
     
@@ -519,10 +522,10 @@ PSchedule Schedule :: crossViaPreviewAllBlocks(PSchedule schedule, float permiss
     
     while (denseJobsBlocks->size() != 0 || denseJobsBlocks2->size() != 0) {
         
-        shared_ptr<pair<shared_ptr<vector<Job *>>, float>> bestBlock = nullptr;
+        shared_ptr<pair<PVectorJobs, float>> bestBlock = nullptr;
         vector<Job *> *bestJobsList = NULL;
         
-        shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>>
+        shared_ptr<vector<shared_ptr<pair<PVectorJobs, float>>>>
         bestDenseJobsBlocks = nullptr, otherDenseJobsBlocks = nullptr;
         
         if (denseJobsBlocks->size() != 0 && denseJobsBlocks2->size() == 0) {
@@ -614,7 +617,7 @@ PSchedule Schedule :: crossViaSelectOneBlock(PSchedule schedule, ParamsCross par
     auto jobsList = *earlySchedule->activeList()->jobList();
     auto jobsList2 = *earlySchedule2->activeList()->jobList();
     
-    shared_ptr<pair<shared_ptr<vector<Job *>>, float>> bestBlock = nullptr;
+    shared_ptr<pair<PVectorJobs, float>> bestBlock = nullptr;
     vector<Job *> *otherJobsList = NULL;
     PSchedule otherSchedule = nullptr;
     
@@ -647,7 +650,7 @@ PSchedule Schedule :: crossViaSelectOneBlock(PSchedule schedule, ParamsCross par
     }
     if (paramsCross.withNet) {
         for (Job *job : *bestBlock->first) {
-            shared_ptr<vector<Job *>> net = nullptr;
+            PVectorJobs net = nullptr;
             if (paramsCross.isEarlyComposite) net = otherSchedule->outgoingNetwork(job);
             else net = otherSchedule->incomingNetwork(job);
             for (Job *j : *net) {
@@ -664,8 +667,8 @@ PSchedule Schedule :: crossViaSelectOneBlock(PSchedule schedule, ParamsCross par
         }
     }
     
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [paramsCross](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+    function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [paramsCross](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
         return selectJobsViaKP(jobs, schedule, time, timeForStart, paramsCross.probabilityKP);
     };
     
@@ -705,7 +708,7 @@ PSchedule Schedule :: lateSchedule() const
 
 shared_ptr<vector<PSchedule>> Schedule :: neighboringSchedules
 (NeighbourhoodType neighbourhoodType,
- function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
+ function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
 #warning Is it right? Are we needs to construct correct schedule first?
     PSchedule schedule = nullptr;
@@ -772,13 +775,13 @@ PActiveList Schedule :: earlyActiveList() const
 
 PSchedule Schedule :: neighbourForEarlySchedule
 (Job *job,
- function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
+ function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
     if (_type != ScheduleTypeEarly) return PSchedule(nullptr);
     
-    shared_ptr<vector<Job *>> block = blockOfJobs(job, false, true);
+    PVectorJobs block = blockOfJobs(job, false, true);
     if (!block) return PSchedule(nullptr);
-    shared_ptr<vector<Job *>> net = outgoingNetwork(job);
+    PVectorJobs net = outgoingNetwork(job);
     
     auto minIterator = _activeList.jobList()->end();
     auto maxIterator = _activeList.jobList()->begin();
@@ -802,13 +805,13 @@ PSchedule Schedule :: neighbourForEarlySchedule
 
 PSchedule Schedule :: neighbourForLateSchedule
 (Job *job,
- function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
+ function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
     if (_type != ScheduleTypeLate) return PSchedule(nullptr);
     
-    shared_ptr<vector<Job *>> block = blockOfJobs(job, true, false);
+    PVectorJobs block = blockOfJobs(job, true, false);
     if (!block) return PSchedule(nullptr);
-    shared_ptr<vector<Job *>> net = incomingNetwork(job);
+    PVectorJobs net = incomingNetwork(job);
     
     auto minIterator = _activeList.jobList()->end();
     auto maxIterator = _activeList.jobList()->begin();

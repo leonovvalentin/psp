@@ -8,33 +8,12 @@
 
 
 
-#error Set correct paths
-#define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/psp/psp/LOG.txt"
-#define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/psp/Data"
-
-#define LOG_TO_COLSOL 1
-#define LOG_TO_FILE 1
-#define LOG_TO_CONSOL_SCHEDULE_H 1
-#define LOG_TO_CONSOL_PROBLEM_H 1
-
-
-
 #include "Solver.h"
 #include "utils.h"
 
 #include <iostream>
 #include <fstream>
 #include <ctime>
-
-
-
-// for using ',' instead of '.' in float numbers
-#include <locale>
-class comma : public numpunct<char>
-{
-public: comma () : numpunct<char> () {}
-protected: char do_decimal_point() const { return ','; }
-};
 
 
 
@@ -48,8 +27,7 @@ using namespace std;
 
 int main(int argc, const char * argv[])
 {
-    // for using ',' instead of '.' in float numbers
-    locale loccomma(cout.getloc(), new comma); locale::global(loccomma);
+    useCommaInsteadOfPointInConsolOut();
     
     cout << "Start" << endl;
     time_t totalTime; time(&totalTime);
@@ -125,14 +103,14 @@ int main(int argc, const char * argv[])
                                                            permissibleNoChangeRecord,
                                                            numberOfSubstitutions,
                                                            numberOfLocalSearchKS);
-    LOG(stringFromSolutions(solutionsGA2014));
+    LOG(strSolutions(solutionsGA2014));
     LOGF(strParamsGA2014(paramsGA,
                          paramsKS,
                          paramsCross,
                          permissibleNoChangeRecord,
                          numberOfSubstitutions,
                          numberOfLocalSearchKS)
-         << endl << stringFromSolutionsForTable(solutionsGA2014));
+         << endl << strTableSolutions(solutionsGA2014));
     
     delete solver;
     

@@ -13,6 +13,8 @@
 
 
 
+#include "defines.h"
+
 #include "ParamsKS.h"
 #include "ParamsGA.h"
 #include "ParamsCross.h"
@@ -34,58 +36,21 @@ using namespace std;
 
 
 
-#ifndef PATH_TO_LOG_FILE
-#define PATH_TO_LOG_FILE "you_should_set_your_path_to_LOG.txt_in_main.cpp"
-#endif
-#ifndef PATH_TO_DATA_FOLDER
-#define PATH_TO_DATA_FOLDER "you_should_set_your_path_to_Data_folder_in_main.cpp"
-#endif
-
-#ifdef LOG_TO_COLSOL
-#define LOG(str) cout << str << endl;
-#else
-#define LOG(str)
-#endif
-
-#ifdef LOG_TO_FILE
-#define LOGF(str) {ofstream f; f.open(PATH_TO_LOG_FILE, ios::app); f << "\n\n\n"; f << str << endl; f.close();}
-#else
-#define LOGF(str)
-#endif
-
-#define PARAMETERS_OF_SELECTING_FUNCTION const vector<Job *> *jobs,\
-                                         const Schedule *schedule,\
-                                         const int time,\
-                                         const bool timeForStart
-
-
-
 typedef shared_ptr<Schedule> PSchedule;
 typedef shared_ptr<ActiveList> PActiveList;
 
-typedef shared_ptr<vector<Job *>> JOBS_VECTOR_PTR;
+typedef shared_ptr<vector<Job *>> PVectorJobs;
 
 
 
-JOBS_VECTOR_PTR selectJobFirstInActiveList(PARAMETERS_OF_SELECTING_FUNCTION);
-JOBS_VECTOR_PTR selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probability);
+/**
+ Launch this method if you want to use ',' instead of '.’ in the float numbers in console out.
+ */
+void useCommaInsteadOfPointInConsolOut();
 
-string strParamsGA2014(ParamsGA paramsGA,
-                       ParamsKS paramsKS,
-                       ParamsCross paramsCross,
-                       int permissibleNoChangeRecord,
-                       int numberOfSubstitutions,
-                       int numberOfLocalSearchKS);
-
-string strForTableFromParamsGA2014(ParamsGA paramsGA,
-                                   ParamsKS paramsKS,
-                                   ParamsCross paramsCross,
-                                   int permissibleNoChangeRecord,
-                                   int numberOfSubstitutions,
-                                   int numberOfLocalSearchKS);
-
-string stringFromSolutions(shared_ptr<map<Problem *, Solution>> solutions);
-string stringFromSolutionsForTable(shared_ptr<map<Problem *, Solution>> solutions);
+#define PARAMETERS_OF_SELECTING_FUNCTION const vector<Job *> *jobs, const Schedule *schedule, const int time, const bool timeForStart
+PVectorJobs selectJobFirstInActiveList(PARAMETERS_OF_SELECTING_FUNCTION);
+PVectorJobs selectJobsViaKP(PARAMETERS_OF_SELECTING_FUNCTION, float probability);
 
 /**
  @param jobs Jobs list, search in which will be.
@@ -102,21 +67,31 @@ long distanceToPredecessor(const vector<Job *> *jobs, const long numberOfJob);
 
 void removeJobFromList(const Job *job, vector<Job *> *list);
 bool jobInList(const Job *job, const vector<Job *> *list);
-string stringMATLARRectangle(int x, int y, int width, int height,
-                             float redColor, float greenColor, float blueColor,
-                             string textInside, string textOutside);
-string stringFromSchedulesVector(const vector<PSchedule> *schedules);
-string stringFromJobsVector(const vector<Job *> *jobs);
-string stringFromIntVector(const vector<int> *ints);
-string stringOfDurationsFromSchdulesVector(const vector<PSchedule> *schedules);
-string stringOfSumOfStartsFromSchdulesVector(const vector<PSchedule> *schedules);
-string stringFromBlocksVector
-(const shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>> blocks);
-string stringFromBlock(const shared_ptr<pair<shared_ptr<vector<Job *>>, float>> block);
 bool sameJobsInVector(const vector<Job *> *jobs);
 
 int minHammingDistance(vector<PSchedule> *schedules, int hammingDispersion);
 int maxHammingDistance(vector<PSchedule> *schedules, int hammingDispersion);
+
+string strParamsGA2014(ParamsGA paramsGA,
+                       ParamsKS paramsKS,
+                       ParamsCross paramsCross,
+                       int permissibleNoChangeRecord,
+                       int numberOfSubstitutions,
+                       int numberOfLocalSearchKS);
+
+string strSolutions(shared_ptr<map<Problem *, Solution>> solutions);
+string strTableSolutions(shared_ptr<map<Problem *, Solution>> solutions);
+
+string stringMATLARRectangle(int x, int y, int width, int height,
+                             float redColor, float greenColor, float blueColor,
+                             string textInside, string textOutside);
+string strVectorSchedules(const vector<PSchedule> *schedules);
+string strVectorJobs(const vector<Job *> *jobs);
+string strVectorInt(const vector<int> *ints);
+string strDurationsFromVectorSchdules(const vector<PSchedule> *schedules);
+string strSumOfStartsFromVectorSchdules(const vector<PSchedule> *schedules);
+string strVectorBlocks(const shared_ptr<vector<shared_ptr<pair<PVectorJobs, float>>>> blocks);
+string strBlock(const shared_ptr<pair<PVectorJobs, float>> block);
 
 
 

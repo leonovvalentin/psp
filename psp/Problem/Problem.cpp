@@ -157,8 +157,8 @@ PSchedule Problem :: scheduleLateWithRandom(int times) const
 
 PSchedule Problem :: scheduleEarlyParallelSimple(int times) const
 {
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+    function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
         return selectJobFirstInActiveList(jobs, schedule, time, timeForStart);
     };
     
@@ -176,8 +176,8 @@ PSchedule Problem :: scheduleEarlyParallelSimple(int times) const
 
 PSchedule Problem :: scheduleEarlyParallelKP(int times, float probability) const
 {
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+    function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
         return selectJobsViaKP(jobs, schedule, time, timeForStart, probability);
     };
     
@@ -195,8 +195,8 @@ PSchedule Problem :: scheduleEarlyParallelKP(int times, float probability) const
 
 PSchedule Problem :: schedulePingPong(int times, float probability) const
 {
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+    function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
         return selectJobsViaKP(jobs, schedule, time, timeForStart, probability);
     };
     

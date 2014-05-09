@@ -87,7 +87,7 @@ private:
      vector<Job *> :: const_iterator minIterator,
      vector<Job *> :: const_iterator maxIterator,
      const map<Job *, int> *starts,
-     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
      Late partial parallel schedule. Last part of activeList will be started with time moments from `starts`, middle part of activeList will be schedule via parallel decoder, first part of activeList will be scheduled via late decoder.
      @param activeList ActiveList by which shedule will be created.
@@ -106,7 +106,7 @@ private:
      vector<Job *> :: const_iterator minIterator,
      vector<Job *> :: const_iterator maxIterator,
      const map<Job *, int> *starts,
-     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
 public:
     /**
      Early schedule without resource constrains.
@@ -140,7 +140,7 @@ public:
     static PSchedule scheduleEarlyParallel
     (ActiveList *activeList,
      const vector<Resource *> *resources,
-     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     
 #pragma mark - out
 public:
@@ -208,7 +208,7 @@ public:
      */
     shared_ptr<vector<PSchedule>> neighboringSchedules
     (NeighbourhoodType neighbourhoodType,
-     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
      @return ActiveList with jobs ordered by increasing of starts in current schedule.
      */
@@ -223,7 +223,7 @@ private:
      */
     PSchedule neighbourForLateSchedule
     (Job *job,
-     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
      Creating neghbour for early schedule, based on rescheduled jobs from block of specified job.
      @warning Should be applied to early schedule types only.
@@ -233,7 +233,7 @@ private:
      */
     PSchedule neighbourForEarlySchedule
     (Job *job,
-     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
 public:
     ScheduleValid validation();
     /**
@@ -252,7 +252,7 @@ private:
      @param permissibleResourceRemains Returned jobs are performed simultaneously will be give relative resource remains less or equal then this parameter (resource remains <= permissible resource remains).
      @return List of pairs (key = jobs list, value = relative resources remaining) sorted by increasing of time in schedule.
      */
-    shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>> denseJobsBlocks
+    shared_ptr<vector<shared_ptr<pair<PVectorJobs, float>>>> denseJobsBlocks
     (float permissibleResourceRemains);
     /**
      Add jobs on schedule via early decoder.
@@ -271,7 +271,7 @@ private:
      */
     void addJobsOnScheduleViaEarlyParallelDecoder
     (vector<Job *> jobs,
-     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
      Add jobs on schedule via late parallel decoder.
      @param jobs Jobs which will be added on schedule.
@@ -279,13 +279,13 @@ private:
      */
     void addJobsOnScheduleViaLateParallelDecoder
     (vector<Job *> jobs,
-     function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
+     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
      Calculate active (which is in process or is started at this `time`) jobs.
      @param time Time for which jobs will be calculated.
      @return Active jobs.
      */
-    shared_ptr<vector<Job *>> calcActiveJobs(int time);
+    PVectorJobs calcActiveJobs(int time);
     /**
      Calculate completed and active (which is in process or is started at this `time`) jobs.
      @param time Time for which jobs will be calculated.
@@ -305,13 +305,13 @@ private:
      @param job Job for which incoming network will be created.
      @return Incoming network.
      */
-    shared_ptr<vector<Job *>> incomingNetwork(Job *job);
+    PVectorJobs incomingNetwork(Job *job);
     /**
      Outgoing network.
      @param job Job for which outgoing network will be created.
      @return Outgoing network.
      */
-    shared_ptr<vector<Job *>> outgoingNetwork(Job *job);
+    PVectorJobs outgoingNetwork(Job *job);
     /**
      Block of jobs.
      @param job Job for which block will be created.
@@ -319,7 +319,7 @@ private:
      @param withSuccessors If true, blocks with successors will be ignored and returned nullptr.
      @return Block of jobs.
      */
-    shared_ptr<vector<Job *>> blockOfJobs(Job *job, bool withPredecessors, bool withSuccessors);
+    PVectorJobs blockOfJobs(Job *job, bool withPredecessors, bool withSuccessors);
     /**
      Reduce resource remain.
      @param job Job for which needs to reduce.
@@ -331,9 +331,9 @@ private:
      @param timeForStart If true, then `time` is time of jobs beginning, else of jobs finishing.
      @return Jobs which can be started at time `time` given the resource constraints.
      */
-    shared_ptr<vector<Job *>> permissibleJobsByResources(vector<Job *> *jobs,
-                                                         int time,
-                                                         bool timeForStart);
+    PVectorJobs permissibleJobsByResources(vector<Job *> *jobs,
+                                           int time,
+                                           bool timeForStart);
     /**
      Shift all job starts and resource remains on `time`.
      @param time Step for shifting.
