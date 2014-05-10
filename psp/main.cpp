@@ -109,7 +109,7 @@ int main(int argc, const char * argv[])
         .withNet = true,
         .isEarlyComposite = false
     };
-    int permissibleNoChangeRecord = 20;
+    int permissibleNoChangeRecord = 10;
     int numberOfSubstitutions = 10;
     int numberOfLocalSearchKS = 10;
     auto solutionsGA2014 = solver->solveWithScheduleGA2014(paramsGA,
