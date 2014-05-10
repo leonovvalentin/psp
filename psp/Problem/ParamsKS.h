@@ -26,19 +26,21 @@ using namespace std;
 
 /**
  Parameters for scheduleKS methtod.
+ @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
  @param probabilityKP Probability for solving knapsack problem.
  @param probabilitySN Probability for creating subset of neighbours.
  @param tabuListSize Length of tabu list.
  @param changingInterval Number of steps of algorithm before changing neighbourhood.
- @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
+ @param numberOfReturnsToRecord If not 0, return to record will be ever maxIterationNumber/numberOfReturnsToRecord iteration (it is intensification of search).
  */
 struct ParamsKS {
     
+    int maxIterationNumber;
     float probabilityKP;
     float probabilitySN;
     int tabuListSize;
     int changingInterval;
-    int maxIterationNumber;
+    int numberOfReturnsToRecord;
     
 #pragma mark - table
     
@@ -47,11 +49,12 @@ struct ParamsKS {
         stringstream ss;
         
         ss
-        << "probabilityKP"
+        << "maxIterationNumber"
+        << "\tprobabilityKP"
         << "\tprobabilitySN"
         << "\ttabuListSize"
         << "\tchangingInterval"
-        << "\tmaxIterationNumber";
+        << "\tnumberOfReturnsToRecord";
         
         return ss.str();
     }
@@ -61,11 +64,12 @@ struct ParamsKS {
         stringstream ss;
         
         ss
-        << probabilityKP
+        << maxIterationNumber
+        << "\t" << probabilityKP
         << "\t" << probabilitySN
         << "\t" << tabuListSize
         << "\t" << changingInterval
-        << "\t" << maxIterationNumber;
+        << "\t" << numberOfReturnsToRecord;
         
         return ss.str();
     }
@@ -82,11 +86,12 @@ struct ParamsKS {
         stringstream ss;
         
         ss
-        << "probabilityKP = " << probabilityKP
+        << "maxIterationNumber = " << maxIterationNumber
+        << ", probabilityKP = " << probabilityKP
         << ", probabilitySN = " << probabilitySN
         << ", tabuListSize = " << tabuListSize
         << ", changingInterval = " << changingInterval
-        << ", maxIterationNumber = " << maxIterationNumber;
+        << ", numberOfReturnsToRecord = " << numberOfReturnsToRecord;
         
         return ss.str();
     }

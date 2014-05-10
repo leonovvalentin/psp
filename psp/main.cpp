@@ -8,28 +8,12 @@
 
 
 
-#error Set correct paths
-#define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/psp/psp/LOG.txt"
-#define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/psp/Data"
-
-
-
 #include "Solver.h"
 #include "utils.h"
 
 #include <iostream>
 #include <fstream>
 #include <ctime>
-
-
-
-// for using ',' instead of '.' in float numbers
-#include <locale>
-class comma : public numpunct<char>
-{
-public: comma () : numpunct<char> () {}
-protected: char do_decimal_point() const { return ','; }
-};
 
 
 
@@ -43,8 +27,7 @@ using namespace std;
 
 int main(int argc, const char * argv[])
 {
-    // for using ',' instead of '.' in float numbers
-    locale loccomma(cout.getloc(), new comma); locale::global(loccomma);
+    useCommaInsteadOfPointInConsolOut();
     
     cout << "Start" << endl;
     time_t totalTime; time(&totalTime);
@@ -56,11 +39,12 @@ int main(int argc, const char * argv[])
     
     // Kochetov, Stolyar, 2003
 //    ParamsKS paramsKS = {
+//        .maxIterationNumber = 5000, // 1000-5000
 //        .probabilityKP = 0.5f, // ?
 //        .probabilitySN = 0.2f, // 0.2
 //        .tabuListSize = 5, // 5
 //        .changingInterval = 10, // 5-10
-//        .maxIterationNumber = 5000 // 1000-5000
+//        .numberOfReturnsToRecord = 5 // 5
 //    };
 //    auto solutionsKS = solver->solveWithScheduleKS(paramsKS);
 //    LOG(stringFromSolutions(solutionsKS));
@@ -97,11 +81,12 @@ int main(int argc, const char * argv[])
         .swapAndMovePermissibleTimes = 10
     };
     ParamsKS paramsKS = {
+        .maxIterationNumber = 20,
         .probabilityKP = 0.5f,
         .probabilitySN = 0.2f,
         .tabuListSize = 1,
         .changingInterval = 1,
-        .maxIterationNumber = 20
+        .numberOfReturnsToRecord = 0
     };
     ParamsCross paramsCross = {
         .permissibleResourceRemains = 0.9f,
@@ -118,14 +103,14 @@ int main(int argc, const char * argv[])
                                                            permissibleNoChangeRecord,
                                                            numberOfSubstitutions,
                                                            numberOfLocalSearchKS);
-    LOG(stringFromSolutions(solutionsGA2014));
+    LOG(strSolutions(solutionsGA2014));
     LOGF(strParamsGA2014(paramsGA,
                          paramsKS,
                          paramsCross,
                          permissibleNoChangeRecord,
                          numberOfSubstitutions,
                          numberOfLocalSearchKS)
-         << endl << stringFromSolutionsForTable(solutionsGA2014));
+         << endl << strTableSolutions(solutionsGA2014));
     
     delete solver;
     

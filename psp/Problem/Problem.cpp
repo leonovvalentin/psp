@@ -157,8 +157,8 @@ PSchedule Problem :: scheduleLateWithRandom(int times) const
 
 PSchedule Problem :: scheduleEarlyParallelSimple(int times) const
 {
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+    function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
         return selectJobFirstInActiveList(jobs, schedule, time, timeForStart);
     };
     
@@ -176,8 +176,8 @@ PSchedule Problem :: scheduleEarlyParallelSimple(int times) const
 
 PSchedule Problem :: scheduleEarlyParallelKP(int times, float probability) const
 {
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+    function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
         return selectJobsViaKP(jobs, schedule, time, timeForStart, probability);
     };
     
@@ -195,8 +195,8 @@ PSchedule Problem :: scheduleEarlyParallelKP(int times, float probability) const
 
 PSchedule Problem :: schedulePingPong(int times, float probability) const
 {
-    function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
-    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> JOBS_VECTOR_PTR {
+    function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
+    [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
         return selectJobsViaKP(jobs, schedule, time, timeForStart, probability);
     };
     
@@ -235,7 +235,7 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
     population.reserve(params.populationSize + params.numberOfChildrenInNextGeneration);
     for (int i=0; i<params.populationSize; i++) {
         
-#ifdef LOG_PROBLEM_H
+#ifdef LOG_TO_CONSOL_PROBLEM_H
         LOG("initial population: "
             << (float)i/params.populationSize * 100 << "%"
             << " record = " << (record ? record->duration() : INT_MAX));
@@ -252,7 +252,7 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
     int numberOfGeneratedSchedules = 0;
     while (numberOfGeneratedSchedules < params.maxGeneratedSchedules) {
         
-#ifdef LOG_PROBLEM_H
+#ifdef LOG_TO_CONSOL_PROBLEM_H
         LOG("generated schedules: "
             << (float)numberOfGeneratedSchedules/params.maxGeneratedSchedules * 100 << "%"
             << " record = " << record->duration());
@@ -332,7 +332,7 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
     population.reserve(paramsGA.populationSize + paramsGA.numberOfChildrenInNextGeneration);
     for (int i=0; i<paramsGA.populationSize; i++) {
         
-#ifdef LOG_PROBLEM_H
+#ifdef LOG_TO_CONSOL_PROBLEM_H
         LOG("initial population: "
             << (float)i/paramsGA.populationSize * 100 << "%"
             << " record = " << (record ? record->duration() : INT_MAX));
@@ -351,7 +351,7 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
     int numberOfGeneratedSchedules = 0;
     while (numberOfGeneratedSchedules < paramsGA.maxGeneratedSchedules) {
         
-#ifdef LOG_PROBLEM_H
+#ifdef LOG_TO_CONSOL_PROBLEM_H
         LOG("generated schedules: "
             << (float)numberOfGeneratedSchedules/paramsGA.maxGeneratedSchedules * 100 << "%"
             << " record = " << record->duration());

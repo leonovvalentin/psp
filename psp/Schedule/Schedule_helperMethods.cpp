@@ -12,14 +12,14 @@
 
 
 
-shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>> Schedule ::
+shared_ptr<vector<shared_ptr<pair<PVectorJobs, float>>>> Schedule ::
 denseJobsBlocks(float permissibleResourceRemains)
 {
-    shared_ptr<vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>>
-    blocks(new vector<shared_ptr<pair<shared_ptr<vector<Job *>>, float>>>);
+    shared_ptr<vector<shared_ptr<pair<PVectorJobs, float>>>>
+    blocks(new vector<shared_ptr<pair<PVectorJobs, float>>>);
     blocks->reserve(duration());
     
-    shared_ptr<pair<shared_ptr<vector<Job *>>, float>> prevBlock = nullptr;
+    shared_ptr<pair<PVectorJobs, float>> prevBlock = nullptr;
     for (int t=0; t<duration(); t++) {
         
         float resourceRemains = relativeResourceRemains(t);
@@ -29,8 +29,8 @@ denseJobsBlocks(float permissibleResourceRemains)
             
             if (!prevBlock) {
                 
-                shared_ptr<pair<shared_ptr<vector<Job *>>, float>>
-                block(new pair<shared_ptr<vector<Job *>>, float>(activeJobs, resourceRemains));
+                shared_ptr<pair<PVectorJobs, float>>
+                block(new pair<PVectorJobs, float>(activeJobs, resourceRemains));
                 
                 blocks->push_back(block);
                 prevBlock= block;
@@ -43,8 +43,8 @@ denseJobsBlocks(float permissibleResourceRemains)
                     isIntersecting = true;
                     if (resourceRemains < prevBlock->second) {
                         
-                        shared_ptr<pair<shared_ptr<vector<Job *>>, float>>
-                        block(new pair<shared_ptr<vector<Job *>>, float>(activeJobs,
+                        shared_ptr<pair<PVectorJobs, float>>
+                        block(new pair<PVectorJobs, float>(activeJobs,
                                                                          resourceRemains));
                         
                         (*blocks)[blocks->size() - 1] = block;
@@ -55,8 +55,8 @@ denseJobsBlocks(float permissibleResourceRemains)
             }
             if (!isIntersecting) {
                 
-                shared_ptr<pair<shared_ptr<vector<Job *>>, float>>
-                block(new pair<shared_ptr<vector<Job *>>, float>(activeJobs, resourceRemains));
+                shared_ptr<pair<PVectorJobs, float>>
+                block(new pair<PVectorJobs, float>(activeJobs, resourceRemains));
                 
                 blocks->push_back(block);
                 prevBlock = block;
@@ -119,7 +119,7 @@ void Schedule :: addJobsOnScheduleViaLateDecoder(const vector<Job *> *jobs)
 
 void Schedule :: addJobsOnScheduleViaEarlyParallelDecoder
 (vector<Job *> jobs,
- function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
+ function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
     size_t finalSize = _starts.size() + jobs.size();
     vector<Job *> complited(0); complited.reserve(finalSize);
@@ -134,14 +134,14 @@ void Schedule :: addJobsOnScheduleViaEarlyParallelDecoder
             if (job->validByPredecessors(&complited) && !jobInList(job, &permissibleByPredecessor))
                 permissibleByPredecessor.push_back(job);
         }
-        shared_ptr<vector<Job *>> permissible =
+        PVectorJobs permissible =
         permissibleJobsByResources(&permissibleByPredecessor, time, true);
         
         while (permissible->size()) {
-            shared_ptr<vector<Job *>> newActiveJobs = functionForSelecting(permissible.get(),
-                                                                           this,
-                                                                           time,
-                                                                           true);
+            PVectorJobs newActiveJobs = functionForSelecting(permissible.get(),
+                                                             this,
+                                                             time,
+                                                             true);
             
             for (auto &job : *newActiveJobs) {
                 _starts[job] = time;
@@ -165,7 +165,7 @@ void Schedule :: addJobsOnScheduleViaEarlyParallelDecoder
 
 void Schedule :: addJobsOnScheduleViaLateParallelDecoder
 (vector<Job *> jobs,
- function<JOBS_VECTOR_PTR(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
+ function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
     size_t finalSize = _starts.size() + jobs.size();
     vector<Job *> started(0); started.reserve(finalSize);
@@ -183,9 +183,9 @@ void Schedule :: addJobsOnScheduleViaLateParallelDecoder
                 permissibleBySuccessors.push_back(job);
         }
         
-        shared_ptr<vector<Job *>> permissible = permissibleJobsByResources(&permissibleBySuccessors,
-                                                                           time,
-                                                                           false);
+        PVectorJobs permissible = permissibleJobsByResources(&permissibleBySuccessors,
+                                                             time,
+                                                             false);
         
 #warning Is it needs to be done similar for early?
         if (!active.size() && !permissible->size()) {
@@ -194,10 +194,10 @@ void Schedule :: addJobsOnScheduleViaLateParallelDecoder
         }
         
         while (permissible->size()) {
-            shared_ptr<vector<Job *>> newActiveJobs = functionForSelecting(permissible.get(),
-                                                                           this,
-                                                                           time,
-                                                                           false);
+            PVectorJobs newActiveJobs = functionForSelecting(permissible.get(),
+                                                             this,
+                                                             time,
+                                                             false);
             for (auto &job : *newActiveJobs) {
                 _starts[job] = time - job->duration();
                 reduceResourceRemain(job);
@@ -218,9 +218,9 @@ void Schedule :: addJobsOnScheduleViaLateParallelDecoder
     }
 }
 
-shared_ptr<vector<Job *>> Schedule :: calcActiveJobs(int time)
+PVectorJobs Schedule :: calcActiveJobs(int time)
 {
-    shared_ptr<vector<Job *>> active(new vector<Job *>); active->reserve(_starts.size());
+    PVectorJobs active(new vector<Job *>); active->reserve(_starts.size());
     for (auto &pJobStart : _starts) {
         Job *job = pJobStart.first;
         int start = pJobStart.second;
@@ -258,9 +258,9 @@ void Schedule :: calcStartedAndActiveJobs(int time,
     }
 }
 
-shared_ptr<vector<Job *>> Schedule :: incomingNetwork(Job *job)
+PVectorJobs Schedule :: incomingNetwork(Job *job)
 {
-    shared_ptr<vector<Job *>> net(new vector<Job *>(1, job)); net->reserve(_activeList.size());
+    PVectorJobs net(new vector<Job *>(1, job)); net->reserve(_activeList.size());
     vector<Job *> front(1, job); front.reserve(_activeList.size());
     
     for (int i=0; i<front.size(); i++) {
@@ -277,9 +277,9 @@ shared_ptr<vector<Job *>> Schedule :: incomingNetwork(Job *job)
     return net;
 }
 
-shared_ptr<vector<Job *>> Schedule :: outgoingNetwork(Job *job)
+PVectorJobs Schedule :: outgoingNetwork(Job *job)
 {
-    shared_ptr<vector<Job *>> net(new vector<Job *>(1, job)); net->reserve(_activeList.size());
+    PVectorJobs net(new vector<Job *>(1, job)); net->reserve(_activeList.size());
     vector<Job *> front(1, job); front.reserve(_activeList.size());
     
     for (int i=0; i<front.size(); i++) {
@@ -296,11 +296,9 @@ shared_ptr<vector<Job *>> Schedule :: outgoingNetwork(Job *job)
     return net;
 }
 
-shared_ptr<vector<Job *>> Schedule :: blockOfJobs(Job *job,
-                                                  bool withPredecessors,
-                                                  bool withSuccessors)
+PVectorJobs Schedule :: blockOfJobs(Job *job, bool withPredecessors, bool withSuccessors)
 {
-    shared_ptr<vector<Job *>> block(new vector<Job *>); block->reserve(_activeList.size());
+    PVectorJobs block(new vector<Job *>); block->reserve(_activeList.size());
     
     int jobStart = _starts[job];
     int jobEnd = jobStart + job->duration();
@@ -311,9 +309,9 @@ shared_ptr<vector<Job *>> Schedule :: blockOfJobs(Job *job,
 #warning is it right check for block jobs?
         if (start <= jobEnd && end >= jobStart) {
             if (!withPredecessors && job->hasPredecessor(pJobStart.first))
-                return shared_ptr<vector<Job *>>(nullptr);
+                return PVectorJobs(nullptr);
             if (!withSuccessors && job->hasSuccessor(pJobStart.first))
-                return shared_ptr<vector<Job *>>(nullptr);
+                return PVectorJobs(nullptr);
             block->push_back(pJobStart.first);
         }
     }
@@ -333,11 +331,9 @@ void Schedule :: reduceResourceRemain(Job *job)
     }
 }
 
-shared_ptr<vector<Job *>> Schedule :: permissibleJobsByResources(vector<Job *> *jobs,
-                                                                 int time,
-                                                                 bool timeForStart)
+PVectorJobs Schedule :: permissibleJobsByResources(vector<Job *> *jobs, int time, bool timeForStart)
 {
-    shared_ptr<vector<Job *>> permissible(new vector<Job *>(0)); permissible->reserve(jobs->size());
+    PVectorJobs permissible(new vector<Job *>(0)); permissible->reserve(jobs->size());
     
     for (auto &job : *jobs) {
         int timeStart = timeForStart ? time : time - job->duration();

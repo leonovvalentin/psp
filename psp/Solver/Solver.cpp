@@ -278,12 +278,12 @@ solveWithScheduleGA2014(ParamsGA paramsGA,
         (*solutions)[problem] = solution;
         
         LOG(*problem->name() << ": " << solution.str());
-        string userInfo = strForTableFromParamsGA2014(paramsGA,
-                                                      paramsKS,
-                                                      paramsCross,
-                                                      permissibleNoChangeRecord,
-                                                      numberOfSubstitutions,
-                                                      numberOfLocalSearchKS);
+        string userInfo = strParamsGA2014(paramsGA,
+                                          paramsKS,
+                                          paramsCross,
+                                          permissibleNoChangeRecord,
+                                          numberOfSubstitutions,
+                                          numberOfLocalSearchKS);
         solution.checkOnRecord(problem->name(), &userInfo);
         solution.checkOnValid(problem->name(), &userInfo);
     }
