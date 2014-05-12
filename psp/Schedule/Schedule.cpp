@@ -483,9 +483,9 @@ PSchedule Schedule :: localSearchKS(ParamsKS params)
     return record;
 }
 
-PSchedule Schedule :: pingPongSchedule() const
+PSchedule Schedule :: pingPongSchedule()
 {
-    PSchedule schedule = earlySchedule();
+    PSchedule schedule = shared_from_this();
     
     bool stop = false;
     while (!stop) {

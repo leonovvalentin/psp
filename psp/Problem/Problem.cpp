@@ -207,12 +207,7 @@ PSchedule Problem :: schedulePingPong(int times, float probability) const
         PSchedule schedule = Schedule :: scheduleEarlyParallel(&activeList,
                                                                &_resources,
                                                                functionForSelecting);
-        bool stop = false;
-        while (!stop) {
-            PSchedule scheduleEarly = schedule->lateSchedule()->earlySchedule();
-            if (scheduleEarly->duration() < schedule->duration()) schedule = scheduleEarly;
-            else stop = true;
-        }
+        schedule = schedule->pingPongSchedule();
         if (!record.get() || record->duration() > schedule->duration()) record = schedule;
     }
     

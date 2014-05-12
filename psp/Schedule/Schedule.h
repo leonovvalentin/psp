@@ -170,7 +170,7 @@ public:
     /**
      @return Schedule, created from current via ping-pong procedure.
      */
-    PSchedule pingPongSchedule() const;
+    PSchedule pingPongSchedule();
     /**
      Creating mutated schedule, by applying swap and move random jobs, not more then specified number of times.
      @return Early schedule, created from mutated activeList.
