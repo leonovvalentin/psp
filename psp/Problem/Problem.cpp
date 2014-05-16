@@ -293,6 +293,7 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
             }
             else {
                 child = mutatedChild;
+                if (child->duration() < record->duration()) record = child;
             }
             
             children.push_back(child);
@@ -398,6 +399,7 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
             }
             else {
                 child = mutatedChild;
+                if (child->duration() < record->duration()) record = child;
             }
             
             children.push_back(child);
