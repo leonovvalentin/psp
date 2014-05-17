@@ -193,7 +193,9 @@ PSchedule Problem :: scheduleEarlyParallelKP(int times, float probability) const
     return record;
 }
 
-PSchedule Problem :: schedulePingPong(int times, float probability) const
+PSchedule Problem :: schedulePingPong(int times,
+                                      float probability,
+                                      int *numberOfGeneratedSchedules) const
 {
     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
     [probability](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
@@ -207,7 +209,8 @@ PSchedule Problem :: schedulePingPong(int times, float probability) const
         PSchedule schedule = Schedule :: scheduleEarlyParallel(&activeList,
                                                                &_resources,
                                                                functionForSelecting);
-        schedule = schedule->pingPongSchedule();
+        (*numberOfGeneratedSchedules)++;
+        schedule = schedule->pingPongSchedule(numberOfGeneratedSchedules);
         if (!record.get() || record->duration() > schedule->duration()) record = schedule;
     }
     
@@ -216,13 +219,14 @@ PSchedule Problem :: schedulePingPong(int times, float probability) const
 
 PSchedule Problem :: scheduleKS(ParamsKS params) const
 {
-    PSchedule schedule = schedulePingPong(1, params.probabilityKP); // Initial schedule
-    return schedule->localSearchKS(params);
+    PSchedule schedule = schedulePingPong(1, params.probabilityKP, NULL); // Initial schedule
+    return schedule->localSearchKS(params, NULL);
 }
 
 PSchedule Problem :: scheduleGA(ParamsGA params) const
 {
     PSchedule record = nullptr;
+    int numberOfGeneratedSchedules = 0;
     
     // initial population
     
@@ -237,14 +241,14 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
 #endif
         
         PSchedule schedule = schedulePingPong(params.timesPingPongInitialPopulation,
-                                              params.probabilityKP);
+                                              params.probabilityKP,
+                                              &numberOfGeneratedSchedules);
         population.push_back(schedule);
         if (!record || (schedule->duration() < record->duration())) record = schedule;
     }
     
     // generations
     
-    int numberOfGeneratedSchedules = 0;
     while (numberOfGeneratedSchedules < params.maxGeneratedSchedules) {
         
 #ifdef LOG_TO_CONSOL_PROBLEM_H
@@ -284,9 +288,12 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
             // crossing
             auto child = parent1->crossViaPreviewAllBlocks(parent2,
                                                            params.permissibleResourceRemains);
+            numberOfGeneratedSchedules++;
             auto mutatedChild =
             child->swapAndMoveMutation(params.swapAndMovePermissibleTimes,
-                                       params.swapAndMovePermissibleTimes)->pingPongSchedule();
+                                       params.swapAndMovePermissibleTimes);
+            numberOfGeneratedSchedules++;
+            mutatedChild = mutatedChild->pingPongSchedule(&numberOfGeneratedSchedules);
             if (child->duration() < record->duration()) {
                 if (mutatedChild->duration() < child->duration()) child = mutatedChild;
                 record = child;
@@ -297,7 +304,6 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
             }
             
             children.push_back(child);
-            numberOfGeneratedSchedules++;
         }
         
         // next population
@@ -321,6 +327,7 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
                                     int numberOfLocalSearchKS) const
 {
     PSchedule record = nullptr;
+    int numberOfGeneratedSchedules = 0;
     
     // initial population
     
@@ -335,7 +342,8 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
 #endif
         
         PSchedule schedule = schedulePingPong(paramsGA.timesPingPongInitialPopulation,
-                                              paramsGA.probabilityKP);
+                                              paramsGA.probabilityKP,
+                                              &numberOfGeneratedSchedules);
         population.push_back(schedule);
         if (!record || (schedule->duration() < record->duration())) record = schedule;
     }
@@ -344,7 +352,6 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
     
     int prevRecordDuration = record->duration();
     int noChangeRecord = 0;
-    int numberOfGeneratedSchedules = 0;
     while (numberOfGeneratedSchedules < paramsGA.maxGeneratedSchedules) {
         
 #ifdef LOG_TO_CONSOL_PROBLEM_H
@@ -390,9 +397,12 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
             else {
                 child = parent1->crossViaSelectOneBlock(parent2, paramsCross);
             }
+            numberOfGeneratedSchedules++;
             auto mutatedChild =
             child->swapAndMoveMutation(paramsGA.swapAndMovePermissibleTimes,
-                                       paramsGA.swapAndMovePermissibleTimes)->pingPongSchedule();
+                                       paramsGA.swapAndMovePermissibleTimes);
+            numberOfGeneratedSchedules++;
+            mutatedChild = mutatedChild->pingPongSchedule(&numberOfGeneratedSchedules);
             if (child->duration() < record->duration()) {
                 if (mutatedChild->duration() < child->duration()) child = mutatedChild;
                 record = child;
@@ -403,7 +413,6 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
             }
             
             children.push_back(child);
-            numberOfGeneratedSchedules++;
         }
         
         // next population
@@ -430,7 +439,8 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
             }
             for (int i=0; i<numberOfSubstitutions; i++) {
                 PSchedule schedule = schedulePingPong(paramsGA.timesPingPongInitialPopulation,
-                                                      paramsGA.probabilityKP);
+                                                      paramsGA.probabilityKP,
+                                                      &numberOfGeneratedSchedules);
                 population.push_back(schedule);
                 if (schedule->duration() < record->duration()) {
                     record = schedule;
@@ -439,11 +449,12 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
             }
             for (int i=0; i<numberOfLocalSearchKS; i++) {
                 auto schedule = population[Random :: randomLong(0, population.size()-1)];
-                schedule = schedule->localSearchKS(paramsKS);
+                schedule = schedule->localSearchKS(paramsKS, &numberOfGeneratedSchedules);
                 if (schedule->duration() < record->duration()) {
                     record = schedule;
                     prevRecordDuration = record->duration();
                 }
+                if (numberOfGeneratedSchedules >= paramsGA.maxGeneratedSchedules) return record;
             }
             noChangeRecord = 0;
         }

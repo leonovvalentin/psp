@@ -166,11 +166,11 @@ public:
     /**
      @return Schedule, created from current via local search algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
      */
-    PSchedule localSearchKS(ParamsKS params);
+    PSchedule localSearchKS(ParamsKS params, int *numberOfGeneratedSchedules);
     /**
      @return Schedule, created from current via ping-pong procedure.
      */
-    PSchedule pingPongSchedule();
+    PSchedule pingPongSchedule(int *numberOfGeneratedSchedules);
     /**
      Creating mutated schedule, by applying swap and move random jobs, not more then specified number of times.
      @return Early schedule, created from mutated activeList.

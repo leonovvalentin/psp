@@ -364,7 +364,7 @@ const map<Resource *, shared_ptr<vector<int>>> * Schedule :: resourceRemains() c
 
 #pragma mark - functionality
 
-PSchedule Schedule :: localSearchKS(ParamsKS params)
+PSchedule Schedule :: localSearchKS(ParamsKS params, int *numberOfGeneratedSchedules)
 {
     function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> functionForSelecting =
     [params](PARAMETERS_OF_SELECTING_FUNCTION) -> PVectorJobs {
@@ -414,6 +414,7 @@ PSchedule Schedule :: localSearchKS(ParamsKS params)
         
         shared_ptr<vector<PSchedule>> allNeighbours =
         schedule->neighboringSchedules(currentNeighbourhoodType, functionForSelecting);
+        (*numberOfGeneratedSchedules) += allNeighbours->size();
         
         // neighboursWithoutTabu
         
@@ -483,13 +484,21 @@ PSchedule Schedule :: localSearchKS(ParamsKS params)
     return record;
 }
 
-PSchedule Schedule :: pingPongSchedule()
+PSchedule Schedule :: pingPongSchedule(int *numberOfGeneratedSchedules)
 {
     PSchedule schedule = shared_from_this();
     
     bool stop = false;
     while (!stop) {
-        PSchedule scheduleEarly = schedule->lateSchedule()->earlySchedule();
+        PSchedule scheduleEarly = nullptr;
+        if (schedule->type() == ScheduleTypeLate) {
+            scheduleEarly = schedule->earlySchedule();
+            (*numberOfGeneratedSchedules)++;
+        }
+        else {
+            scheduleEarly = schedule->lateSchedule()->earlySchedule();
+            (*numberOfGeneratedSchedules) += 2;
+        }
         if (scheduleEarly->duration() < schedule->duration()) schedule = scheduleEarly;
         else stop = true;
     }
@@ -711,6 +720,7 @@ shared_ptr<vector<PSchedule>> Schedule :: neighboringSchedules
  function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
 #warning Is it right? Are we needs to construct correct schedule first?
+#warning numberOfGeneratedSchedules needs to be ++ here?
     PSchedule schedule = nullptr;
     switch (neighbourhoodType) {
         case NeighbourhoodTypeEarly: {

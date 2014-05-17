@@ -191,7 +191,7 @@ shared_ptr<map<Problem *, PSchedule>> Solver :: solveWithSchedulePingPong(int ti
 {
     shared_ptr<map<Problem *, PSchedule>> solutions(new map<Problem *, PSchedule>);
     for (auto &problem : _problems) {
-        (*solutions)[problem] = problem->schedulePingPong(times, probability);
+        (*solutions)[problem] = problem->schedulePingPong(times, probability, NULL);
     }
     return solutions;
 }

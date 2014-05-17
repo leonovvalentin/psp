@@ -93,7 +93,7 @@ public:
      @param probability Probability for solving knapsack problem.
      @return Found record.
      */
-    PSchedule schedulePingPong(int times, float probability) const;
+    PSchedule schedulePingPong(int times, float probability, int *numberOfGeneratedSchedules) const;
     /**
      Solve problem.
      Solve based on algorithm of Kochetov and Slolyar (Кочетов, Столяр. Использование чередующихся окрестностей для приближенного решения задачи календарного планирования с ограниченными ресурсами. 2003).
