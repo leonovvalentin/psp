@@ -46,7 +46,7 @@ unsigned long TabuList :: size() const
     return _list.size();
 }
 
-int TabuList :: maxSize() const
+unsigned long TabuList :: maxSize() const
 {
     return _maxSize;
 }
@@ -70,4 +70,10 @@ void TabuList :: removeOlderTabu(unsigned long numberOfTabuForRemoving)
 bool TabuList :: containTabu(int tabu)
 {
     return find(begin(_list), end(_list), tabu) != end(_list);
+}
+
+void TabuList :: changeMaxSize(unsigned long size)
+{
+    if (_list.size() > size) _list.erase(_list.begin(), _list.begin() + _list.size() - size);
+    _maxSize = size;
 }

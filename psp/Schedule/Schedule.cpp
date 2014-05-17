@@ -427,9 +427,8 @@ PSchedule Schedule :: localSearchKS(ParamsKS params, int *numberOfGeneratedSched
                     neighboursWithoutTabu->push_back(neighbour);
                 }
             }
-            if (neighboursWithoutTabu->size() == 0) {
-#warning Set number of tabu for removing as parameter of function?
-                tabuList.removeOlderTabu(1);
+            if (neighboursWithoutTabu->size() == 0 && tabuList.maxSize() > 0) {
+                tabuList.changeMaxSize(tabuList.maxSize() - 1);
             }
         }
         

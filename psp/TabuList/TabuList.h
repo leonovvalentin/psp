@@ -23,7 +23,7 @@ using namespace std;
 class TabuList
 {
 private:
-    int _maxSize;
+    unsigned long _maxSize;
     vector<int> _list;
     
 public:
@@ -41,12 +41,13 @@ public:
     
 #pragma mark - getters
     unsigned long size() const;
-    int maxSize() const;
+    unsigned long maxSize() const;
     
 #pragma mark - functionality
     void add(int tabu);
     void removeOlderTabu(unsigned long numberOfTabuForRemoving);
     bool containTabu(int tabu);
+    void changeMaxSize(unsigned long size);
 };
 
 
