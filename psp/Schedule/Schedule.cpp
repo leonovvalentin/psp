@@ -427,7 +427,7 @@ PSchedule Schedule :: localSearchKS(ParamsKS params, int *numberOfGeneratedSched
                     neighboursWithoutTabu->push_back(neighbour);
                 }
             }
-            if (neighboursWithoutTabu->size() == 0 && tabuList.maxSize() > 0) {
+            if (neighboursWithoutTabu->size() == 0) {
                 tabuList.changeMaxSize(tabuList.maxSize() - 1);
             }
         }
