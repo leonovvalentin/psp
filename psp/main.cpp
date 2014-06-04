@@ -34,13 +34,13 @@ int main(int argc, const char * argv[])
     
     string path = PATH_TO_DATA_FOLDER;
     Solver *solver = new Solver(&path, [](long i, string name){
-        return i < 1;
+        return i == 0;
     });
     
     // Kochetov, Stolyar, 2003
 //    ParamsKS paramsKS = {
 //        .maxIterationNumber = 5000, // 1000-5000
-//        .probabilityKP = 0.5f, // ?
+//        .probabilityKP = 0.5f,
 //        .probabilitySN = 0.2f, // 0.2
 //        .tabuListSize = 5, // 5
 //        .changingInterval = 10, // 5-10
@@ -52,7 +52,7 @@ int main(int argc, const char * argv[])
     
     // My genetic algorithm
 //    ParamsGA paramsGA = {
-//        .maxGeneratedSchedules = 5000, // 5000
+//        .maxGeneratedSchedules = 5000, // 1000, 5000, 50000
 //        .populationSize = 40, // 40
 //        .maxParents = 20, // 20
 //        .maxChildren = 40, // 40
@@ -64,35 +64,35 @@ int main(int argc, const char * argv[])
 //        .swapAndMovePermissibleTimes = 10 // 10
 //    };
 //    auto solutionsGA = solver->solveWithScheduleGA(paramsGA);
-//    LOG(stringFromSolutions(solutionsGA));
-//    LOGF(paramsGA.str() << endl << stringFromSolutionsForTable(solutionsGA));
+//    LOG(strSolutions(solutionsGA));
+//    LOGF(paramsGA.str() << endl << strTableSolutions(solutionsGA));
     
     // My genetic algorithm, 2014
     ParamsGA paramsGA = {
-        .maxGeneratedSchedules = 5000,
-        .populationSize = 40,
-        .maxParents = 20,
-        .maxChildren = 40,
-        .numberOfChildrenInNextGeneration = 10,
-        .timesPingPongInitialPopulation = 100,
-        .probabilityKP = 0.5f,
-        .probabilityParentSelection = 0.8f,
-        .permissibleResourceRemains = 0.9f,
-        .swapAndMovePermissibleTimes = 10
+        .maxGeneratedSchedules = 1000, // 1000, 5000, 50000
+        .populationSize = 40, // 40
+        .maxParents = 20, // 20
+        .maxChildren = 40, // 40
+        .numberOfChildrenInNextGeneration = 10, // 10
+        .timesPingPongInitialPopulation = 10, // 10
+        .probabilityKP = 0.5f, // 0.5
+        .probabilityParentSelection = 0.8f, // 0.8
+        .permissibleResourceRemains = 0.9f, // 0.9
+        .swapAndMovePermissibleTimes = 10 // 10
     };
     ParamsKS paramsKS = {
-        .maxIterationNumber = 20,
-        .probabilityKP = 0.5f,
-        .probabilitySN = 0.2f,
-        .tabuListSize = 1,
-        .changingInterval = 1,
-        .numberOfReturnsToRecord = 0
+        .maxIterationNumber = 0, // 0
+        .probabilityKP = 0.5f, // 0.5
+        .probabilitySN = 0.2f, // 0.2
+        .tabuListSize = 1, // 1
+        .changingInterval = 1, // 1
+        .numberOfReturnsToRecord = 0 // 0
     };
     ParamsCross paramsCross = {
-        .permissibleResourceRemains = 0.9f,
-        .probabilityKP = 0.5f,
-        .withNet = true,
-        .isEarlyComposite = false
+        .permissibleResourceRemains = 0.9f, // 0.9
+        .probabilityKP = 0.5f, // 0.5
+        .withNet = true, // true
+        .isEarlyComposite = false // false
     };
     int permissibleNoChangeRecord = 10;
     int numberOfSubstitutions = 10;
