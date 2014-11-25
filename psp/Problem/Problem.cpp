@@ -219,8 +219,9 @@ PSchedule Problem :: schedulePingPong(int times,
 
 PSchedule Problem :: scheduleKS(ParamsKS params) const
 {
-    PSchedule schedule = schedulePingPong(1, params.probabilityKP, NULL); // Initial schedule
-    return schedule->localSearchKS(params, NULL);
+    int numberOfGeneratedSchedules = 0;
+    PSchedule schedule = schedulePingPong(1, params.probabilityKP, &numberOfGeneratedSchedules); // Initial schedule
+    return schedule->localSearchKS(params, &numberOfGeneratedSchedules);
 }
 
 PSchedule Problem :: scheduleGA(ParamsGA params) const

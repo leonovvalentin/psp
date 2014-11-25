@@ -59,7 +59,7 @@ struct Solution {
             << endl << *schedule << "MATLAB:" << endl << schedule->stringMATLAB();
             
             LOG(ss.str());
-            LOGF(ss.str())
+            LOGF(ss.str());
         }
     }
     

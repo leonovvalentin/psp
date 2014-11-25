@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
     
     // Kochetov, Stolyar, 2003
 //    ParamsKS paramsKS = {
-//        .maxIterationNumber = 5000, // 1000-5000
+//        .maxIterationNumber = 1000, // 1000-5000
 //        .probabilityKP = 0.5f,
 //        .probabilitySN = 0.2f, // 0.2
 //        .tabuListSize = 5, // 5
@@ -47,8 +47,8 @@ int main(int argc, const char * argv[])
 //        .numberOfReturnsToRecord = 5 // 5
 //    };
 //    auto solutionsKS = solver->solveWithScheduleKS(paramsKS);
-//    LOG(stringFromSolutions(solutionsKS));
-//    LOGF(paramsKS.str() << endl << stringFromSolutionsForTable(solutionsKS));
+//    LOG(strSolutions(solutionsKS));
+//    LOGF(paramsKS.str() << endl << strTableSolutions(solutionsKS));
     
     // My genetic algorithm
 //    ParamsGA paramsGA = {
