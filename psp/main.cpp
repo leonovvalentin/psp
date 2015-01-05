@@ -21,10 +21,6 @@ using namespace std;
 
 
 
-#warning Refactor in all project: eighbour -> eighbor, neghb -> neighb
-
-
-
 int main(int argc, const char * argv[])
 {
     useCommaInsteadOfPointInConsolOut();

@@ -14,8 +14,8 @@
 
 
 #error Set correct paths
-#define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/psp/psp/LOG.txt"
-#define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/psp/Data"
+#define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/PSP/psp/LOG.txt"
+#define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/PSP/Data"
 
 #define LOG_TO_COLSOL 1
 #define LOG_TO_FILE 1

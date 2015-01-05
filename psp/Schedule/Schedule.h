@@ -38,10 +38,10 @@ typedef enum ScheduleTypes {
     ScheduleTypeLateComposite,
 } ScheduleType;
 
-typedef enum NeighbourhoodTypes {
-    NeighbourhoodTypeEarly = 0,
-    NeighbourhoodTypeLate
-} NeighbourhoodType;
+typedef enum NeighborhoodTypes {
+    NeighborhoodTypeEarly = 0,
+    NeighborhoodTypeLate
+} NeighborhoodType;
 
 typedef enum ScheduleValids {
     ScheduleValidOK = 0,
@@ -201,13 +201,13 @@ public:
      */
     PSchedule lateSchedule() const;
     /**
-     Creating neghbour schedules from current, based on rescheduled jobs from block of some job.
-     @param neighbourhoodType Type of neighborhood.
+     Creating neighbour schedules from current, based on rescheduled jobs from block of some job.
+     @param neighborhoodType Type of neighborhood.
      @param functionForSelecting Function for selecting jobs which will be next scheduled.
      @return List of composite schedules constructed with specified neighborhood type.
      */
     shared_ptr<vector<PSchedule>> neighboringSchedules
-    (NeighbourhoodType neighbourhoodType,
+    (NeighborhoodType neighborhoodType,
      function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
      @return ActiveList with jobs ordered by increasing of starts in current schedule.
@@ -215,23 +215,23 @@ public:
     PActiveList earlyActiveList() const;
 private:
     /**
-     Creating neghbour for late schedule, based on rescheduled jobs from block of specified job.
+     Creating neighbour for late schedule, based on rescheduled jobs from block of specified job.
      @warning Should be applied to late schedule types only.
      @param job Specified job for which will be found block of jobs for rescheduling.
      @param functionForSelecting Function for selecting jobs which will be next scheduled.
      @return Composite schedule, if current schedule is late, otherwise null_ptr.
      */
-    PSchedule neighbourForLateSchedule
+    PSchedule neighborForLateSchedule
     (Job *job,
      function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
     /**
-     Creating neghbour for early schedule, based on rescheduled jobs from block of specified job.
+     Creating neighbour for early schedule, based on rescheduled jobs from block of specified job.
      @warning Should be applied to early schedule types only.
      @param job Specified job for which will be found block of jobs for rescheduling.
      @param functionForSelecting Function for selecting jobs which will be next scheduled.
      @return Composite schedule, if current schedule is early, otherwise null_ptr.
      */
-    PSchedule neighbourForEarlySchedule
+    PSchedule neighborForEarlySchedule
     (Job *job,
      function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting);
 public:

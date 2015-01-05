@@ -373,8 +373,8 @@ PSchedule Schedule :: localSearchKS(ParamsKS params, int *numberOfGeneratedSched
     
     TabuList tabuList(params.tabuListSize);
     
-    int stepsNoChange = 0; // Number of steps without changing neighbourhood
-    NeighbourhoodType currentNeighbourhoodType = NeighbourhoodTypeEarly;
+    int stepsNoChange = 0; // Number of steps without changing neighborhood
+    NeighborhoodType currentNeighborhoodType = NeighborhoodTypeEarly;
     
     PSchedule schedule = shared_from_this(); // Start from current schedule
     PSchedule record = schedule;
@@ -394,86 +394,86 @@ PSchedule Schedule :: localSearchKS(ParamsKS params, int *numberOfGeneratedSched
             schedule = record;
         }
         
-        // currentNeighbourhoodType
+        // currentNeighborhoodType
         
         if (stepsNoChange >= params.changingInterval) {
-            switch (currentNeighbourhoodType) {
-                case NeighbourhoodTypeEarly: {
-                    currentNeighbourhoodType = NeighbourhoodTypeLate;
+            switch (currentNeighborhoodType) {
+                case NeighborhoodTypeEarly: {
+                    currentNeighborhoodType = NeighborhoodTypeLate;
                     break;
                 }
-                case NeighbourhoodTypeLate: {
-                    currentNeighbourhoodType = NeighbourhoodTypeEarly;
+                case NeighborhoodTypeLate: {
+                    currentNeighborhoodType = NeighborhoodTypeEarly;
                     break;
                 }
             }
             stepsNoChange = 0;
         }
         
-        // allNeighbours
+        // allNeighbors
         
-        shared_ptr<vector<PSchedule>> allNeighbours =
-        schedule->neighboringSchedules(currentNeighbourhoodType, functionForSelecting);
-        (*numberOfGeneratedSchedules) += allNeighbours->size();
+        shared_ptr<vector<PSchedule>> allNeighbors =
+        schedule->neighboringSchedules(currentNeighborhoodType, functionForSelecting);
+        (*numberOfGeneratedSchedules) += allNeighbors->size();
         
-        // neighboursWithoutTabu
+        // neighborsWithoutTabu
         
-        auto neighboursWithoutTabu = shared_ptr<vector<PSchedule>>(new vector<PSchedule>(0));
-        neighboursWithoutTabu->reserve(allNeighbours->size());
+        auto neighborsWithoutTabu = shared_ptr<vector<PSchedule>>(new vector<PSchedule>(0));
+        neighborsWithoutTabu->reserve(allNeighbors->size());
         
-        while (neighboursWithoutTabu->size() == 0 && tabuList.size() != 0) {
-            for (auto &neighbour : *allNeighbours) {
-                if (!tabuList.containTabu(neighbour->sumOfStarts())) {
-                    neighboursWithoutTabu->push_back(neighbour);
+        while (neighborsWithoutTabu->size() == 0 && tabuList.size() != 0) {
+            for (auto &neighbor : *allNeighbors) {
+                if (!tabuList.containTabu(neighbor->sumOfStarts())) {
+                    neighborsWithoutTabu->push_back(neighbor);
                 }
             }
-            if (neighboursWithoutTabu->size() == 0) {
+            if (neighborsWithoutTabu->size() == 0) {
                 tabuList.changeMaxSize(tabuList.maxSize() - 1);
             }
         }
         
-        if (neighboursWithoutTabu->size() == 0 && tabuList.size() == 0) {
-            neighboursWithoutTabu->insert(neighboursWithoutTabu->begin(),
-                                          allNeighbours->begin(),
-                                          allNeighbours->end());
+        if (neighborsWithoutTabu->size() == 0 && tabuList.size() == 0) {
+            neighborsWithoutTabu->insert(neighborsWithoutTabu->begin(),
+                                          allNeighbors->begin(),
+                                          allNeighbors->end());
         }
         
-        // neighbours
+        // neighbors
         
-        auto neighbours =
+        auto neighbors =
         shared_ptr<vector<PSchedule>>(new vector<PSchedule>(0));
-        neighbours->reserve(neighboursWithoutTabu->size());
+        neighbors->reserve(neighborsWithoutTabu->size());
         
-        for (auto &neighbour : *neighboursWithoutTabu) {
+        for (auto &neighbor : *neighborsWithoutTabu) {
             if (Random :: randomFloatFrom0To1() < params.probabilitySN) {
-                neighbours->push_back(neighbour);
+                neighbors->push_back(neighbor);
             }
         }
         
-        if (neighbours->size() == 0) {
-            long randIndex = Random :: randomLong(0, neighboursWithoutTabu->size() - 1);
-            neighbours->push_back((*neighboursWithoutTabu)[randIndex]);
+        if (neighbors->size() == 0) {
+            long randIndex = Random :: randomLong(0, neighborsWithoutTabu->size() - 1);
+            neighbors->push_back((*neighborsWithoutTabu)[randIndex]);
         }
         
-        // minNeighbour
+        // minNeighbor
         
-        PSchedule minNeighbour = nullptr;
-        int minNeighbourDuration = INT_MAX;
+        PSchedule minNeighbor = nullptr;
+        int minNeighborDuration = INT_MAX;
         
-        for (auto &neighbour : *neighbours) {
-            int neighbourDuration = neighbour->duration();
-            if (neighbourDuration < minNeighbourDuration) {
-                minNeighbour = neighbour;
-                minNeighbourDuration = neighbourDuration;
+        for (auto &neighbor : *neighbors) {
+            int neighborDuration = neighbor->duration();
+            if (neighborDuration < minNeighborDuration) {
+                minNeighbor = neighbor;
+                minNeighborDuration = neighborDuration;
             }
         }
         
         // Update record, schedule, tabuList
         
 #warning (<=) or (<) ? May be move it to parametes of method?
-        if (minNeighbourDuration <= record->duration()) record = minNeighbour;
-        schedule = minNeighbour;
-        tabuList.add(minNeighbour->sumOfStarts());
+        if (minNeighborDuration <= record->duration()) record = minNeighbor;
+        schedule = minNeighbor;
+        tabuList.add(minNeighbor->sumOfStarts());
         
         // Update stepsNoChange
         
@@ -715,19 +715,19 @@ PSchedule Schedule :: lateSchedule() const
 }
 
 shared_ptr<vector<PSchedule>> Schedule :: neighboringSchedules
-(NeighbourhoodType neighbourhoodType,
+(NeighborhoodType neighborhoodType,
  function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
 #warning Is it right? Are we needs to construct correct schedule first?
 #warning numberOfGeneratedSchedules needs to be ++ here?
     PSchedule schedule = nullptr;
-    switch (neighbourhoodType) {
-        case NeighbourhoodTypeEarly: {
+    switch (neighborhoodType) {
+        case NeighborhoodTypeEarly: {
             if (_type == ScheduleTypeEarly) schedule = shared_from_this();
             else schedule = earlySchedule();
             break;
         }
-        case NeighbourhoodTypeLate: {
+        case NeighborhoodTypeLate: {
             if (_type == ScheduleTypeLate) schedule = shared_from_this();
             else schedule = lateSchedule();
             break;
@@ -741,19 +741,19 @@ shared_ptr<vector<PSchedule>> Schedule :: neighboringSchedules
         PSchedule neighbor = nullptr;
         switch (schedule->type()) {
             case ScheduleTypeEarly: {
-                neighbor = schedule->neighbourForEarlySchedule(job, functionForSelecting);
+                neighbor = schedule->neighborForEarlySchedule(job, functionForSelecting);
                 break;
             }
             case ScheduleTypeLate: {
-                neighbor = schedule->neighbourForLateSchedule(job, functionForSelecting);
+                neighbor = schedule->neighborForLateSchedule(job, functionForSelecting);
                 break;
             }
             default: {
                 
-                cout << "Error. Incorrect schedule type. See neighboringSchedules(neighbourhoodType, &functionForSelecting) function of Schedule"
+                cout << "Error. Incorrect schedule type. See neighboringSchedules(neighborhoodType, &functionForSelecting) function of Schedule"
                 << endl;
                 
-                cout << "neighbourhoodType = " << neighbourhoodType << endl;
+                cout << "neighborhoodType = " << neighborhoodType << endl;
                 
                 cout << "this = " << *this << endl;
                 cout << "this MATLAB string = " << this->stringMATLAB() << endl;
@@ -782,7 +782,7 @@ PActiveList Schedule :: earlyActiveList() const
     return earlyActiveList;
 }
 
-PSchedule Schedule :: neighbourForEarlySchedule
+PSchedule Schedule :: neighborForEarlySchedule
 (Job *job,
  function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {
@@ -812,7 +812,7 @@ PSchedule Schedule :: neighbourForEarlySchedule
                                                      functionForSelecting);
 }
 
-PSchedule Schedule :: neighbourForLateSchedule
+PSchedule Schedule :: neighborForLateSchedule
 (Job *job,
  function<PVectorJobs(PARAMETERS_OF_SELECTING_FUNCTION)> &functionForSelecting)
 {

@@ -28,9 +28,9 @@ using namespace std;
  Parameters for scheduleKS methtod.
  @param maxIterationNumber Number of iterations to go through the neighborhood. It is stop criteria.
  @param probabilityKP Probability for solving knapsack problem.
- @param probabilitySN Probability for creating subset of neighbours.
+ @param probabilitySN Probability for creating subset of neighbors.
  @param tabuListSize Length of tabu list.
- @param changingInterval Number of steps of algorithm before changing neighbourhood.
+ @param changingInterval Number of steps of algorithm before changing neighborhood.
  @param numberOfReturnsToRecord If not 0, return to record will be ever maxIterationNumber/numberOfReturnsToRecord iteration (it is intensification of search).
  */
 struct ParamsKS {
