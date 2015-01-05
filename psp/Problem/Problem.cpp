@@ -250,12 +250,20 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
     
     // generations
     
-    while (numberOfGeneratedSchedules < params.maxGeneratedSchedules) {
+    while ((params.maxGeneratedSchedules != maxGeneratedSchedulesInfinite) ?
+           (numberOfGeneratedSchedules < params.maxGeneratedSchedules) :
+           true) {
         
 #ifdef LOG_TO_CONSOL_PROBLEM_H
-        LOG("generated schedules: "
-            << (float)numberOfGeneratedSchedules/params.maxGeneratedSchedules * 100 << "%"
-            << " record = " << record->duration());
+        if (params.maxGeneratedSchedules != maxGeneratedSchedulesInfinite) {
+            LOG("generated schedules: "
+                << (float)numberOfGeneratedSchedules/params.maxGeneratedSchedules * 100 << "%"
+                << " record = " << record->duration());
+        }
+        else {
+            LOG("generated schedules: "
+                << numberOfGeneratedSchedules << " record = " << record->duration());
+        }
 #endif
         
         // select parents as subset of population
@@ -353,12 +361,20 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
     
     int prevRecordDuration = record->duration();
     int noChangeRecord = 0;
-    while (numberOfGeneratedSchedules < paramsGA.maxGeneratedSchedules) {
+    while ((paramsGA.maxGeneratedSchedules != maxGeneratedSchedulesInfinite) ?
+           (numberOfGeneratedSchedules < paramsGA.maxGeneratedSchedules) :
+           true) {
         
 #ifdef LOG_TO_CONSOL_PROBLEM_H
-        LOG("generated schedules: "
-            << (float)numberOfGeneratedSchedules/paramsGA.maxGeneratedSchedules * 100 << "%"
-            << " record = " << record->duration());
+        if (paramsGA.maxGeneratedSchedules != maxGeneratedSchedulesInfinite) {
+            LOG("generated schedules: "
+                << (float)numberOfGeneratedSchedules/paramsGA.maxGeneratedSchedules * 100 << "%"
+                << " record = " << record->duration());
+        }
+        else {
+            LOG("generated schedules: "
+                << numberOfGeneratedSchedules << " record = " << record->duration());
+        }
 #endif
         
         // select parents as subset of population
@@ -455,7 +471,10 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
                     record = schedule;
                     prevRecordDuration = record->duration();
                 }
-                if (numberOfGeneratedSchedules >= paramsGA.maxGeneratedSchedules) return record;
+                if ((paramsGA.maxGeneratedSchedules != maxGeneratedSchedulesInfinite) &&
+                    (numberOfGeneratedSchedules >= paramsGA.maxGeneratedSchedules)) {
+                    return record;
+                }
             }
             noChangeRecord = 0;
         }
