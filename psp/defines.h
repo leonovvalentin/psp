@@ -20,6 +20,9 @@
 #define LOG_TO_COLSOL 1
 #define LOG_TO_FILE 1
 
+#warning It has effect only for GA and GA2014, it needs to be corrected for other algorithms
+#define LOG_TO_FILE_EACH_NEW_RECORD 1
+
 #define LOG_TO_CONSOL_SCHEDULE_H 1
 #define LOG_TO_CONSOL_PROBLEM_H 1
 

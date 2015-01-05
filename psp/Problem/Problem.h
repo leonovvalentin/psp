@@ -35,6 +35,9 @@ private:
     vector <Resource *> _resources;
     int _criticalPathDuration;
     
+#pragma mark - helper methods
+    void logRecordToFile(PSchedule record) const;
+    
 public:
     
 #pragma mark - init

@@ -17,6 +17,17 @@
 
 
 
+#pragma mark - helper methods
+
+void Problem ::  logRecordToFile(PSchedule record) const
+{
+#ifdef LOG_TO_FILE_EACH_NEW_RECORD
+    stringstream ss;
+    ss << "Problem: " << _name << endl << "duration: " << record->duration() << endl << *record;
+    LOGF(ss.str());
+#endif
+}
+
 #pragma mark - init
 
 Problem :: Problem(string *name, string *path)
@@ -245,7 +256,10 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
                                               params.probabilityKP,
                                               &numberOfGeneratedSchedules);
         population.push_back(schedule);
-        if (!record || (schedule->duration() < record->duration())) record = schedule;
+        if (!record || (schedule->duration() < record->duration())) {
+            record = schedule;
+            logRecordToFile(record);
+        }
     }
     
     // generations
@@ -306,10 +320,14 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
             if (child->duration() < record->duration()) {
                 if (mutatedChild->duration() < child->duration()) child = mutatedChild;
                 record = child;
+                logRecordToFile(record);
             }
             else {
                 child = mutatedChild;
-                if (child->duration() < record->duration()) record = child;
+                if (child->duration() < record->duration()) {
+                    record = child;
+                    logRecordToFile(record);
+                }
             }
             
             children.push_back(child);
@@ -354,7 +372,10 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
                                               paramsGA.probabilityKP,
                                               &numberOfGeneratedSchedules);
         population.push_back(schedule);
-        if (!record || (schedule->duration() < record->duration())) record = schedule;
+        if (!record || (schedule->duration() < record->duration())) {
+            record = schedule;
+            logRecordToFile(record);
+        }
     }
     
     // generations
@@ -423,10 +444,14 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
             if (child->duration() < record->duration()) {
                 if (mutatedChild->duration() < child->duration()) child = mutatedChild;
                 record = child;
+                logRecordToFile(record);
             }
             else {
                 child = mutatedChild;
-                if (child->duration() < record->duration()) record = child;
+                if (child->duration() < record->duration()) {
+                    record = child;
+                    logRecordToFile(record);
+                }
             }
             
             children.push_back(child);
@@ -461,6 +486,7 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
                 population.push_back(schedule);
                 if (schedule->duration() < record->duration()) {
                     record = schedule;
+                    logRecordToFile(record);
                     prevRecordDuration = record->duration();
                 }
             }
@@ -469,6 +495,7 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
                 schedule = schedule->localSearchKS(paramsKS, &numberOfGeneratedSchedules);
                 if (schedule->duration() < record->duration()) {
                     record = schedule;
+                    logRecordToFile(record);
                     prevRecordDuration = record->duration();
                 }
                 if ((paramsGA.maxGeneratedSchedules != maxGeneratedSchedulesInfinite) &&
