@@ -21,7 +21,7 @@
 
 void Problem ::  logRecordToFile(PSchedule record) const
 {
-#ifdef LOG_TO_FILE_EACH_NEW_RECORD
+#ifdef LOG_TO_FILE_EACH_NEW_RECORD_GA_GA2014
     time_t result = time(nullptr);
     stringstream ss;
     ss << asctime(localtime(&result))
