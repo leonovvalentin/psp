@@ -22,8 +22,10 @@
 void Problem ::  logRecordToFile(PSchedule record) const
 {
 #ifdef LOG_TO_FILE_EACH_NEW_RECORD
+    time_t result = time(nullptr);
     stringstream ss;
-    ss << "Problem: " << _name << endl << "duration: " << record->duration() << endl << *record;
+    ss << asctime(localtime(&result))
+    << "Problem: " << _name << endl << "duration: " << record->duration() << endl << *record;
     LOGF(ss.str());
 #endif
 }
