@@ -24,7 +24,7 @@ static int const maxGeneratedSchedulesInfinite = INT_MAX;
  @param maxParents Number of selected parents in each iteration. It should be greater then 1.
  @param maxChildren Number of generated children for each iteration.
  @param numberOfChildrenInNextGeneration Number of created children which will be added to next generation.
- @param timesPingPongInitialPopulation Number of attempts to build a record in Ping-pong algorithm when we construct schedules for initial population.
+ @param timesPingPong Number of attempts to build a record in Ping-pong algorithm when we construct schedules for population.
  @param probabilityKP Probability for solving knapsack problem.
  @param probabilityParentSelection Probability for selectiong schedule from population to parents.
  @param permissibleResourceRemains Relative resource remains which used for finding dense blocks of jobs.
@@ -37,7 +37,7 @@ struct ParamsGA {
     int maxParents;
     int maxChildren;
     int numberOfChildrenInNextGeneration;
-    int timesPingPongInitialPopulation;
+    int timesPingPong;
     float probabilityKP;
     float probabilityParentSelection;
     float permissibleResourceRemains;
@@ -55,7 +55,7 @@ struct ParamsGA {
         << "\tmaxParents"
         << "\tmaxChildren"
         << "\tnumberOfChildrenInNextGeneration"
-        << "\ttimesPingPongInitialPopulation"
+        << "\ttimesPingPong"
         << "\tprobabilityKP"
         << "\tprobabilityParentSelection"
         << "\tpermissibleResourceRemains"
@@ -74,7 +74,7 @@ struct ParamsGA {
         << "\t" << maxParents
         << "\t" << maxChildren
         << "\t" << numberOfChildrenInNextGeneration
-        << "\t" << timesPingPongInitialPopulation
+        << "\t" << timesPingPong
         << "\t" << probabilityKP
         << "\t" << probabilityParentSelection
         << "\t" << permissibleResourceRemains
@@ -100,7 +100,7 @@ struct ParamsGA {
         << ", maxParents = " << maxParents
         << ", maxChildren = " << maxChildren
         << ", numberOfChildrenInNextGeneration = " << numberOfChildrenInNextGeneration
-        << ", timesPingPongInitialPopulation = " << timesPingPongInitialPopulation
+        << ", timesPingPong = " << timesPingPong
         << ", probabilityKP = " << probabilityKP
         << ", probabilityParentSelection = " << probabilityParentSelection
         << ", permissibleResourceRemains = " << permissibleResourceRemains

@@ -252,7 +252,7 @@ PSchedule Problem :: scheduleGA(ParamsGA params) const
             << " record = " << (record ? record->duration() : INT_MAX));
 #endif
         
-        PSchedule schedule = schedulePingPong(params.timesPingPongInitialPopulation,
+        PSchedule schedule = schedulePingPong(params.timesPingPong,
                                               params.probabilityKP,
                                               &numberOfGeneratedSchedules);
         population.push_back(schedule);
@@ -368,7 +368,7 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
             << " record = " << (record ? record->duration() : INT_MAX));
 #endif
         
-        PSchedule schedule = schedulePingPong(paramsGA.timesPingPongInitialPopulation,
+        PSchedule schedule = schedulePingPong(paramsGA.timesPingPong,
                                               paramsGA.probabilityKP,
                                               &numberOfGeneratedSchedules);
         population.push_back(schedule);
@@ -466,6 +466,19 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
                           children.begin() + paramsGA.numberOfChildrenInNextGeneration);
         population.erase(population.begin() + paramsGA.populationSize, population.end());
         
+        // replace copies // appearance of copies after this cycle is unlikely, but not impossible
+        for (int i = 0; i < population.size(); i++) {
+            auto s1 = population[i];
+            for (int j = i + 1; j < population.size(); j++) {
+                auto s2 = population[j];
+                if (s2->isEqualToSchedule(s1)) {
+                    population[j] = schedulePingPong(paramsGA.timesPingPong,
+                                                     paramsGA.probabilityKP,
+                                                     &numberOfGeneratedSchedules);
+                }
+            }
+        }
+        
         // population thinning
         if (prevRecordDuration == record->duration()) {
             noChangeRecord++;
@@ -480,7 +493,7 @@ PSchedule Problem :: scheduleGA2014(ParamsGA paramsGA,
                 population.erase(it);
             }
             for (int i=0; i<numberOfSubstitutions; i++) {
-                PSchedule schedule = schedulePingPong(paramsGA.timesPingPongInitialPopulation,
+                PSchedule schedule = schedulePingPong(paramsGA.timesPingPong,
                                                       paramsGA.probabilityKP,
                                                       &numberOfGeneratedSchedules);
                 population.push_back(schedule);

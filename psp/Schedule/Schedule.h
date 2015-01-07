@@ -355,6 +355,10 @@ public:
      @return Sum of starts.
      */
     int sumOfStarts();
+    /**
+     @return True if all jobs starts of current schedule the same as in specified schedule
+     */
+    bool isEqualToSchedule(PSchedule shedule);
 };
 
 

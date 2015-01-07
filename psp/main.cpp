@@ -53,7 +53,7 @@ int main(int argc, const char * argv[])
 //        .maxParents = 20, // 20
 //        .maxChildren = 40, // 40
 //        .numberOfChildrenInNextGeneration = 10, // 10
-//        .timesPingPongInitialPopulation = 100, // 100
+//        .timesPingPong = 100, // 100
 //        .probabilityKP = 0.5f, // -
 //        .probabilityParentSelection = 0.8f, // 0.8
 //        .permissibleResourceRemains = 0.9f, // 0.9
@@ -65,24 +65,24 @@ int main(int argc, const char * argv[])
     
     // My genetic algorithm, 2014
     ParamsGA paramsGA = {
-        .maxGeneratedSchedules = 1000, // 1000, 5000, 50000
+        .maxGeneratedSchedules = maxGeneratedSchedulesInfinite, // 1000, 5000, 50000
         .populationSize = 40, // 40
         .maxParents = 20, // 20
         .maxChildren = 40, // 40
         .numberOfChildrenInNextGeneration = 10, // 10
-        .timesPingPongInitialPopulation = 10, // 10
+        .timesPingPong = 10, // 10
         .probabilityKP = 0.5f, // 0.5
         .probabilityParentSelection = 0.8f, // 0.8
         .permissibleResourceRemains = 0.9f, // 0.9
         .swapAndMovePermissibleTimes = 10 // 10
     };
     ParamsKS paramsKS = {
-        .maxIterationNumber = 0, // 0
+        .maxIterationNumber = 100, // 0
         .probabilityKP = 0.5f, // 0.5
         .probabilitySN = 0.2f, // 0.2
         .tabuListSize = 1, // 1
         .changingInterval = 1, // 1
-        .numberOfReturnsToRecord = 0 // 0
+        .numberOfReturnsToRecord = 10 // 0
     };
     ParamsCross paramsCross = {
         .permissibleResourceRemains = 0.9f, // 0.9

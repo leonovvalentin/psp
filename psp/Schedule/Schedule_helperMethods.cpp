@@ -414,3 +414,13 @@ int Schedule :: sumOfStarts()
     }
     return sum;
 }
+
+bool Schedule :: isEqualToSchedule(PSchedule shedule)
+{
+    for (auto &pJobStart : _starts) {
+        if (pJobStart.second != shedule->start(pJobStart.first)) {
+            return false;
+        }
+    }
+    return true;
+}
