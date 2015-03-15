@@ -40,6 +40,7 @@
 		5803492A19153CE500E81416 /* LOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LOG.txt; sourceTree = "<group>"; };
 		5850315F1916C8B200EA111B /* ParamsKS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamsKS.h; sourceTree = "<group>"; };
 		585031601916C8DE00EA111B /* ParamsGA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamsGA.h; sourceTree = "<group>"; };
+		585410DB1AB5F54600C613FF /* GV_temp.gv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GV_temp.gv; sourceTree = "<group>"; };
 		585B3E7B191CBCE100551478 /* defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
 		58AA8EED191B32C9008E5A6E /* ParamsCross.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamsCross.h; sourceTree = "<group>"; };
 		58D631AD18D42B7600C5F841 /* psp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = psp; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +111,7 @@
 				585B3E7B191CBCE100551478 /* defines.h */,
 				58D631B018D42B7600C5F841 /* main.cpp */,
 				5803492A19153CE500E81416 /* LOG.txt */,
+				585410DB1AB5F54600C613FF /* GV_temp.gv */,
 				58D631B218D42B7600C5F841 /* psp.1 */,
 			);
 			path = psp;

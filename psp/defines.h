@@ -16,6 +16,7 @@
 #error Set correct paths
 #define PATH_TO_LOG_FILE "/Users/valentinleonov/Documents/xCode/PSP/psp/LOG.txt"
 #define PATH_TO_DATA_FOLDER "/Users/valentinleonov/Documents/xCode/psp/PSP/Data"
+#define PATH_TO_GV_TEMP_FILE "/Users/valentinleonov/Documents/xCode/PSP/psp/GV_temp.gv"
 
 #define LOG_TO_COLSOL 1
 #define LOG_TO_FILE 1
@@ -46,6 +47,8 @@
 #else
 #define LOGF(str)
 #endif
+
+#define PRINT_GV_TEMP(str) {ofstream f; f.open(PATH_TO_GV_TEMP_FILE, ios::trunc); f << str << endl; f.close();}
 
 
 
