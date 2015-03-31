@@ -57,8 +57,10 @@ void TabuList :: add(int tabu)
 {
     if (containTabu(tabu)) return;
     
-    if (_list.size() >= _maxSize) _list.erase(_list.begin());
-    _list.push_back(tabu);
+    if (_maxSize > 0) {
+        if (_list.size() >= _maxSize) _list.erase(_list.begin());
+        _list.push_back(tabu);
+    }
 }
 
 void TabuList :: removeOlderTabu(unsigned long numberOfTabuForRemoving)
